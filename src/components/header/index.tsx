@@ -3,6 +3,7 @@ import React from 'react'
 import { Layout, Row, Col } from 'antd';
 import { HomeOutlined, ReadOutlined, UserOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
+import { Link } from "react-router-dom";
 const { Header } = Layout;
 
 interface antdColPropObj {
@@ -55,13 +56,13 @@ export default class BlogHeader extends React.Component<{}, { [key: string]: any
                         )
                         }
                     >
-                        <Button type="primary" icon={<HomeOutlined />}>Home</Button>
+                        <Link to="/"><Button type="primary" icon={<HomeOutlined />}>Home</Button></Link>
                     </Col>
                     <Col {...spanPropObj}>
-                        <Button type="primary" icon={<ReadOutlined />}>Blogs</Button>
+                        <Link to="/blogs"> <Button type="primary" icon={<ReadOutlined />}>Blogs</Button></Link>
                     </Col>
                     <Col {...spanPropObj}>
-                        <Button type="primary" icon={<UserOutlined />}>About</Button>
+                        <Link to="/about"><Button type="primary" icon={<UserOutlined />}>About</Button></Link>
                     </Col>
                 </Row>
             </Header>
