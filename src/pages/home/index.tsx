@@ -10,19 +10,8 @@ const { Title, Paragraph, Text, Link } = Typography;
 export default class Home extends React.Component<{}, { [key: string]: any }> {
     constructor(props: Object) {
         super(props);
-        this.state = {
-            profile: {
-                'avatarUrl': '',
-            }
-        };
+        this.state = {};
     }
-
-    // componentDidMount() {
-    //     getProfileInfo({})
-    //         .then(res => {
-    //             this.setState({ profile: { 'avatarUrl': res.avatar_url } })
-    //         })
-    // }
 
     render() {
         return (
