@@ -1,8 +1,6 @@
 import React from 'react'
-import { Row, Col } from 'antd';
-import { Layout } from 'antd';
+import { Layout, Row, Col, Typography } from 'antd';
 import BlogAvatar from '../../components/avatar';
-import { Typography } from 'antd';
 import homeStyle from './index.module.css'
 const { Title, Paragraph, Text, Link } = Typography;
 
