@@ -1,7 +1,7 @@
 import { Component } from 'react'
-import { Layout } from 'antd';
+import { Layout } from 'antd'
 import { Routes, Route, Navigate } from "react-router-dom"
-import Home from '../../pages/home';
+import Home from '../../pages/home'
 import Blogs from '../../pages/blogs'
 import About from '../../pages/about'
 

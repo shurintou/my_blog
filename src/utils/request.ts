@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { message } from 'antd';
+import { message } from 'antd'
 
 declare module 'axios' {
     interface AxiosInstance {

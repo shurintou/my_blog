@@ -1,6 +1,6 @@
 import { Component } from 'react'
-import { Avatar } from 'antd';
-import { AntDesignOutlined } from '@ant-design/icons';
+import { Avatar } from 'antd'
+import { AntDesignOutlined } from '@ant-design/icons'
 import avatarJpg from '../../static/images/avatar/avatar.jpg'
 
 

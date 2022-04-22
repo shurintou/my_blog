@@ -1,8 +1,8 @@
-import { Layout } from 'antd';
-import BlogHeader from './components/header';
-import BlogBody from './components/body';
-import BlogFooter from './components/footer';
-import './App.less';
+import { Layout } from 'antd'
+import BlogHeader from './components/header'
+import BlogBody from './components/body'
+import BlogFooter from './components/footer'
+import './App.less'
 
 function App() {
     return (
@@ -11,7 +11,7 @@ function App() {
             <BlogBody />
             <BlogFooter />
         </Layout>
-    );
+    )
 }
 
-export default App;
+export default App

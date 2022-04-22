@@ -1,6 +1,6 @@
 import { Component } from 'react'
-import { Layout } from 'antd';
-const { Footer } = Layout;
+import { Layout } from 'antd'
+const { Footer } = Layout
 
 export default class BlogFooter extends Component {
     render() {

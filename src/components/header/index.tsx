@@ -1,9 +1,9 @@
 
 import React from 'react'
-import { Layout, Row, Col, Button } from 'antd';
-import { HomeOutlined, ReadOutlined, UserOutlined } from '@ant-design/icons';
-import { Link } from "react-router-dom";
-const { Header } = Layout;
+import { Layout, Row, Col, Button } from 'antd'
+import { HomeOutlined, ReadOutlined, UserOutlined } from '@ant-design/icons'
+import { Link } from "react-router-dom"
+const { Header } = Layout
 
 interface antdColPropObj {
     xs: antdColSubPropObj,
