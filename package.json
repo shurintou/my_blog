@@ -18,6 +18,8 @@
         "craco": "0.0.3",
         "craco-antd": "^1.19.0",
         "craco-less": "^2.0.0",
+        "crypto-js": "^4.1.1",
+        "gitalk": "^1.7.2",
         "react": "^18.0.0",
         "react-dom": "^18.0.0",
         "react-redux": "^7.2.8",
