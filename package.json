@@ -31,9 +31,9 @@
         "web-vitals": "^2.1.4"
     },
     "scripts": {
-        "start": "concurrently \"craco start\" \"react-app-rewired start\"",
+        "start": "craco start",
         "build": "concurrently \"craco build\" \"react-app-rewired build\"",
-        "test": "concurrently \"craco test\" \"react-app-rewired test\"",
+        "test": "craco test",
         "eject": "react-scripts eject"
     },
     "eslintConfig": {
