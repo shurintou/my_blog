@@ -4,7 +4,7 @@ const overrideFunc = function override(config, env) {
     if (env === 'production') {
         config.plugins = config.plugins.concat([
             new PrerenderSPAPlugin({
-                routes: ['/', '/about', '/blogs'],
+                routes: ['/', '/about', '/home'],
                 staticDir: path.join(__dirname, 'build'),
             }),
         ])
