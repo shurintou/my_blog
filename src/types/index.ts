@@ -44,3 +44,10 @@ export interface AntdColSubPropObj {
     span?: number,
     offset?: number,
 }
+
+export interface PendingRequest {
+    url: string | undefined,
+    method: string | undefined,
+    params?: any,
+    data?: any,
+}
