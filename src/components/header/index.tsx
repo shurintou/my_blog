@@ -3,20 +3,20 @@ import React from 'react'
 import { Layout, Row, Col, Button } from 'antd'
 import { HomeOutlined, ReadOutlined, UserOutlined } from '@ant-design/icons'
 import { Link } from "react-router-dom"
-import { antdColPropObj, } from '../../types/index'
+import { AntdColPropObj } from '../../types/index'
 const { Header } = Layout
 
 export default class BlogHeader extends React.Component<{}, { [key: string]: any }> {
 
     render() {
-        const spanPropObj: antdColPropObj = {
+        const spanPropObj: AntdColPropObj = {
             'xs': { span: 6 },
             'sm': { span: 5 },
             'md': { span: 4 },
             'lg': { span: 3 },
             'xl': { span: 2 },
         }
-        const offsetPropObj: antdColPropObj = {
+        const offsetPropObj: AntdColPropObj = {
             'xs': { offset: 0 },
             'sm': { offset: 1 },
             'md': { offset: 2 },
@@ -36,8 +36,8 @@ export default class BlogHeader extends React.Component<{}, { [key: string]: any
                                     [
                                         key,
                                         Object.assign({},
-                                            spanPropObj[key as keyof antdColPropObj],
-                                            offsetPropObj[key as keyof antdColPropObj])
+                                            spanPropObj[key as keyof AntdColPropObj],
+                                            offsetPropObj[key as keyof AntdColPropObj])
                                     ]
                             ))
                         )

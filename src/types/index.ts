@@ -1,8 +1,8 @@
-export interface configObj {
-    gitProps: gitProps
+export interface ConfigObj {
+    gitProps: GitProps
 }
 
-export interface gitProps {
+export interface GitProps {
     clientID: string,
     clientSecret: string,
     repo: string,
@@ -23,19 +23,24 @@ export interface LanguageItem {
     [key: string]: any
 }
 
-export interface getRepoInfoParam {
+export interface GetRepoInfoParam {
 
 }
 
-export interface antdColPropObj {
-    xs: antdColSubPropObj,
-    sm: antdColSubPropObj,
-    md: antdColSubPropObj,
-    lg: antdColSubPropObj,
-    xl: antdColSubPropObj,
+export interface RepoInfoRes {
+    has_issues: boolean,
+    open_issues_count: number
 }
 
-export interface antdColSubPropObj {
+export interface AntdColPropObj {
+    xs: AntdColSubPropObj,
+    sm: AntdColSubPropObj,
+    md: AntdColSubPropObj,
+    lg: AntdColSubPropObj,
+    xl: AntdColSubPropObj,
+}
+
+export interface AntdColSubPropObj {
     span?: number,
     offset?: number,
 }
