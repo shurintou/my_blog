@@ -3,20 +3,8 @@ import React from 'react'
 import { Layout, Row, Col, Button } from 'antd'
 import { HomeOutlined, ReadOutlined, UserOutlined } from '@ant-design/icons'
 import { Link } from "react-router-dom"
+import { antdColPropObj, } from '../../types/index'
 const { Header } = Layout
-
-interface antdColPropObj {
-    xs: antdColSubPropObj,
-    sm: antdColSubPropObj,
-    md: antdColSubPropObj,
-    lg: antdColSubPropObj,
-    xl: antdColSubPropObj,
-}
-
-interface antdColSubPropObj {
-    span?: number,
-    offset?: number,
-}
 
 export default class BlogHeader extends React.Component<{}, { [key: string]: any }> {
 

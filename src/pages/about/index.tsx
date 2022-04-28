@@ -11,22 +11,12 @@ import pythonImg from '../../static/images/icons/python.png'
 import chinaImg from '../../static/images/icons/china.png'
 import japanImg from '../../static/images/icons/japan.png'
 import americaImg from '../../static/images/icons/america.png'
+import { AboutDataList, LanguageItem } from '../../types/index'
 const { Link, Text, Paragraph } = Typography
 const fontSize = { fontSize: '2em' }
 const boxHeight = { height: '15rem' }
 
-interface AboutDataList {
-    Skills: Array<LanguageItem>,
-    Languages: Array<LanguageItem>,
-    [key: string]: any
-}
 
-interface LanguageItem {
-    language: string,
-    imgSrc: string,
-    link: string,
-    [key: string]: any
-}
 
 export default class About extends Component {
     render() {
