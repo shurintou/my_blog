@@ -1,5 +1,4 @@
 import axios, { Canceler } from 'axios'
-import { message } from 'antd'
 import { isSameRequest } from './common'
 import { PendingRequest } from '../types/index'
 
@@ -40,9 +39,7 @@ request.interceptors.request.use(
         return config
     },
     error => {
-        if (error.message) {
-            message.error(error.message)
-        }
+        console.error(error)
     }
 )
 
@@ -62,7 +59,7 @@ request.interceptors.response.use(
         return res.data
     },
     error => {
-        message.error(error.message)
+        console.error(error)
     }
 )
 
