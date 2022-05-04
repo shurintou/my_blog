@@ -51,3 +51,30 @@ export interface PendingRequest {
     params?: any,
     data?: any,
 }
+
+
+export interface BlogRequestParam {
+    labels?: Array<string>,
+    page?: number,
+    per_page?: number,
+}
+
+export interface BlogsListItem {
+    id: number,
+    title: string,
+    body: string,
+    comments: number,
+    reactions: ReactionItem,
+    labels: Array<Label>,
+}
+
+export interface Label {
+    id: number,
+    name: string
+}
+
+export interface ReactionItem {
+    [+1]: number,
+    laugh: number,
+    heart: number,
+}
