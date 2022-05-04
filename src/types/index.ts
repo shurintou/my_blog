@@ -59,15 +59,18 @@ export interface BlogRequestParam {
     per_page?: number,
 }
 
-export interface BlogsListItem {
+export interface BlogsListRes {
     id: number,
     title: string,
     body: string,
     comments: number,
     reactions: ReactionItem,
     labels: Array<Label>,
-    createDate: Date,
-    lastUpdateDate: Date,
+    created_at: string,
+}
+
+export interface BlogsListItem extends BlogsListRes {
+    created_at_local: string,
 }
 
 export interface Label {
