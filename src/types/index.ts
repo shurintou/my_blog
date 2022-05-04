@@ -66,6 +66,8 @@ export interface BlogsListItem {
     comments: number,
     reactions: ReactionItem,
     labels: Array<Label>,
+    createDate: Date,
+    lastUpdateDate: Date,
 }
 
 export interface Label {
