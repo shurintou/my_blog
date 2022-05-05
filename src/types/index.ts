@@ -75,7 +75,9 @@ export interface BlogsListItem extends BlogsListRes {
 
 export interface Label {
     id: number,
-    name: string
+    name: string,
+    color: string,
+    description: string,
 }
 
 export interface ReactionItem {
