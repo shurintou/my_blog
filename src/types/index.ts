@@ -59,8 +59,13 @@ export interface BlogRequestParam {
     per_page?: number,
 }
 
-export interface BlogsListRes {
+export interface BlogInfoRequestParam {
+    number: number,
+}
+
+export interface BlogsItemRes {
     id: number,
+    number: number,
     title: string,
     body: string,
     comments: number,
@@ -69,7 +74,7 @@ export interface BlogsListRes {
     created_at: string,
 }
 
-export interface BlogsListItem extends BlogsListRes {
+export interface BlogsListItem extends BlogsItemRes {
     created_at_local: string,
 }
 
