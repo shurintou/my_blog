@@ -1,5 +1,5 @@
 import request from '../utils/request'
-import { GetRepoInfoParam } from '../types/index'
+import { GetRepoInfoParam, BlogRequestParam, BlogInfoRequestParam } from '../types/index'
 import conf from '../config/config'
 
 const auth = {
@@ -14,6 +14,23 @@ export function getRepoInfo(params: GetRepoInfoParam) {
         url: baseURL + '/repos/' + conf.gitProps.owner + '/' + conf.gitProps.repo,
         method: 'get',
         params: params,
+        auth: auth
+    })
+}
+
+export function getBlogsList(params: BlogRequestParam) {
+    return request({
+        url: baseURL + '/repos/' + conf.gitProps.owner + '/' + conf.gitProps.repo + '/issues',
+        method: 'get',
+        params: params,
+        auth: auth
+    })
+}
+
+export function getBlogInfo(params: BlogInfoRequestParam) {
+    return request({
+        url: baseURL + '/repos/' + conf.gitProps.owner + '/' + conf.gitProps.repo + '/issues/' + params.number,
+        method: 'get',
         auth: auth
     })
 }
