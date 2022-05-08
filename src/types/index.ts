@@ -90,3 +90,7 @@ export interface ReactionItem {
     laugh: number,
     heart: number,
 }
+
+export interface MarkdownProps {
+    blogText: string | undefined
+}
