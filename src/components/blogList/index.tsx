@@ -4,7 +4,7 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 import { getBlogsList } from '../../api/blogs'
 import { BlogsItemRes, BlogsListItem } from '../../types/index'
 import ListItem from './item'
-import { parseISODate } from '../../utils/formatter'
+import { parseISODate, parseISODateStr, getDateFromNow } from '../../utils/formatter'
 
 const InfiniteBlogsList = () => {
     const [loading, setLoading] = useState(false)
@@ -22,7 +22,10 @@ const InfiniteBlogsList = () => {
             .then((res: Array<BlogsItemRes>) => {
                 let newData: Array<BlogsListItem> = res.map((resItem: BlogsItemRes) => {
                     let newData: BlogsListItem = Object.assign(resItem, {
-                        created_at_local: parseISODate(resItem.created_at),
+                        created_at_local: parseISODateStr(resItem.created_at),
+                        updated_at_local: '', //blogListItem doesn't use this value so set it ''.
+                        created_from_now: getDateFromNow(parseISODate(resItem.created_at)),
+                        updated_from_now: '', //blogListItem doesn't use this value so set it ''.,
                     })
                     return newData
                 })

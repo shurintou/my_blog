@@ -3,6 +3,7 @@ import { Divider, Space, Typography, Button, Tag, Layout } from 'antd'
 import { MessageOutlined, LikeOutlined } from '@ant-design/icons'
 import { BlogsListItem } from '../../types/index'
 import { useNavigate } from "react-router-dom"
+import DateComp from '../blog/date'
 import Markdown from '../others/markdown/'
 
 const { Title, Paragraph, Text } = Typography
@@ -14,9 +15,11 @@ const BlogsListItemComp: React.FC<BlogsListItem> = (props) => {
     return (
         <Typography>
             <Title level={3} onClick={navigateToBlog}><Text style={mouseBlurStyle} >{props.title}</Text></Title>
-            <Paragraph>
-                <Text type="secondary">{props.created_at_local}</Text>
-            </Paragraph>
+            <DateComp
+                dateFromNow={props.created_from_now}
+                dateLocal={props.created_at_local}
+                text={'Created'}
+            />
             {props.labels.length > 0 &&
                 <Paragraph>
                     {props.labels.map(label => {
