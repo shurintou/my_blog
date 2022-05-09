@@ -94,3 +94,7 @@ export interface ReactionItem {
 export interface MarkdownProps {
     blogText: string | undefined
 }
+
+export interface GitalkProps {
+    blogId: number
+}
