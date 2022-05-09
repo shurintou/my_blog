@@ -72,10 +72,14 @@ export interface BlogsItemRes {
     reactions: ReactionItem,
     labels: Array<Label>,
     created_at: string,
+    updated_at: string,
 }
 
 export interface BlogsListItem extends BlogsItemRes {
     created_at_local: string,
+    updated_at_local: string,
+    created_from_now: string,
+    updated_from_now: string,
 }
 
 export interface Label {
