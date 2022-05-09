@@ -5,12 +5,14 @@ import { getBlogsList } from '../../api/blogs'
 import { BlogsItemRes, BlogsListItem } from '../../types/index'
 import ListItem from './item'
 import { parseISODate, parseISODateStr, getDateFromNow } from '../../utils/formatter'
+import config from '../../config/config'
 
 const InfiniteBlogsList = () => {
     const [loading, setLoading] = useState(false)
     const [hasmore, setHasMore] = useState(true)
     const [data, setData] = useState<Array<BlogsListItem>>([])
     const [page, setPage] = useState(1)
+    const { blogProps: { blogListItemCountPerPage } } = config
 
     const loadMoreData = () => {
         if (loading) {
@@ -18,7 +20,7 @@ const InfiniteBlogsList = () => {
         }
         setPage(page + 1)
         setLoading(true)
-        getBlogsList({ page: page, per_page: 10 })
+        getBlogsList({ page: page, per_page: blogListItemCountPerPage })
             .then((res: Array<BlogsItemRes>) => {
                 let newData: Array<BlogsListItem> = res.map((resItem: BlogsItemRes) => {
                     let newData: BlogsListItem = Object.assign(resItem, {
@@ -29,7 +31,7 @@ const InfiniteBlogsList = () => {
                     })
                     return newData
                 })
-                setHasMore(newData.length >= 10)
+                setHasMore(newData.length >= blogListItemCountPerPage)
                 setData([...data, ...newData])
                 setLoading(false)
             })
@@ -49,7 +51,7 @@ const InfiniteBlogsList = () => {
             next={loadMoreData}
             hasMore={hasmore}
             loader={<Skeleton avatar paragraph={{ rows: 1 }} active />}
-            endMessage={data.length > 10 && <Divider plain>It is all, nothing more 🤐</Divider>}
+            endMessage={data.length > blogListItemCountPerPage && <Divider plain>It is all, nothing more 🤐</Divider>}
             scrollableTarget="scrollableDiv"
         >
             <List

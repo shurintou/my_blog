@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react'
 import Gitalk from "gitalk"
 import 'gitalk/dist/gitalk.css'
-import { GitalkProps, BlogsItemRes } from '../../../types/index'
-import { getBlogInfo } from '../../../api/blogs'
+import { GitalkProps } from '../../../types/index'
 import config from '../../../config/config'
 
 const GitalkCompo: React.FC<GitalkProps> = (props) => {
@@ -12,13 +11,11 @@ const GitalkCompo: React.FC<GitalkProps> = (props) => {
         function renderGitalk(blogId: number) {
             let gitalkProps = config.gitProps
             gitalkProps.number = blogId
+            gitalkProps.perPage = config.blogProps.commentCountPerPage
             const gitalk = new Gitalk(gitalkProps)
             gitalk.render('gitalk-container')
         }
-
-        getBlogInfo({ number: blogId }).then((res: BlogsItemRes) => {
-            renderGitalk(blogId)
-        })
+        renderGitalk(blogId)
 
         /* eslint-disable-next-line */
     }, [])

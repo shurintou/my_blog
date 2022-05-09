@@ -1,4 +1,5 @@
 const CracoLessPlugin = require('craco-less')
+import config from './src/config/config'
 
 export { }
 
@@ -10,8 +11,8 @@ module.exports = {
                 lessLoaderOptions: {
                     lessOptions: {
                         modifyVars: {
-                            '@primary-color': '#1DA57A',
-                            '@layout-header-background': '#1DA57A',
+                            '@primary-color': config.antdProps.themeColor,
+                            '@layout-header-background': config.antdProps.themeColor,
                             '@menu-dark-bg': '@layout-header-background'
                         },
                         javascriptEnabled: true,
