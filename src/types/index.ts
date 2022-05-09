@@ -102,3 +102,9 @@ export interface MarkdownProps {
 export interface GitalkProps {
     blogId: number
 }
+
+export interface DateCompProps {
+    dateLocal: string,
+    dateFromNow: string,
+    text: string,
+}
