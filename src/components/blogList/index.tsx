@@ -8,6 +8,7 @@ import { parseISODate } from '../../utils/formatter'
 
 const InfiniteBlogsList = () => {
     const [loading, setLoading] = useState(false)
+    const [hasmore, setHasMore] = useState(true)
     const [data, setData] = useState<Array<BlogsListItem>>([])
     const [page, setPage] = useState(1)
 
@@ -25,6 +26,7 @@ const InfiniteBlogsList = () => {
                     })
                     return newData
                 })
+                setHasMore(newData.length >= 10)
                 setData([...data, ...newData])
                 setLoading(false)
             })
@@ -42,9 +44,9 @@ const InfiniteBlogsList = () => {
         <InfiniteScroll
             dataLength={data.length}
             next={loadMoreData}
-            hasMore={data.length >= 10}
+            hasMore={hasmore}
             loader={<Skeleton avatar paragraph={{ rows: 1 }} active />}
-            endMessage={<Divider plain>It is all, nothing more 🤐</Divider>}
+            endMessage={data.length > 10 && <Divider plain>It is all, nothing more 🤐</Divider>}
             scrollableTarget="scrollableDiv"
         >
             <List
