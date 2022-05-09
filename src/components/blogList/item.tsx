@@ -34,6 +34,9 @@ const BlogsListItemComp: React.FC<BlogsListItem> = (props) => {
                     display: '-webkit-box',
                     WebkitBoxOrient: 'vertical',
                     overflow: 'hidden',
+                    lineHeight: '2em',
+                    maxHeight: '10em',
+                    wordWrap: 'break-word',
                 }}>
                     <Markdown blogText={props.body}></Markdown>
                 </Layout>
