@@ -5,6 +5,7 @@ import remarkBreaks from 'remark-breaks'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { tomorrow } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import { MarkdownProps } from '../../../types/index'
+import config from '../../../config/config'
 
 const Markdown: React.FC<MarkdownProps> = (props) => {
     const { blogText } = props
@@ -43,7 +44,7 @@ const Markdown: React.FC<MarkdownProps> = (props) => {
                     return (
                         <blockquote {...props} style={{
                             borderLeft: '.25em solid',
-                            borderLeftColor: '#d0d7de',
+                            borderLeftColor: config.antdProps.borderColor,
                             padding: '0 1em'
                         }}>
                             {children}
