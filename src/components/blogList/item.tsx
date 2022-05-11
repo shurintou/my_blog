@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Divider, Space, Typography, Button, Tag, Layout } from 'antd'
 import { MessageOutlined, LikeOutlined } from '@ant-design/icons'
 import { BlogsListItem } from '../../types/index'
@@ -12,6 +12,12 @@ const BlogsListItemComp: React.FC<BlogsListItem> = (props) => {
     const navigate = useNavigate()
     const navigateToBlog = () => navigate('/blog/' + props.number)
     const mouseBlurStyle = { cursor: 'pointer' }
+    const [isLastItem, setIsLastItem] = useState(false)
+
+    useEffect(() => {
+        setIsLastItem((props.index || 0) >= (props.listLength || 0)) //divider of which is the last item would not be shown.
+    }, [props.index, props.listLength])
+
     return (
         <Typography>
             <Title level={3} onClick={navigateToBlog}><Text style={mouseBlurStyle} >{props.title}</Text></Title>
@@ -48,7 +54,7 @@ const BlogsListItemComp: React.FC<BlogsListItem> = (props) => {
                 <Button type="primary" size="small" icon={<LikeOutlined />}>{props.reactions['+1'] + props.reactions.heart + props.reactions.laugh}</Button>
                 <Button type="primary" size="small" icon={<MessageOutlined />}>{props.comments}</Button>
             </Space>
-            <Divider />
+            {!isLastItem && <Divider />}
         </Typography>
     )
 }

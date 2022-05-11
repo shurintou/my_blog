@@ -80,6 +80,8 @@ export interface BlogsListItem extends BlogsItemRes {
     updated_at_local: string,
     created_from_now: string,
     updated_from_now: string,
+    index?: number,
+    listLength?: number,
 }
 
 export interface Label {

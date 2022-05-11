@@ -22,14 +22,20 @@ const InfiniteBlogsList = () => {
         setLoading(true)
         getBlogsList({ page: page, per_page: blogListItemCountPerPage })
             .then((res: Array<BlogsItemRes>) => {
-                let newData: Array<BlogsListItem> = res.map((resItem: BlogsItemRes) => {
+                const newListLength = data.length + res.length - 1
+                let newData: Array<BlogsListItem> = res.map((resItem: BlogsItemRes, index: number) => {
                     let newData: BlogsListItem = Object.assign(resItem, {
+                        index: data.length + index,
+                        listLength: newListLength,
                         created_at_local: parseISODateStr(resItem.created_at),
                         updated_at_local: '', //blogListItem doesn't use this value so set it ''.
                         created_from_now: getDateFromNow(parseISODate(resItem.created_at)),
                         updated_from_now: '', //blogListItem doesn't use this value so set it ''.,
                     })
                     return newData
+                })
+                data.forEach(item => { //reset the listLengh prop of each item in data lists. 
+                    item.listLength = newListLength
                 })
                 setHasMore(newData.length >= blogListItemCountPerPage)
                 setData([...data, ...newData])
@@ -58,6 +64,7 @@ const InfiniteBlogsList = () => {
                 itemLayout="vertical"
                 size="large"
                 dataSource={data}
+                style={{ border: '2px solid', borderColor: config.antdProps.borderColor, borderRadius: '6px' }}
                 renderItem={(item: BlogsListItem) => (
                     <List.Item
                         key={item.id}
