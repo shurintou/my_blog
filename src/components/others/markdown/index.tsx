@@ -6,6 +6,7 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { tomorrow } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import { MarkdownProps } from '../../../types/index'
 import config from '../../../config/config'
+import pTagInsideBlockQuote from './index.module.css'
 
 const Markdown: React.FC<MarkdownProps> = (props) => {
     const { blogText } = props
@@ -15,6 +16,7 @@ const Markdown: React.FC<MarkdownProps> = (props) => {
             children={blogText ? blogText : ''}
             remarkPlugins={[remarkGfm, remarkBreaks]}
             components={{
+                h3: 'h2',
                 code({ node, inline, className, children, ...props }) {
                     const match = /language-(\w+)/.exec(className || '')
                     return !inline && match ? (
@@ -42,11 +44,15 @@ const Markdown: React.FC<MarkdownProps> = (props) => {
                 },
                 blockquote({ node, className, children, ...props }) {
                     return (
-                        <blockquote {...props} style={{
-                            borderLeft: '.25em solid',
-                            borderLeftColor: config.antdProps.borderColor,
-                            padding: '0 1em'
-                        }}>
+                        <blockquote
+                            {...props}
+                            /* set the margin of p tag in blockquote 0, to prevent the overflow of borderLeft.  */
+                            className={pTagInsideBlockQuote.pTagInsideBlockquote}
+                            style={{
+                                borderLeft: '.25em solid',
+                                borderLeftColor: config.antdProps.borderColor,
+                                padding: '0 1em',
+                            }}>
                             {children}
                         </blockquote>
                     )
