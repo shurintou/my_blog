@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useParams } from "react-router-dom"
-import { Layout, Empty, Typography, Tag, Row, Col } from 'antd'
+import { Layout, Empty, Typography, Tag, Row, Col, BackTop } from 'antd'
 import { getBlogInfo } from '../../api/blogs'
 import { BlogsItemRes, BlogsListItem } from '../../types/index'
 import { parseISODate, parseISODateStr, getDateFromNow } from '../../utils/formatter'
@@ -78,6 +78,7 @@ const Blog = () => {
                 <Col xs={0} sm={0} md={3} lg={3} xl={3}>
                 </Col>
             </Row>
+            <BackTop target={() => document} />{/* default target value '()=> window' is not work. */}
         </Layout>
     )
 }

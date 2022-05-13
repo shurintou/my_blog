@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { List, Skeleton, Divider, } from 'antd'
+import { List, Skeleton, Divider, Layout, BackTop } from 'antd'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { getBlogsList } from '../../api/blogs'
 import { BlogsItemRes, BlogsListItem } from '../../types/index'
@@ -52,28 +52,33 @@ const InfiniteBlogsList = () => {
     }, [])
 
     return (
-        <InfiniteScroll
-            dataLength={data.length}
-            next={loadMoreData}
-            hasMore={hasmore}
-            loader={<Skeleton avatar paragraph={{ rows: 1 }} active />}
-            endMessage={data.length > blogListItemCountPerPage && <Divider plain>It is all, nothing more 🤐</Divider>}
-            scrollableTarget="scrollableDiv"
-        >
-            <List
-                itemLayout="vertical"
-                size="large"
-                dataSource={data}
-                style={{ border: window.innerWidth >= 768 ? '2px solid' : 'null', borderColor: config.antdProps.borderColor, borderRadius: '6px' }}
-                renderItem={(item: BlogsListItem) => (
-                    <List.Item
-                        key={item.id}
-                    >
-                        <ListItem {...item}></ListItem>
-                    </List.Item>
-                )}
-            />
-        </InfiniteScroll>
+        <Layout>
+            <InfiniteScroll
+                dataLength={data.length}
+                next={loadMoreData}
+                hasMore={hasmore}
+                loader={<Skeleton avatar paragraph={{ rows: 1 }} active />}
+                endMessage={data.length > blogListItemCountPerPage && <Divider plain>It is all, nothing more 🤐</Divider>}
+                scrollableTarget="scrollableDiv"
+            >
+                <List
+                    itemLayout="vertical"
+                    size="large"
+                    dataSource={data}
+                    style={{ border: window.innerWidth >= 768 ? '2px solid' : 'null', borderColor: config.antdProps.borderColor, borderRadius: '6px' }}
+                    renderItem={(item: BlogsListItem) => (
+                        <List.Item
+                            key={item.id}
+                        >
+                            <ListItem {...item}></ListItem>
+                        </List.Item>
+                    )}
+                >
+                </List>
+            </InfiniteScroll>
+            <BackTop target={() => document} />{/* default target value '()=> window' is not work. */}
+        </Layout>
+
     )
 }
 
