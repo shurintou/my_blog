@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import { Divider, Space, Typography, Button, Tag, Layout } from 'antd'
+import { Divider, Space, Typography, Tag, Layout, } from 'antd'
 import { MessageOutlined, LikeOutlined } from '@ant-design/icons'
+import CommentComp from './comment'
 import { BlogsListItem } from '../../types/index'
 import { useNavigate } from "react-router-dom"
 import DateComp from '../blog/date'
 import Markdown from '../others/markdown/'
+import config from '../../config/config'
 
 const { Title, Paragraph, Text } = Typography
 
@@ -37,24 +39,44 @@ const BlogsListItemComp: React.FC<BlogsListItem> = (props) => {
                 onClick={navigateToBlog}
                 style={mouseBlurStyle}
             >
-                <Layout style={{
-                    WebkitLineClamp: 3,
-                    lineClamp: 3,
-                    display: '-webkit-box',
-                    WebkitBoxOrient: 'vertical',
-                    overflow: 'hidden',
-                    lineHeight: '2em',
-                    maxHeight: '10em',
-                    wordWrap: 'break-word',
-                }}>
+                <Layout
+                    style={{
+                        WebkitLineClamp: config.blogProps.previewLine,
+                        lineClamp: config.blogProps.previewLine,
+                        display: '-webkit-box',
+                        WebkitBoxOrient: 'vertical',
+                        overflow: 'hidden',
+                        lineHeight: '2em',
+                        maxHeight: 5 * (config.blogProps.previewLine) + 'em',
+                        wordWrap: 'break-word',
+                    }}>
                     <Markdown blogText={props.body}></Markdown>
                 </Layout>
             </Paragraph>
-            <Space size="middle">
-                <Button type="primary" size="small" icon={<LikeOutlined />}>{props.reactions['+1'] + props.reactions.heart + props.reactions.laugh}</Button>
-                <Button type="primary" size="small" icon={<MessageOutlined />}>{props.comments}</Button>
+            <Paragraph>
+                <Text
+                    onClick={navigateToBlog}
+                    style={{
+                        cursor: 'pointer',
+                        color: config.antdProps.themeColor
+                    }}
+                    underline
+                >Read more
+                </Text>
+            </Paragraph>
+            <Space size="small" split={<Divider type="vertical" style={{ borderLeftColor: 'rgba(0,0,0,0.6)' }} />}>
+                <CommentComp
+                    title='Like'
+                    slot={<LikeOutlined></LikeOutlined>}
+                    text={props.reactions['+1'] + props.reactions.heart + props.reactions.laugh}
+                />
+                <CommentComp
+                    title='Comment'
+                    slot={<MessageOutlined></MessageOutlined>}
+                    text={props.comments}
+                />
             </Space>
-            {!isLastItem && <Divider />}
+            {!isLastItem && <Divider style={{ borderTopColor: 'rgba(0,0,0,0.2)' }} />}
         </Typography>
     )
 }

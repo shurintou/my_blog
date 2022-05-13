@@ -1,3 +1,5 @@
+import { ReactElement } from "react"
+
 export interface ConfigObj {
     gitProps: GitProps
 }
@@ -109,4 +111,10 @@ export interface DateCompProps {
     dateLocal: string,
     dateFromNow: string,
     text: string,
+}
+
+export interface CommentCompProps {
+    text: string | number,
+    slot: ReactElement,
+    title: string,
 }
