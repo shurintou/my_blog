@@ -43,32 +43,52 @@ const Blog = () => {
                 <Col xs={24} sm={24} md={18} lg={18} xl={18}>
                     {hasData
                         ?
-                        <Layout style={{
-                            border: window.innerWidth >= 768 ? '2px solid' : 'null',
-                            padding: window.innerWidth >= 768 ? '1em' : '0em',
-                            borderColor: config.antdProps.borderColor,
-                            borderRadius: '6px'
-                        }}>
-                            <Title level={3}>{blogContent?.title}</Title>
-                            <DateComp
-                                dateFromNow={blogContent ? blogContent.created_from_now : ''}
-                                dateLocal={blogContent ? blogContent.created_at_local : ''}
-                                text={'Created'}
-                            />
-                            <Paragraph>
-                                {blogContent?.labels.map(label => {
-                                    return <Tag key={label.name} color={'#' + label.color}>{label.name}</Tag>
-                                })}
-                            </Paragraph>
-                            <Markdown blogText={blogContent?.body} />
-                            {
-                                blogContent?.updated_at !== blogContent?.created_at &&
-                                <DateComp
-                                    dateFromNow={blogContent ? blogContent.updated_from_now : ''}
-                                    dateLocal={blogContent ? blogContent.updated_at_local : ''}
-                                    text={'Updated'}
-                                />
-                            }
+                        <Layout>
+                            <Title
+                                level={3}
+                                style={{
+                                    backgroundColor: window.innerWidth >= 768 ? config.antdProps.titleBackgroundColor : 'null',
+                                    border: window.innerWidth >= 768 ? '2px solid' : 'null',
+                                    borderColor: config.antdProps.borderColor,
+                                    borderRadius: window.innerWidth >= 768 ? '6px 6px 0px 0px' : '0px',
+                                    marginBottom: '0em',
+                                    paddingLeft: window.innerWidth >= 768 ? '0.5em' : '0em',
+                                }}
+                            >{blogContent?.title}</Title>
+                            <Layout
+                                style={{
+                                    padding: window.innerWidth >= 768 ? '1em' : '0em',
+                                    border: window.innerWidth >= 768 ? '2px solid' : 'null',
+                                    borderColor: config.antdProps.borderColor,
+                                    borderRadius: '0px 0px 6px 6px',
+                                }}
+                            >
+                                <Row>
+                                    <Col span={16}>
+                                        <DateComp
+                                            dateFromNow={blogContent ? blogContent.created_from_now : ''}
+                                            dateLocal={blogContent ? blogContent.created_at_local : ''}
+                                            text={'Created'}
+                                        />
+                                    </Col>
+                                    <Col span={1} offset={7}>
+                                    </Col>
+                                </Row>
+                                <Paragraph>
+                                    {blogContent?.labels.map(label => {
+                                        return <Tag key={label.name} color={'#' + label.color}>{label.name}</Tag>
+                                    })}
+                                </Paragraph>
+                                <Markdown blogText={blogContent?.body} />
+                                {
+                                    blogContent?.updated_at !== blogContent?.created_at &&
+                                    <DateComp
+                                        dateFromNow={blogContent ? blogContent.updated_from_now : ''}
+                                        dateLocal={blogContent ? blogContent.updated_at_local : ''}
+                                        text={'Updated'}
+                                    />
+                                }
+                            </Layout>
                         </Layout>
                         :
                         <Empty></Empty>
