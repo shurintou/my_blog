@@ -1,7 +1,7 @@
 import React from 'react'
 import { Typography, Tooltip, Space } from 'antd'
-import { CommentCompProps } from '../../types/index'
-import config from '../../config/config'
+import { CommentCompProps } from '../../../types/index'
+import config from '../../../config/config'
 
 const { Text } = Typography
 

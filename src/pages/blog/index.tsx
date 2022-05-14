@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import { useParams } from "react-router-dom"
-import { Layout, Empty, Typography, Tag, Row, Col, BackTop } from 'antd'
+import { Layout, Empty, Typography, Tag, Row, Col, BackTop, Space, Divider } from 'antd'
+import { EyeOutlined, LikeOutlined } from '@ant-design/icons'
+import CommentComp from '../../components/blog/comment'
 import { getBlogInfo } from '../../api/blogs'
 import { BlogsItemRes, BlogsListItem } from '../../types/index'
 import { parseISODate, parseISODateStr, getDateFromNow } from '../../utils/formatter'
@@ -88,6 +90,18 @@ const Blog = () => {
                                         text={'Updated'}
                                     />
                                 }
+                                <Space size="small" split={<Divider type="vertical" style={{ borderLeftColor: 'rgba(0,0,0,0.6)' }} />}>
+                                    <CommentComp
+                                        title='Like'
+                                        slot={<LikeOutlined />}
+                                        text={blogContent && (blogContent?.reactions['+1'] + blogContent?.reactions.heart + blogContent?.reactions.laugh)}
+                                    />
+                                    <CommentComp
+                                        title='Read'
+                                        slot={<EyeOutlined />}
+                                        text={blogContent?.comments}
+                                    />
+                                </Space>
                             </Layout>
                         </Layout>
                         :

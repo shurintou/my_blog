@@ -114,7 +114,7 @@ export interface DateCompProps {
 }
 
 export interface CommentCompProps {
-    text: string | number,
+    text: string | number | undefined,
     slot: ReactElement,
     title: string,
 }

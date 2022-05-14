@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Divider, Space, Typography, Tag, Layout, } from 'antd'
-import { MessageOutlined, LikeOutlined } from '@ant-design/icons'
-import CommentComp from './comment'
+import { Divider, Typography, Tag, Layout, } from 'antd'
 import { BlogsListItem } from '../../types/index'
 import { useNavigate } from "react-router-dom"
 import DateComp from '../blog/date'
@@ -64,18 +62,6 @@ const BlogsListItemComp: React.FC<BlogsListItem> = (props) => {
                 >Read more
                 </Text>
             </Paragraph>
-            <Space size="small" split={<Divider type="vertical" style={{ borderLeftColor: 'rgba(0,0,0,0.6)' }} />}>
-                <CommentComp
-                    title='Like'
-                    slot={<LikeOutlined></LikeOutlined>}
-                    text={props.reactions['+1'] + props.reactions.heart + props.reactions.laugh}
-                />
-                <CommentComp
-                    title='Comment'
-                    slot={<MessageOutlined></MessageOutlined>}
-                    text={props.comments}
-                />
-            </Space>
             {!isLastItem && <Divider style={{ borderTopColor: 'rgba(0,0,0,0.2)' }} />}
         </Typography>
     )
