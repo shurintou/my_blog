@@ -16,6 +16,20 @@ export const isSameRequest = function (req1: PendingRequest, req2: PendingReques
     return false
 }
 
-export const isSameObjectSimple = function (obj1: Object, obj2: Object) {
-    return JSON.stringify(obj1) === JSON.stringify(obj2)
+export const isSameObjectSimple = function (req1: any, req2: any) {
+    let str1
+    let str2
+    if (typeof req1 === 'object') {
+        str1 = JSON.stringify(req1)
+    }
+    else {
+        str1 = req1
+    }
+    if (typeof req2 === 'object') {
+        str2 = JSON.stringify(req2)
+    }
+    else {
+        str2 = req2
+    }
+    return str1 === str2
 }
