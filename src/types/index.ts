@@ -141,6 +141,7 @@ export interface BlogGetLikeData {
 
 export interface BlogLikeReactionRes extends BlogReaction {
     user: GitUser,
+    content: string,
 }
 
 export interface BlogPostLikeData {
