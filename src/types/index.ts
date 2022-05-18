@@ -1,5 +1,10 @@
 import { ReactElement } from "react"
 
+export interface GitUser {
+    id: number,
+    login: string, //username,
+}
+
 export interface ConfigObj {
     gitProps: GitProps
 }
@@ -117,4 +122,37 @@ export interface CommentCompProps {
     text: string | number | undefined,
     slot: ReactElement,
     title: string,
+}
+
+type Dispatch<A> = (value: A) => void
+
+type SetStateAction<S> = S | ((prevState: S) => S)
+
+export interface LikeCompProps<S> {
+    number: number,
+    handlerClick: Dispatch<SetStateAction<number>>,
+}
+
+export interface BlogGetLikeData {
+    issue_number: number,
+    content: string,
+    per_page: number,
+}
+
+export interface BlogLikeReactionRes extends BlogReaction {
+    user: GitUser,
+}
+
+export interface BlogPostLikeData {
+    number: number,
+    content: string,
+}
+
+export interface DeleteBlogReactionData {
+    id: number,
+    number: number,
+}
+
+export interface BlogReaction {
+    id: number
 }

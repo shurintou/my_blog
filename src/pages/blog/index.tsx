@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useParams } from "react-router-dom"
 import { Layout, Empty, Typography, Tag, Row, Col, BackTop, Space, Divider } from 'antd'
-import { EyeOutlined, LikeOutlined } from '@ant-design/icons'
+import { EyeOutlined } from '@ant-design/icons'
 import CommentComp from '../../components/blog/comment'
 import { getBlogInfo } from '../../api/blogs'
 import { BlogsItemRes, BlogsListItem } from '../../types/index'
@@ -10,6 +10,7 @@ import Markdown from '../../components/others/markdown'
 import Gitalk from '../../components//others/gitalk'
 import DateComp from '../../components/blog/date'
 import config from '../../config/config'
+import Like from '../../components/blog/like'
 
 
 const { Title, Paragraph } = Typography
@@ -18,6 +19,7 @@ const Blog = () => {
     const blogIdStr = useParams().blogId
     const [hasData, setHasData] = useState(false)
     const [blogContent, setBlogContent] = useState<BlogsListItem>()
+    const [commentCntCorrection, setCommentCntCorrection] = useState(0)
 
     useEffect(() => {
 
@@ -93,8 +95,10 @@ const Blog = () => {
                                 <Space size="small" split={<Divider type="vertical" style={{ borderLeftColor: 'rgba(0,0,0,0.6)' }} />}>
                                     <CommentComp
                                         title='Like'
-                                        slot={<LikeOutlined />}
-                                        text={blogContent && (blogContent?.reactions['+1'] + blogContent?.reactions.heart + blogContent?.reactions.laugh)}
+                                        slot={
+                                            <Like number={blogContent ? blogContent?.number : 0} handlerClick={setCommentCntCorrection}></Like>
+                                        }
+                                        text={blogContent && (blogContent?.reactions['+1'] + blogContent?.reactions.heart + blogContent?.reactions.laugh + commentCntCorrection)}
                                     />
                                     <CommentComp
                                         title='Read'

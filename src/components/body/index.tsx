@@ -1,6 +1,8 @@
 import React from 'react'
 import { Layout, message } from 'antd'
 import { Routes, Route, Navigate } from "react-router-dom"
+import { getGitUserInfo } from '../../api/user'
+import { setLocalUser } from '../../utils/authentication'
 import Home from '../../pages/home'
 import Blogs from '../../pages/blogs'
 import About from '../../pages/about'
@@ -18,10 +20,13 @@ export default class BlogBody extends React.Component<{}, { [key: string]: any }
                 }
             }
         }
-
     }
 
     componentDidMount() {
+        getGitUserInfo()
+            .then(res => {
+                setLocalUser(res.data)
+            })
         window.addEventListener('unhandledrejection', this.state.unhandledrejectionFunc)
     }
     componentWillUnmount() {
