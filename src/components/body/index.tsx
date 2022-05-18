@@ -25,7 +25,7 @@ export default class BlogBody extends React.Component<{}, { [key: string]: any }
     componentDidMount() {
         getGitUserInfo()
             .then(res => {
-                setLocalUser(res.data)
+                setLocalUser(res)
             })
         window.addEventListener('unhandledrejection', this.state.unhandledrejectionFunc)
     }
