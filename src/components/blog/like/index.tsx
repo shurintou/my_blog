@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { LikeCompProps, BlogLikeReactionRes } from '../../../types/index'
-import { Layout } from 'antd'
+import { Layout, message } from 'antd'
 import { LikeOutlined, LikeTwoTone } from '@ant-design/icons'
 import { getReactions, postLike, deleteLike } from '../../../api/blogs'
 import { getLocalUser } from '../../../utils/authentication'
@@ -25,6 +25,10 @@ function LikeCompo<T>(props: LikeCompProps<T>) {
         /* eslint-disable-next-line */
     }, [])
 
+    const errorHandler = () => {
+        message.warning('Please login your github account first.')
+    }
+
     function likeClickHandler() {
         if (userLikeId !== 0) {
             deleteLike({ number: props.number, id: userLikeId })
@@ -32,12 +36,14 @@ function LikeCompo<T>(props: LikeCompProps<T>) {
                     setUserLikeId(0)
                     props.handlerClick(0)
                 })
+                .catch(errorHandler)
         } else {
             postLike({ number: props.number, content: reactionType })
                 .then((res: BlogLikeReactionRes) => {
                     setUserLikeId(res.id)
                     props.handlerClick(1)
                 })
+                .catch(errorHandler)
         }
     }
 
