@@ -17,8 +17,9 @@ let pendingRequestList = new Array<PendingRequest>()
 const request = axios.create({ //create an instance using interceptors
     baseURL: '',
     timeout: 15000, // ms, 0 is infinite
-    headers: {}
+    headers: (process.env.NODE_ENV === 'development' ? {} : { 'cache-control': 'no-cache' })
 })
+
 request.interceptors.request.use(
     config => {
         config.cancelToken = new CancelToken(function executor(c) {
