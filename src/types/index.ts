@@ -76,7 +76,6 @@ export interface BlogsItemRes {
     title: string,
     body: string,
     comments: number,
-    reactions: ReactionItem,
     labels: Array<Label>,
     created_at: string,
     updated_at: string,
@@ -98,11 +97,6 @@ export interface Label {
     description: string,
 }
 
-export interface ReactionItem {
-    [+1]: number,
-    laugh: number,
-    heart: number,
-}
 
 export interface MarkdownProps {
     blogText: string | undefined

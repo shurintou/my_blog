@@ -98,7 +98,7 @@ const Blog = () => {
                                         slot={
                                             <Like number={blogContent ? blogContent?.number : 0} likeHandler={setlikeCnt}></Like>
                                         }
-                                        text={blogContent && (blogContent?.reactions.heart + blogContent?.reactions.laugh + likeCnt)}
+                                        text={likeCnt}
                                     />
                                     <CommentComp
                                         title='Read'
