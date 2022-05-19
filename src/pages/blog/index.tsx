@@ -19,7 +19,7 @@ const Blog = () => {
     const blogIdStr = useParams().blogId
     const [hasData, setHasData] = useState(false)
     const [blogContent, setBlogContent] = useState<BlogsListItem>()
-    const [commentCntCorrection, setCommentCntCorrection] = useState(0)
+    const [likeCnt, setlikeCnt] = useState(0)
 
     useEffect(() => {
 
@@ -96,9 +96,9 @@ const Blog = () => {
                                     <CommentComp
                                         title='Like'
                                         slot={
-                                            <Like number={blogContent ? blogContent?.number : 0} handlerClick={setCommentCntCorrection}></Like>
+                                            <Like number={blogContent ? blogContent?.number : 0} likeHandler={setlikeCnt}></Like>
                                         }
-                                        text={blogContent && (blogContent?.reactions['+1'] + blogContent?.reactions.heart + blogContent?.reactions.laugh + commentCntCorrection)}
+                                        text={blogContent && (blogContent?.reactions.heart + blogContent?.reactions.laugh + likeCnt)}
                                     />
                                     <CommentComp
                                         title='Read'

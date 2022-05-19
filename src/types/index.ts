@@ -130,7 +130,7 @@ type SetStateAction<S> = S | ((prevState: S) => S)
 
 export interface LikeCompProps<S> {
     number: number,
-    handlerClick: Dispatch<SetStateAction<number>>,
+    likeHandler: Dispatch<SetStateAction<number>>,
 }
 
 export interface BlogGetLikeData {

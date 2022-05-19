@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useLayoutEffect } from 'react'
 import { LikeCompProps, BlogLikeReactionRes } from '../../../types/index'
 import { Layout, message } from 'antd'
 import { LikeOutlined, LikeTwoTone } from '@ant-design/icons'
@@ -7,42 +7,58 @@ import { getLocalUser } from '../../../utils/authentication'
 
 function LikeCompo<T>(props: LikeCompProps<T>) {
     const [userLikeId, setUserLikeId] = useState(0)
+    const [clickable, setClickable] = useState(false)
     const reactionType = '+1'
+    const getReactionsReq = {
+        issue_number: props.number,
+        content: reactionType,
+        per_page: 100,
+    }
 
-    useEffect(() => {
-        getReactions({
-            issue_number: props.number,
-            content: reactionType,
-            per_page: 100,
-        }).then((res: Array<BlogLikeReactionRes>) => {
-            if (res.length > 0) {
-                const userLikeReaction = res.find(reaction => reaction.content === reactionType && reaction.user.id === getLocalUser().id && reaction.user.login === getLocalUser().login)
-                if (userLikeReaction !== undefined) {
-                    setUserLikeId(userLikeReaction.id)
-                }
-            }
-        })
+    useLayoutEffect(() => {
+        getReactions(getReactionsReq)
+            .then(getReactionsHandler)
         /* eslint-disable-next-line */
     }, [])
+
+    const getReactionsHandler = (res: Array<BlogLikeReactionRes>) => {
+        setClickable(true)
+        props.likeHandler(res.length)
+        if (res.length > 0) {
+            const userLikeReaction: BlogLikeReactionRes | undefined = res.find(reaction => reaction.user.id === getLocalUser().id && reaction.user.login === getLocalUser().login)
+            if (userLikeReaction !== undefined) {
+                setUserLikeId(userLikeReaction.id)
+            }
+            else {
+                setUserLikeId(0)
+            }
+        }
+        else {
+            setUserLikeId(0)
+        }
+    }
 
     const errorHandler = () => {
         message.warning('Please login your github account first.')
     }
 
+    const successHandler = () => {
+        getReactions(getReactionsReq)
+            .then(getReactionsHandler)
+    }
+
     function likeClickHandler() {
+        if (!clickable) {
+            return
+        }
+        setClickable(false)
         if (userLikeId !== 0) {
             deleteLike({ number: props.number, id: userLikeId })
-                .then(() => {
-                    setUserLikeId(0)
-                    props.handlerClick(0)
-                })
+                .then(successHandler)
                 .catch(errorHandler)
         } else {
             postLike({ number: props.number, content: reactionType })
-                .then((res: BlogLikeReactionRes) => {
-                    setUserLikeId(res.id)
-                    props.handlerClick(1)
-                })
+                .then(successHandler)
                 .catch(errorHandler)
         }
     }

@@ -40,7 +40,8 @@ export function getReactions(params: BlogGetLikeData) {
     return request({
         url: baseURL + '/repos/' + conf.gitProps.owner + '/' + conf.gitProps.repo + '/issues/' + params.issue_number + '/reactions',
         method: 'get',
-        auth: auth
+        auth: auth,
+        params: params
     })
 }
 
