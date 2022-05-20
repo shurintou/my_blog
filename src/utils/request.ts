@@ -50,11 +50,14 @@ request.interceptors.response.use(
         return res.data
     },
     error => {
-        if (error.response) {
-            removeResponsedRequestHandler(error.response)
-            const status = error.response.status
-            if (process.env.NODE_ENV === 'production' && status === 401) {
-                message.warning('Please login your github account first.')
+        const res = error.response
+        if (res) {
+            removeResponsedRequestHandler(res)
+            const status = res.status
+            if (process.env.NODE_ENV === 'production') {
+                if (status === 401 && res.config.method !== 'get') {
+                    message.warning('Please login your github account first.')
+                }
             }
         }
         console.error(error)
