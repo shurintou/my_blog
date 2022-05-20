@@ -46,21 +46,12 @@ request.interceptors.request.use(
 
 request.interceptors.response.use(
     res => {
-        let newResponse: PendingRequest = {
-            url: res.config.url,
-            method: res.config.method,
-            data: res.config.data,
-            params: res.config.params,
-        }
-        let sameRequestIndex = pendingRequestList.findIndex(pendingRequest => isSameRequest(pendingRequest, newResponse))
-        if (sameRequestIndex !== -1) {
-            //remove the exactly same request from the list
-            pendingRequestList.splice(sameRequestIndex, 1)
-        }
+        removeResponsedRequestHandler(res)
         return res.data
     },
     error => {
         if (error.response) {
+            removeResponsedRequestHandler(error.response)
             const status = error.response.status
             if (process.env.NODE_ENV === 'production' && status === 401) {
                 message.warning('Please login your github account first.')
@@ -69,5 +60,19 @@ request.interceptors.response.use(
         console.error(error)
     }
 )
+
+const removeResponsedRequestHandler = function (res: any) {
+    let newResponse: PendingRequest = {
+        url: res.config.url,
+        method: res.config.method,
+        data: res.config.data,
+        params: res.config.params,
+    }
+    let sameRequestIndex = pendingRequestList.findIndex(pendingRequest => isSameRequest(pendingRequest, newResponse))
+    if (sameRequestIndex !== -1) {
+        //remove the exactly same request from the list
+        pendingRequestList.splice(sameRequestIndex, 1)
+    }
+}
 
 export default request
