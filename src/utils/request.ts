@@ -1,5 +1,6 @@
 import axios, { Canceler } from 'axios'
 import { isSameRequest } from './common'
+import { message } from 'antd'
 import { PendingRequest } from '../types/index'
 
 const CancelToken = axios.CancelToken
@@ -59,6 +60,12 @@ request.interceptors.response.use(
         return res.data
     },
     error => {
+        if (error.response) {
+            const status = error.response.status
+            if (process.env.NODE_ENV === 'production' && status === 401) {
+                message.warning('Please login your github account first.')
+            }
+        }
         console.error(error)
     }
 )
