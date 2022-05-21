@@ -41,7 +41,10 @@ export function getReactions(params: BlogGetLikeData) {
         url: baseURL + '/repos/' + conf.gitProps.owner + '/' + conf.gitProps.repo + '/issues/' + params.issue_number + '/reactions',
         method: 'get',
         auth: auth,
-        params: params
+        params: params,
+        headers: {
+            Accept: 'application/vnd.github.v3+json'
+        },
     })
 }
 
@@ -51,7 +54,7 @@ export function postLike(data: BlogPostLikeData) {
         method: 'post',
         headers: {
             Authorization: 'token ' + getGitAccessToken(),
-            Accept: 'application/vnd.github.squirrel-girl-preview'
+            Accept: 'application/vnd.github.v3+json'
         },
         data: { content: data.content }
     })
@@ -63,7 +66,7 @@ export function deleteLike(data: DeleteBlogReactionData) {
         method: 'delete',
         headers: {
             Authorization: 'token ' + getGitAccessToken(),
-            Accept: 'application/vnd.github.squirrel-girl-preview'
+            Accept: 'application/vnd.github.v3+json'
         }
     })
 }
