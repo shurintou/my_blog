@@ -1,4 +1,4 @@
-import { useState, useLayoutEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { LikeCompProps, BlogLikeReactionResByGraphQl, BlogLikeReactionByGraphQl } from '../../../types/index'
 import { Layout } from 'antd'
 import { HeartOutlined, HeartTwoTone } from '@ant-design/icons'
@@ -15,9 +15,15 @@ function LikeCompo<T>(props: LikeCompProps<T>) {
         per_page: 100,
     }
 
-    useLayoutEffect(() => {
-        getReactionsByGraphQl(getReactionsReq)
-            .then(getReactionsHandler)
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+            setClickable(false)
+            getReactionsByGraphQl(getReactionsReq)
+                .then(getReactionsHandler)
+                .then(() => clearInterval(intervalId))
+                .catch(() => setClickable(true))
+        }, 1000)
+        return () => clearInterval(intervalId)
         /* eslint-disable-next-line */
     }, [])
 

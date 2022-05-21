@@ -37,12 +37,13 @@ export function getBlogInfo(params: BlogInfoRequestParam) {
 }
 
 export function getReactionsByGraphQl(data: BlogGetLikeData) {
-    return request({
-        url: baseURL + '/graphql',
-        method: 'post',
-        data: {
-            operationName: "getReactions",
-            query: `
+    if (getGitAccessToken()) {
+        return request({
+            url: baseURL + '/graphql',
+            method: 'post',
+            data: {
+                operationName: "getReactions",
+                query: `
                 query getReactions {
                     repository(owner:"${conf.gitProps.owner}", name:"${conf.gitProps.repo}") {
                         issue(number:${data.issue_number}) {
@@ -62,11 +63,13 @@ export function getReactionsByGraphQl(data: BlogGetLikeData) {
                     }
                 }
             `
-        },
-        headers: {
-            Authorization: 'bearer ' + getGitAccessToken(),
-        }
-    })
+            },
+            headers: {
+                Authorization: 'bearer ' + getGitAccessToken(),
+            }
+        })
+    }
+    return Promise.reject()
 }
 
 export function postLike(data: BlogPostLikeData) {
