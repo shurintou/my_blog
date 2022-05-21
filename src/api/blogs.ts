@@ -64,7 +64,7 @@ export function getReactionsByGraphQl(data: BlogGetLikeData) {
             `
         },
         headers: {
-            Authorization: 'bearer' + getGitAccessToken(),
+            Authorization: 'bearer ' + getGitAccessToken(),
         }
     })
 }
