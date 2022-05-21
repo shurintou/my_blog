@@ -11,6 +11,7 @@ import Gitalk from '../../components//others/gitalk'
 import DateComp from '../../components/blog/date'
 import config from '../../config/config'
 import Like from '../../components/blog/like'
+import { getLocalUser } from '../../utils/authentication'
 
 
 const { Title, Paragraph } = Typography
@@ -98,7 +99,13 @@ const Blog = () => {
                                         slot={
                                             <Like number={blogContent ? blogContent?.number : 0} likeHandler={setlikeCnt}></Like>
                                         }
-                                        text={likeCnt}
+                                        text={
+                                            blogContent &&
+                                            blogContent.reactions['+1']
+                                            + blogContent.reactions.hooray
+                                            + blogContent.reactions.laugh
+                                            + blogContent.reactions.rocket
+                                            + (getLocalUser()?.id === 0 ? blogContent.reactions.heart : likeCnt)}
                                     />
                                     <CommentComp
                                         title='Read'
