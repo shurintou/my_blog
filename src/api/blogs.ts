@@ -39,7 +39,9 @@ export function getBlogInfo(params: BlogInfoRequestParam) {
 export function getReactionsByGraphQl(data: BlogGetLikeData) {
     return request({
         url: baseURL + '/graphql',
+        method: 'post',
         data: {
+            operationName: "getReactions",
             query: `
                 query getReactions {
                     repository(owner:${conf.gitProps.owner}, name:${conf.gitProps.repo}) {
