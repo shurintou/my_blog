@@ -7,6 +7,7 @@ import Home from '../../pages/home'
 import Blogs from '../../pages/blogs'
 import About from '../../pages/about'
 import Blog from '../../pages/blog'
+import { GitUser } from '../../types/index'
 
 export default class BlogBody extends React.Component<{}, { [key: string]: any }> {
     constructor(props: Object) {
@@ -23,10 +24,16 @@ export default class BlogBody extends React.Component<{}, { [key: string]: any }
     }
 
     componentDidMount() {
-        getGitUserInfo()
-            .then(res => {
-                setLocalUser(res)
+        const intervalId = setInterval(() => {
+            getGitUserInfo().then((res: GitUser) => {
+                /* clear the interval only if the local storage 'getGitAccessToken' is not null */
+                if (res.id) {
+                    setLocalUser(res)
+                    clearInterval(intervalId)
+                }
             })
+        }, 1000)
+
         window.addEventListener('unhandledrejection', this.state.unhandledrejectionFunc)
     }
     componentWillUnmount() {
