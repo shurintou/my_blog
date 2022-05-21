@@ -133,11 +133,6 @@ export interface BlogGetLikeData {
     per_page: number,
 }
 
-export interface BlogLikeReactionRes extends BlogReaction {
-    user: GitUser,
-    content: string,
-}
-
 export interface BlogPostLikeData {
     number: number,
     content: string,
@@ -148,6 +143,25 @@ export interface DeleteBlogReactionData {
     number: number,
 }
 
-export interface BlogReaction {
-    id: number
+export interface BlogLikeReactionByGraphQl {
+    node: {
+        databaseId: number,
+        content: string,
+        user: {
+            databaseId: number,
+            login: string,
+        }
+    }
+}
+
+export interface BlogLikeReactionResByGraphQl {
+    data: {
+        repository: {
+            issue: {
+                reactions: {
+                    edges: Array<BlogLikeReactionByGraphQl>
+                }
+            }
+        }
+    }
 }

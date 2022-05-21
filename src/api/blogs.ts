@@ -36,15 +36,34 @@ export function getBlogInfo(params: BlogInfoRequestParam) {
     })
 }
 
-export function getReactions(params: BlogGetLikeData) {
+export function getReactionsByGraphQl(data: BlogGetLikeData) {
     return request({
-        url: baseURL + '/repos/' + conf.gitProps.owner + '/' + conf.gitProps.repo + '/issues/' + params.issue_number + '/reactions',
-        method: 'get',
-        auth: auth,
-        params: params,
-        headers: {
-            Accept: 'application/vnd.github.v3+json'
+        url: baseURL + '/graphql',
+        data: {
+            query: `
+                query getReactions {
+                    repository(owner:${conf.gitProps.owner}, name:${conf.gitProps.repo}) {
+                        issue(number:${data.issue_number}) {
+                            reactions(last: ${data.per_page}, content: HEART) {
+                                edges {
+                                    node {
+                                        databaseId
+                                        content
+                                        user {
+                                            databaseId
+                                            login
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            `
         },
+        headers: {
+            Authorization: 'bearer' + getGitAccessToken(),
+        }
     })
 }
 
