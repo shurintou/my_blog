@@ -55,7 +55,7 @@ request.interceptors.response.use(
             removeResponsedRequestHandler(res)
             const status = res.status
             if (process.env.NODE_ENV === 'production') {
-                if (status === 401 && res.config.method !== 'get') {
+                if (status === 401 && res.config.method !== 'get' && res.config.url.indexOf('graphql') === -1) {
                     message.warning('Please login your github account first.')
                 }
             }

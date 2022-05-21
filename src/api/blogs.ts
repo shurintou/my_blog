@@ -44,9 +44,9 @@ export function getReactionsByGraphQl(data: BlogGetLikeData) {
             operationName: "getReactions",
             query: `
                 query getReactions {
-                    repository(owner:${conf.gitProps.owner}, name:${conf.gitProps.repo}) {
+                    repository(owner:"${conf.gitProps.owner}", name:"${conf.gitProps.repo}") {
                         issue(number:${data.issue_number}) {
-                            reactions(last: ${data.per_page}, content: HEART) {
+                            reactions(last: ${data.per_page}, content: ${data.content.toUpperCase()}) {
                                 edges {
                                     node {
                                         databaseId
