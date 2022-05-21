@@ -7,7 +7,10 @@ export function getGitAccessToken() { // this func use the same token stored by 
 }
 
 export function setLocalUser(newUser: GitUser) {
-    localUser = newUser
+    if (newUser) {
+        localUser.id = newUser.id
+        localUser.login = newUser.login
+    }
 }
 
 export function getLocalUser() {
