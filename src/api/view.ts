@@ -27,7 +27,6 @@ export function updateBlogView(data: UpdateBlogView) {
         return request({
             url: baseURL + '/repos/' + conf.gitProps.owner + '/' + conf.gitProps.repo + '/issues/' + blogViewIssueNumber,
             method: 'post',
-            auth: auth,
             data: {
                 body: data.pvStr
             },
