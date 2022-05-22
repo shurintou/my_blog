@@ -178,3 +178,12 @@ export interface BlogLikeReactionResByGraphQl {
         }
     }
 }
+
+export interface BlogView {
+    id: number,
+    pv: number,
+}
+
+export interface UpdateBlogView {
+    pvStr: string,
+}

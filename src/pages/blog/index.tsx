@@ -4,7 +4,8 @@ import { Layout, Empty, Typography, Tag, Row, Col, BackTop, Space, Divider } fro
 import { EyeOutlined } from '@ant-design/icons'
 import CommentComp from '../../components/blog/comment'
 import { getBlogInfo } from '../../api/blogs'
-import { BlogsItemRes, BlogsListItem } from '../../types/index'
+import { getBlogView, updateBlogView } from '../../api/view'
+import { BlogsItemRes, BlogsListItem, BlogView } from '../../types/index'
 import { parseISODate, parseISODateStr, getDateFromNow } from '../../utils/formatter'
 import Markdown from '../../components/others/markdown'
 import Gitalk from '../../components//others/gitalk'
@@ -21,9 +22,9 @@ const Blog = () => {
     const [hasData, setHasData] = useState(false)
     const [blogContent, setBlogContent] = useState<BlogsListItem>()
     const [likeCnt, setlikeCnt] = useState(0)
+    const [blogPv, setBlogPv] = useState(0)
 
     useEffect(() => {
-
         if (blogIdStr) {
             const blogId = parseInt(blogIdStr)
             getBlogInfo({ number: blogId }).then((res: BlogsItemRes) => {
@@ -34,6 +35,19 @@ const Blog = () => {
                     updated_from_now: getDateFromNow(parseISODate(res.updated_at)),
                 }))
                 setHasData(true)
+            })
+            getBlogView().then((res: BlogsItemRes) => {
+                const viewJson = res.body
+                const viewData: Array<BlogView> = JSON.parse(viewJson)
+                const thisBlogViewItem = viewData.find(item => item.id === blogId)
+                if (thisBlogViewItem) {
+                    setBlogPv(++thisBlogViewItem.pv)
+                }
+                else {
+                    setBlogPv(1)
+                    viewData.push({ id: blogId, pv: 1 })
+                }
+                updateBlogView({ pvStr: JSON.stringify(viewData) })
             })
         }
 
@@ -108,9 +122,9 @@ const Blog = () => {
                                             + (getLocalUser()?.id === 0 ? blogContent.reactions.heart : likeCnt)}
                                     />
                                     <CommentComp
-                                        title='Read'
+                                        title='View'
                                         slot={<EyeOutlined />}
-                                        text={blogContent?.comments}
+                                        text={blogPv}
                                     />
                                 </Space>
                             </Layout>
