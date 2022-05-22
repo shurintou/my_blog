@@ -7,7 +7,6 @@ import { getLocalUser } from '../../../utils/authentication'
 
 function LikeCompo<T>(props: LikeCompProps<T>) {
     const [userLikeId, setUserLikeId] = useState(0)
-    const [clickable, setClickable] = useState(false)
     const reactionType = 'heart'
     const getReactionsReq = {
         issue_number: props.number,
@@ -17,18 +16,15 @@ function LikeCompo<T>(props: LikeCompProps<T>) {
 
     useEffect(() => {
         const intervalId = setInterval(() => {
-            setClickable(false)
             getReactionsByGraphQl(getReactionsReq)
                 .then(getReactionsHandler)
                 .then(() => clearInterval(intervalId))
-                .catch(() => setClickable(true))
         }, 1000)
         return () => clearInterval(intervalId)
         /* eslint-disable-next-line */
     }, [])
 
     const getReactionsHandler = (res: BlogLikeReactionResByGraphQl) => {
-        setClickable(true)
         const likeReactions = res.data.repository.issue.reactions.edges
         const likeNum = likeReactions.length
         props.likeHandler(likeNum)
@@ -53,10 +49,6 @@ function LikeCompo<T>(props: LikeCompProps<T>) {
     }
 
     function likeClickHandler() {
-        if (!clickable) {
-            return
-        }
-        setClickable(false)
         if (userLikeId !== 0) {
             deleteLike({ number: props.number, id: userLikeId })
                 .then(successHandler)
