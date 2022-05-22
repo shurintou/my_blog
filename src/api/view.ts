@@ -1,6 +1,7 @@
 import request from '../utils/request'
 import { UpdateBlogView } from '../types/index'
 import conf from '../config/config'
+import { getGitAccessToken } from '../utils/authentication'
 
 const auth = {
     username: conf.gitProps.clientID,
@@ -22,15 +23,19 @@ export function getBlogView() {
 }
 
 export function updateBlogView(data: UpdateBlogView) {
-    return request({
-        url: baseURL + '/repos/' + conf.gitProps.owner + '/' + conf.gitProps.repo + '/issues/' + blogViewIssueNumber,
-        method: 'post',
-        auth: auth,
-        data: {
-            body: data.pvStr
-        },
-        headers: {
-            accept: 'application/vnd.github.v3+json',
-        }
-    })
+    if (getGitAccessToken()) {
+        return request({
+            url: baseURL + '/repos/' + conf.gitProps.owner + '/' + conf.gitProps.repo + '/issues/' + blogViewIssueNumber,
+            method: 'post',
+            auth: auth,
+            data: {
+                body: data.pvStr
+            },
+            headers: {
+                accept: 'application/vnd.github.v3+json',
+                Authorization: 'token ' + getGitAccessToken(),
+            }
+        })
+    }
+    return Promise.reject()
 }
