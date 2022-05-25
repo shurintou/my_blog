@@ -4,8 +4,7 @@ import { Layout, Empty, Typography, Tag, Row, Col, BackTop, Space, Divider, Spin
 import { EyeOutlined } from '@ant-design/icons'
 import CommentComp from '../../components/blog/comment'
 import { getBlogInfo } from '../../api/blogs'
-import { getBlogView, updateBlogView } from '../../api/view'
-import { BlogsItemRes, BlogsListItem, BlogView } from '../../types/index'
+import { BlogsItemRes, BlogsListItem, } from '../../types/index'
 import { parseISODate, parseISODateStr, getDateFromNow } from '../../utils/formatter'
 import Markdown from '../../components/others/markdown'
 import Gitalk from '../../components//others/gitalk'
@@ -22,7 +21,6 @@ const Blog = () => {
     const [hasData, setHasData] = useState(false)
     const [blogContent, setBlogContent] = useState<BlogsListItem>()
     const [likeCnt, setlikeCnt] = useState(0)
-    const [blogPv, setBlogPv] = useState(0)
 
     useEffect(() => {
         if (blogIdStr) {
@@ -35,19 +33,24 @@ const Blog = () => {
                     updated_from_now: getDateFromNow(parseISODate(res.updated_at)),
                 }))
                 setHasData(true)
-            })
-            getBlogView().then((res: BlogsItemRes) => {
-                const viewJson = res.body
-                const viewData: Array<BlogView> = JSON.parse(viewJson)
-                const thisBlogViewItem = viewData.find(item => item.id === blogId)
-                if (thisBlogViewItem) {
-                    setBlogPv(++thisBlogViewItem.pv)
-                }
-                else {
-                    setBlogPv(1)
-                    viewData.push({ id: blogId, pv: 1 })
-                }
-                updateBlogView({ pvStr: JSON.stringify(viewData) })
+                const parentEl = document.head
+                let busuanziScriptSrc = ''
+                const scriptElementArray: Array<HTMLScriptElement> = Array.from(document.getElementsByTagName('script'))
+                scriptElementArray.forEach((script, index) => {
+                    if (script.id === 'busuanzi-script') {
+                        busuanziScriptSrc = script.src
+                    }
+                    if (index > 0) {
+                        parentEl.removeChild(script)
+                    }
+                })
+                // to make busuanzi script to support SPA application. remove/add it every single popstate of route .
+                const newScriptEl = document.createElement('script')
+                newScriptEl.setAttribute('type', 'text/javascript')
+                document.head.appendChild(newScriptEl)
+                newScriptEl.setAttribute('src', busuanziScriptSrc)
+                newScriptEl.setAttribute('async', 'true')
+                newScriptEl.setAttribute('id', 'busuanzi-script')
             })
         }
 
