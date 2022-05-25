@@ -24,7 +24,9 @@ export default class BlogBody extends React.Component<{}, { [key: string]: any }
     }
 
     componentDidMount() {
+        let failTolerantTime = 15
         const intervalId = setInterval(() => {
+            failTolerantTime--
             getGitUserInfo().then((res: GitUser) => {
                 /* clear the interval only if the local storage 'getGitAccessToken' is not null */
                 if (res.id) {
@@ -32,6 +34,9 @@ export default class BlogBody extends React.Component<{}, { [key: string]: any }
                     clearInterval(intervalId)
                 }
             })
+            if (failTolerantTime <= 0) {
+                clearInterval(intervalId)
+            }
         }, 1000)
 
         window.addEventListener('unhandledrejection', this.state.unhandledrejectionFunc)
