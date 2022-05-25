@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useParams } from "react-router-dom"
-import { Layout, Empty, Typography, Tag, Row, Col, BackTop, Space, Divider } from 'antd'
+import { Layout, Empty, Typography, Tag, Row, Col, BackTop, Space, Divider, Spin } from 'antd'
 import { EyeOutlined } from '@ant-design/icons'
 import CommentComp from '../../components/blog/comment'
 import { getBlogInfo } from '../../api/blogs'
@@ -15,7 +15,7 @@ import Like from '../../components/blog/like'
 import { getLocalUser } from '../../utils/authentication'
 
 
-const { Title, Paragraph } = Typography
+const { Title, Paragraph, Text } = Typography
 
 const Blog = () => {
     const blogIdStr = useParams().blogId
@@ -114,17 +114,22 @@ const Blog = () => {
                                             <Like number={blogContent ? blogContent?.number : 0} likeHandler={setlikeCnt}></Like>
                                         }
                                         text={
-                                            blogContent &&
-                                            blogContent.reactions['+1']
-                                            + blogContent.reactions.hooray
-                                            + blogContent.reactions.laugh
-                                            + blogContent.reactions.rocket
-                                            + (getLocalUser()?.id === 0 ? blogContent.reactions.heart : likeCnt)}
+                                            !blogContent ? <Spin /> :
+                                                <Text>
+                                                    {
+                                                        blogContent.reactions['+1']
+                                                        + blogContent.reactions.hooray
+                                                        + blogContent.reactions.laugh
+                                                        + blogContent.reactions.rocket
+                                                        + (getLocalUser()?.id === 0 ? blogContent.reactions.heart : likeCnt)
+                                                    }
+                                                </Text>
+                                        }
                                     />
                                     <CommentComp
                                         title='View'
                                         slot={<EyeOutlined />}
-                                        text={blogPv}
+                                        text={<Text id="busuanzi_value_page_pv"><Spin /></Text>}
                                     />
                                 </Space>
                             </Layout>
