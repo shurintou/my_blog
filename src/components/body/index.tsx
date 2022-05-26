@@ -25,20 +25,22 @@ export default class BlogBody extends React.Component<{}, { [key: string]: any }
 
     componentDidMount() {
         let failTolerantTime = 15
-        const intervalId = setInterval(() => {
-            failTolerantTime--
-            getGitUserInfo().then((res: GitUser) => {
-                /* clear the interval only if the local storage 'getGitAccessToken' is not null */
-                if (res.id) {
-                    setLocalUser(res)
+        let intervalId: NodeJS.Timeout
+        if (process.env.NODE_ENV === 'production') {
+            intervalId = setInterval(() => {
+                failTolerantTime--
+                getGitUserInfo().then((res: GitUser) => {
+                    /* clear the interval only if the local storage 'getGitAccessToken' is not null */
+                    if (res.id) {
+                        setLocalUser(res)
+                        clearInterval(intervalId)
+                    }
+                })
+                if (failTolerantTime <= 0) {
                     clearInterval(intervalId)
                 }
-            })
-            if (failTolerantTime <= 0) {
-                clearInterval(intervalId)
-            }
-        }, 1000)
-
+            }, 1000)
+        }
         window.addEventListener('unhandledrejection', this.state.unhandledrejectionFunc)
     }
     componentWillUnmount() {

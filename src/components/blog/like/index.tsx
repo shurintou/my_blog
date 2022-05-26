@@ -16,16 +16,18 @@ function LikeCompo<T>(props: LikeCompProps<T>) {
 
     useEffect(() => {
         let failTolerantTime = 15
-        const intervalId = setInterval(() => {
-            failTolerantTime--
-            getReactionsByGraphQl(getReactionsReq)
-                .then(getReactionsHandler)
-                .then(() => clearInterval(intervalId))
-            if (failTolerantTime <= 0) {
-                clearInterval(intervalId)
-            }
-        }, 1000)
-
+        let intervalId: NodeJS.Timeout
+        if (process.env.NODE_ENV === 'production') {
+            intervalId = setInterval(() => {
+                failTolerantTime--
+                getReactionsByGraphQl(getReactionsReq)
+                    .then(getReactionsHandler)
+                    .then(() => clearInterval(intervalId))
+                if (failTolerantTime <= 0) {
+                    clearInterval(intervalId)
+                }
+            }, 1000)
+        }
         return () => clearInterval(intervalId)
         /* eslint-disable-next-line */
     }, [])
