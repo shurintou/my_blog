@@ -21,6 +21,7 @@ const Blog = () => {
     const [hasData, setHasData] = useState(false)
     const [blogContent, setBlogContent] = useState<BlogsListItem>()
     const [likeCnt, setlikeCnt] = useState(0)
+    const [pcRenderMode, setPcRenderMode] = useState(true)
 
     useEffect(() => {
         if (blogIdStr) {
@@ -54,6 +55,14 @@ const Blog = () => {
             })
         }
 
+        function windowResizeFunc() {
+            setPcRenderMode(window.innerWidth >= 768)
+        }
+        windowResizeFunc()
+        window.addEventListener('resize', windowResizeFunc)
+        return () => {
+            window.removeEventListener('resize', windowResizeFunc)
+        }
         /* eslint-disable-next-line */
     }, [])
 
@@ -69,18 +78,18 @@ const Blog = () => {
                             <Title
                                 level={3}
                                 style={{
-                                    backgroundColor: window.innerWidth >= 768 ? config.antdProps.titleBackgroundColor : 'null',
-                                    border: window.innerWidth >= 768 ? '2px solid' : 'null',
+                                    backgroundColor: pcRenderMode ? config.antdProps.titleBackgroundColor : 'null',
+                                    border: pcRenderMode ? '2px solid' : 'null',
                                     borderColor: config.antdProps.borderColor,
-                                    borderRadius: window.innerWidth >= 768 ? '6px 6px 0px 0px' : '0px',
+                                    borderRadius: pcRenderMode ? '6px 6px 0px 0px' : '0px',
                                     marginBottom: '0em',
-                                    paddingLeft: window.innerWidth >= 768 ? '0.5em' : '0em',
+                                    paddingLeft: pcRenderMode ? '0.5em' : '0em',
                                 }}
                             >{blogContent?.title}</Title>
                             <Layout
                                 style={{
-                                    padding: window.innerWidth >= 768 ? '1em' : '0em',
-                                    border: window.innerWidth >= 768 ? '2px solid' : 'null',
+                                    padding: pcRenderMode ? '1em' : '0em',
+                                    border: pcRenderMode ? '2px solid' : 'null',
                                     borderColor: config.antdProps.borderColor,
                                     borderRadius: '0px 0px 6px 6px',
                                 }}

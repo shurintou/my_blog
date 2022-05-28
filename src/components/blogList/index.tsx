@@ -12,6 +12,7 @@ const InfiniteBlogsList = () => {
     const [hasmore, setHasMore] = useState(true)
     const [data, setData] = useState<Array<BlogsListItem>>([])
     const [page, setPage] = useState(1)
+    const [pcRenderMode, setPcRenderMode] = useState(true)
     const { blogProps: { blogListItemCountPerPage } } = config
 
     const loadMoreData = () => {
@@ -48,6 +49,14 @@ const InfiniteBlogsList = () => {
 
     useEffect(() => {
         loadMoreData()
+        function windowResizeFunc() {
+            setPcRenderMode(window.innerWidth >= 768)
+        }
+        windowResizeFunc()
+        window.addEventListener('resize', windowResizeFunc)
+        return () => {
+            window.removeEventListener('resize', windowResizeFunc)
+        }
         /* eslint-disable-next-line */
     }, [])
 
@@ -65,7 +74,7 @@ const InfiniteBlogsList = () => {
                     itemLayout="vertical"
                     size="large"
                     dataSource={data}
-                    style={{ border: window.innerWidth >= 768 ? '2px solid' : 'null', borderColor: config.antdProps.borderColor, borderRadius: '6px' }}
+                    style={{ border: pcRenderMode ? '2px solid' : 'null', borderColor: config.antdProps.borderColor, borderRadius: '6px' }}
                     renderItem={(item: BlogsListItem) => (
                         <List.Item
                             key={item.id}
