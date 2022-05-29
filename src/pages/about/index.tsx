@@ -1,103 +1,108 @@
-import { Component } from 'react'
-import { Layout, Row, Col, Typography, Tooltip, Space, Divider, Image } from 'antd'
-import javascriptImg from '../../static/images/icons/javascript.png'
-import typescriptImg from '../../static/images/icons/typescript.png'
-import javaImg from '../../static/images/icons/java.png'
-import vueImg from '../../static/images/icons/vuejs.png'
-import reactImg from '../../static/images/icons/reactjs.png'
-import nodeImg from '../../static/images/icons/nodejs.png'
-import springImg from '../../static/images/icons/spring.png'
-import pythonImg from '../../static/images/icons/python.png'
-import chinaImg from '../../static/images/icons/china.png'
-import japanImg from '../../static/images/icons/japan.png'
-import americaImg from '../../static/images/icons/america.png'
-import { AboutDataList, LanguageItem } from '../../types/index'
-const { Link, Text, Paragraph } = Typography
-const fontSize = { fontSize: '2em' }
-const boxHeight = { height: '15rem' }
+import React from 'react'
+import { Layout, Row, Col, Typography, Space, Divider, } from 'antd'
+import aboutStyle from './index.module.css'
+const { Text, Title } = Typography
 
-
-
-export default class About extends Component {
-    render() {
-        const aboutDataList: AboutDataList = {
-            Skills: [
-                { language: 'Javascript', imgSrc: javascriptImg, link: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript' },
-                { language: 'Typescript', imgSrc: typescriptImg, link: 'https://www.typescriptlang.org/' },
-                { language: 'Vue.js', imgSrc: vueImg, link: 'https://vuejs.org/' },
-                { language: 'React.js', imgSrc: reactImg, link: 'https://reactjs.org/' },
-                { language: 'Node.js', imgSrc: nodeImg, link: 'https://nodejs.org/' },
-                { language: 'Java', imgSrc: javaImg, link: 'https://www.java.com/' },
-                { language: 'Spring', imgSrc: springImg, link: 'https://spring.io/' },
-            ],
-            Learning: [
-                { language: 'Python', imgSrc: pythonImg, link: 'https://www.python.org/' },
-
-            ],
-            Languages: [
-                { language: 'chinese', imgSrc: chinaImg, link: '' },
-                { language: 'japanese', imgSrc: japanImg, link: '' },
-                { language: 'english', imgSrc: americaImg, link: '' },
-            ]
+export default class About extends React.Component<{}, { [key: string]: any }>  {
+    constructor(props: Object) {
+        super(props)
+        this.state = {
+            windowInnerWdith: window.innerHeight,
+            windowResizeFunc: () => {
+                this.setState({ windowInnerWdith: window.innerWidth })
+            }
         }
+    }
+
+    componentDidMount() {
+        this.setState({ windowInnerWdith: window.innerWidth })
+        window.addEventListener('resize', this.state.windowResizeFunc)
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('unhandledrejection', this.state.windowResizeFunc)
+    }
+
+    render() {
+        const imageContent1Height = this.state.windowInnerWdith >= 992 ? '35em' : '25em'
+        const textContent1Height = this.state.windowInnerWdith >= 992 ? '35em' : ''
+        const imageContent2Height = this.state.windowInnerWdith >= 992 ? '30em' : '25em'
+        const textContent2Height = this.state.windowInnerWdith >= 992 ? '30em' : ''
+        const content1Padding = this.state.windowInnerWdith >= 992 ? '3.75rem 3rem 1.75rem 3rem' : '1em 0rem 0rem'
+        const content2Padding = this.state.windowInnerWdith >= 992 ? '4.25rem 3rem 1.75rem 4.25rem' : '1em 0rem 0rem'
         return (
             <Layout>
-                <Row gutter={10}>
-                    <Col
-                        xs={{ offset: 2, span: 20 }}
-                        sm={{ offset: 2, span: 10 }}
-                        md={{ offset: 2, span: 10 }}
-                        lg={{ offset: 2, span: 9 }}
-                        xl={{ offset: 4, span: 7 }}
-                        style={boxHeight}
-                    >
-                        {
-                            Object.keys(aboutDataList).map(key =>
-                                <Paragraph key={key}>
-                                    <Text style={fontSize}>
-                                        <Space wrap size={[15, 0]}>
-                                            {key + ':'}
-                                            {
-                                                aboutDataList[key].map((item: LanguageItem) =>
-                                                    <Tooltip title={item.language} key={item.language}>
-                                                        {item.link && item.link !== '' ?
-                                                            <a rel="noreferrer" target="_blank" href={item.link}>
-                                                                <Image preview={false} src={item.imgSrc} width={35}></Image>
-                                                            </a>
-                                                            :
-                                                            <Image preview={false} src={item.imgSrc} width={35}></Image>}
-                                                    </Tooltip>
-                                                )}
-                                        </Space>
-                                    </Text>
-                                </Paragraph>
-                            )
-                        }
-                        <Divider />
-                    </Col>
-                    <Col
-                        xs={{ offset: 2, span: 20 }}
-                        sm={{ offset: 12, span: 10 }}
-                        md={{ offset: 12, span: 10 }}
-                        lg={{ offset: 13, span: 9 }}
-                        xl={{ offset: 13, span: 7 }}
-                        style={boxHeight}
-                    >
-                        <Divider />
-                        <Paragraph>
-                            <Text style={fontSize}>
-                                Please feel free to contact me if you need any further information.
-                            </Text>
-                        </Paragraph>
-                        <Paragraph>
-                            <Text style={fontSize}>
-                                <Link href="mailto:shurintou@gmail.com?subject = Hello" target="_blank">
-                                    shurintou@gmail.com
-                                </Link>
-                            </Text>
-                        </Paragraph>
-                    </Col>
-                </Row>
+                <Space direction="vertical" size={'large'}>
+                    <Row>
+                        <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 24 }} lg={{ span: 12, push: 12 }} xl={{ span: 12, push: 12 }} style={{ height: imageContent1Height }}>
+                            <div className={aboutStyle['about-1']} style={{ width: '100%', height: '100%' }}></div>
+                        </Col>
+                        <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 24 }} lg={{ span: 12, pull: 12 }} xl={{ span: 12, pull: 12 }} style={{ height: textContent1Height }}>
+
+                            <Layout style={{ padding: content1Padding }}>
+                                <Title level={1}>About Blog</Title>
+                                <p className={aboutStyle.aboutText}>
+                                    This is a blog that I share some thoughts and experiences in my coding career.
+                                    The topic will mostly includes
+                                    <Text keyboard>Java (Spring)</Text>,
+                                    <Text keyboard>Javascript (React, Vue, Typescript)</Text>,
+                                    and web development languages that address most facets of web programming,
+                                    such as &nbsp;
+                                    <Text underline>HTML</Text>,&nbsp;
+                                    <Text underline>CSS( less, sass)</Text>,&nbsp;
+                                    <Text underline>JQuery</Text>
+                                    &nbsp;in frontend,&nbsp;
+                                    <Text underline>SQL</Text>,&nbsp;
+                                    <Text underline>Redis</Text>,&nbsp;
+                                    <Text underline>Ngnix</Text>,&nbsp;
+                                    <Text underline>NodeJs</Text>
+                                    &nbsp;in backend, and so on.
+                                </p>
+                            </Layout>
+
+                        </Col>
+                    </Row>
+                    <Divider />
+                    <Row>
+                        <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 24 }} lg={{ span: 10 }} xl={{ span: 10 }} style={{ height: imageContent2Height }}>
+                            <div className={aboutStyle['about-2']} style={{ width: '100%', height: '100%' }}></div>
+                        </Col>
+                        <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 24 }} lg={{ span: 14 }} xl={{ span: 14 }} style={{ height: textContent2Height }}>
+                            <Layout style={{ padding: content2Padding }}>
+                                <Title level={1}>About Me</Title>
+                                <p className={aboutStyle.aboutText}>
+                                    My name is Shurintou. I am from
+                                    <Text keyboard>China</Text>.
+                                    I came to<Text keyboard>Japan</Text>in 2013 and
+                                    after 5 years study I graduated from<Text keyboard>The University Of Tokyo</Text>.
+                                    I currently work in <Text keyboard>Tokyo</Text>
+                                    as a web developer with {new Date().getFullYear() - 2019} years work experience and several successful projects under my belt.
+                                    One of my key strengths is<Text keyboard>problem-solving</Text>.
+                                    I am adept at identifying the cause of problems and generating the most beneficial solutions.
+                                </p>
+                            </Layout>
+                        </Col>
+                    </Row>
+                    <Divider />
+                    <Row>
+                        <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 24 }} lg={{ span: 10, push: 14 }} xl={{ span: 10, push: 14 }} style={{ height: imageContent2Height }}>
+                            <div className={aboutStyle['about-3']} style={{ width: '100%', height: '100%' }}></div>
+                        </Col>
+                        <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 24 }} lg={{ span: 14, pull: 10 }} xl={{ span: 14, pull: 10 }} style={{ height: textContent2Height }}>
+                            <Layout style={{ padding: content1Padding }}>
+                                <Title level={1}>Why Code ?</Title>
+                                <p className={aboutStyle.aboutText}>
+                                    I like<Text keyboard>creating stuff</Text> and that's just what code does.
+                                    Before becoming a full-time job programmer,
+                                    I spent plenty of time to design and develop my own computer games to have fun with my friend,
+                                    which is just like "You are the creator of the world".
+                                    Besides, the world of computer science is changing all the time.
+                                    Learning a new technology, language, design pattern or framework can always keep me<Text keyboard>passionate</Text>.
+                                </p>
+                            </Layout>
+                        </Col>
+                    </Row>
+                </Space>
             </Layout>
         )
     }
