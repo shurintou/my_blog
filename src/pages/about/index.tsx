@@ -1,7 +1,9 @@
 import React from 'react'
 import { Layout, Row, Col, Typography, Space, Divider, } from 'antd'
+import Gitalk from '../../components//others/gitalk'
+import config from '../../config/config'
 import aboutStyle from './index.module.css'
-const { Text, Title } = Typography
+const { Text, Title, Link } = Typography
 
 export default class About extends React.Component<{}, { [key: string]: any }>  {
     constructor(props: Object) {
@@ -44,12 +46,12 @@ export default class About extends React.Component<{}, { [key: string]: any }>  
                                 <p className={aboutStyle.aboutText}>
                                     This is a blog that I share some thoughts and experiences in my coding career.
                                     The topic will mostly includes
-                                    <Text keyboard>Java (Spring)</Text>,
-                                    <Text keyboard>Javascript (React, Vue, Typescript)</Text>,
+                                    <Text keyboard>Java</Text> (<Text underline>Spring</Text>),
+                                    <Text keyboard>Javascript</Text> (<Text underline>React</Text>, <Text underline>Vue</Text>, <Text underline>Typescript</Text>),
                                     and web development languages that address most facets of web programming,
                                     such as &nbsp;
                                     <Text underline>HTML</Text>,&nbsp;
-                                    <Text underline>CSS( less, sass)</Text>,&nbsp;
+                                    <Text underline>CSS(less, sass)</Text>,&nbsp;
                                     <Text underline>JQuery</Text>
                                     &nbsp;in frontend,&nbsp;
                                     <Text underline>SQL</Text>,&nbsp;
@@ -75,7 +77,7 @@ export default class About extends React.Component<{}, { [key: string]: any }>  
                                     <Text keyboard>China</Text>.
                                     I came to<Text keyboard>Japan</Text>in 2013 and
                                     after 5 years study I graduated from<Text keyboard>The University Of Tokyo</Text>.
-                                    I currently work in <Text keyboard>Tokyo</Text>
+                                    I currently work in<Text keyboard>Tokyo</Text>
                                     as a web developer with {new Date().getFullYear() - 2019} years work experience and several successful projects under my belt.
                                     One of my key strengths is<Text keyboard>problem-solving</Text>.
                                     I am adept at identifying the cause of problems and generating the most beneficial solutions.
@@ -102,6 +104,26 @@ export default class About extends React.Component<{}, { [key: string]: any }>  
                             </Layout>
                         </Col>
                     </Row>
+                    <Divider />
+                    <Row>
+                        <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 24 }} lg={{ span: 10 }} xl={{ span: 10 }} style={{ height: imageContent2Height }}>
+                            <div className={aboutStyle['about-4']} style={{ width: '100%', height: '100%' }}></div>
+                        </Col>
+                        <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 24 }} lg={{ span: 14 }} xl={{ span: 14 }} style={{ height: textContent2Height }}>
+                            <Layout style={{ padding: content2Padding }}>
+                                <Title level={1}>Getting in Touch</Title>
+                                <p className={aboutStyle.aboutText}>
+                                    If you are interested in this blog, or have any questions to ask, please feel free to contact me at<Text keyboard><Link href="mailto:shurintou@gmail.com?subject = Hello" target="_blank">shurintou@gmail.com</Link></Text>.
+                                </p>
+                                <p className={aboutStyle.aboutText}>
+                                    If this blog does attracts you, or the content of it is helpful, please follow and give me a star to my<Text keyboard><Link href="https://github.com/shurintou" target="_blank">Github</Link></Text>,
+                                    or just leave a message to the<Text keyboard>message board</Text> below.
+                                </p>
+                            </Layout>
+                        </Col>
+                    </Row>
+                    <Divider />
+                    <Gitalk blogId={config.aboutProps.messageBoardIssueId} />
                 </Space>
             </Layout>
         )
