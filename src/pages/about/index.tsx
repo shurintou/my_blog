@@ -94,10 +94,13 @@ export default class About extends React.Component<{}, { [key: string]: any }>  
                             <Layout style={{ padding: content1Padding }}>
                                 <Title level={1}>Why Code ?</Title>
                                 <p className={aboutStyle.aboutText}>
-                                    I like<Text keyboard>creating stuff</Text> and that's just what code does.
+                                    I like<Text keyboard>creating stuff</Text> and that's exactly what code does.
                                     Before becoming a full-time job programmer,
                                     I spent plenty of time to design and develop my own computer games to have fun with my friend,
-                                    which is just like "You are the creator of the world".
+                                    from which I got great satisfaction.
+                                    Even as a job, making a idea into reality can still stimulate me everyday.
+                                </p>
+                                <p className={aboutStyle.aboutText}>
                                     Besides, the world of computer science is changing all the time.
                                     Learning a new technology, language, design pattern or framework can always keep me<Text keyboard>passionate</Text>.
                                 </p>
@@ -113,17 +116,23 @@ export default class About extends React.Component<{}, { [key: string]: any }>  
                             <Layout style={{ padding: content2Padding }}>
                                 <Title level={1}>Getting in Touch</Title>
                                 <p className={aboutStyle.aboutText}>
-                                    If you are interested in this blog, or have any questions to ask, please feel free to contact me at<Text keyboard><Link href="mailto:shurintou@gmail.com?subject = Hello" target="_blank">shurintou@gmail.com</Link></Text>.
+                                    If you need any further information, or have any questions to ask, please feel free to contact me at<Text keyboard><Link href="mailto:shurintou@gmail.com?subject = Hello" target="_blank">shurintou@gmail.com</Link></Text>,
+                                    or simply leave a message to the<Text keyboard><Link href='#gitalk-container'>message board</Link></Text> below.
                                 </p>
                                 <p className={aboutStyle.aboutText}>
-                                    If this blog does attracts you, or the content of it is helpful, please follow and give me a star to my<Text keyboard><Link href="https://github.com/shurintou" target="_blank">Github</Link></Text>,
-                                    or just leave a message to the<Text keyboard>message board</Text> below.
+                                    If you are interested in this blog, or you think the content of the blog is helpful, it would be very kind of you to star me at my<Text keyboard><Link href="https://github.com/shurintou" target="_blank">Github</Link></Text> repository.
                                 </p>
                             </Layout>
                         </Col>
                     </Row>
                     <Divider />
-                    <Gitalk blogId={config.aboutProps.messageBoardIssueId} />
+                    <Row>
+                        <Col xs={0} sm={0} md={3} lg={3} xl={3}>
+                        </Col>
+                        <Col xs={24} sm={24} md={18} lg={18} xl={18}>
+                            <Gitalk blogId={config.aboutProps.messageBoardIssueId} />
+                        </Col>
+                    </Row>
                 </Space>
             </Layout>
         )
