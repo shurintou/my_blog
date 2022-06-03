@@ -76,11 +76,7 @@ const InfiniteBlogsList = () => {
                     dataSource={data}
                     style={{ border: pcRenderMode ? '2px solid' : 'null', borderColor: config.antdProps.borderColor, borderRadius: '6px' }}
                     renderItem={(item: BlogsListItem) => (
-                        <List.Item
-                            key={item.id}
-                        >
-                            <ListItem {...item}></ListItem>
-                        </List.Item>
+                        <ListItem key={item.id} {...item}></ListItem>
                     )}
                 >
                 </List>

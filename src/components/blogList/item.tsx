@@ -20,45 +20,47 @@ const BlogsListItemComp: React.FC<BlogsListItem> = (props) => {
     }, [props.index, props.listLength])
 
     return (
-        <Typography>
-            <Title level={3} onClick={navigateToBlog}><Text style={mouseBlurStyle} >{props.title}</Text></Title>
-            <DateComp
-                dateFromNow={props.created_from_now}
-                dateLocal={props.created_at_local}
-                text={'Created'}
-            />
-            <LabelsComp labelList={props.labels}></LabelsComp>
-            <Paragraph
-                onClick={navigateToBlog}
-                style={mouseBlurStyle}
-            >
-                <Layout
-                    style={{
-                        WebkitLineClamp: config.blogProps.previewLine,
-                        lineClamp: config.blogProps.previewLine,
-                        display: '-webkit-box',
-                        WebkitBoxOrient: 'vertical',
-                        overflow: 'hidden',
-                        lineHeight: '2em',
-                        maxHeight: 5 * (config.blogProps.previewLine) + 'em',
-                        wordWrap: 'break-word',
-                    }}>
-                    <Markdown blogText={props.body}></Markdown>
-                </Layout>
-            </Paragraph>
-            <Paragraph>
-                <Text
+        <li>
+            <Typography style={{ padding: '16px 24px' }} >
+                <Title level={3} onClick={navigateToBlog}><Text style={mouseBlurStyle} >{props.title}</Text></Title>
+                <DateComp
+                    dateFromNow={props.created_from_now}
+                    dateLocal={props.created_at_local}
+                    text={'Created'}
+                />
+                <LabelsComp labelList={props.labels}></LabelsComp>
+                <Paragraph
                     onClick={navigateToBlog}
-                    style={{
-                        cursor: 'pointer',
-                        color: config.antdProps.themeColor
-                    }}
-                    underline
-                >Read more
-                </Text>
-            </Paragraph>
-            {!isLastItem && <Divider style={{ borderTopColor: 'rgba(0,0,0,0.2)' }} />}
-        </Typography>
+                    style={mouseBlurStyle}
+                >
+                    <Layout
+                        style={{
+                            WebkitLineClamp: config.blogProps.previewLine,
+                            lineClamp: config.blogProps.previewLine,
+                            display: '-webkit-box',
+                            WebkitBoxOrient: 'vertical',
+                            overflow: 'hidden',
+                            lineHeight: '2em',
+                            maxHeight: 5 * (config.blogProps.previewLine) + 'em',
+                            wordWrap: 'break-word',
+                        }}>
+                        <Markdown blogText={props.body}></Markdown>
+                    </Layout>
+                </Paragraph>
+                <Paragraph>
+                    <Text
+                        onClick={navigateToBlog}
+                        style={{
+                            cursor: 'pointer',
+                            color: config.antdProps.themeColor
+                        }}
+                        underline
+                    >Read more
+                    </Text>
+                </Paragraph>
+            </Typography>
+            {!isLastItem && <Divider style={{ borderTopColor: 'rgba(0,0,0,0.2)', margin: 0 }} />}
+        </li>
     )
 }
 
