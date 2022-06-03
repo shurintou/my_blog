@@ -35,8 +35,8 @@ const LabelsCompo: React.FC<LabelsCompoProps> = (props) => {
             {tags.length > 0 && <Paragraph>
                 <Text style={{ marginRight: '0.5em' }}>Tags: </Text>
                 {tags.map(label => {
-                    return <span>
-                        <Tag style={{ borderRadius: '1em' }} key={label.id} color={'#' + label.color}><Text strong style={{ color: lightOrDark(label.color) }}>{label.name}</Text></Tag>
+                    return <span key={label.id}>
+                        <Tag style={{ borderRadius: '1em' }} color={'#' + label.color}><Text strong style={{ color: lightOrDark(label.color) }}>{label.name}</Text></Tag>
                         &nbsp;
                     </span>
                 })}
