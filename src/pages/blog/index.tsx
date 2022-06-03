@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useParams } from "react-router-dom"
-import { Layout, Empty, Typography, Tag, Row, Col, BackTop, Space, Divider, Spin } from 'antd'
+import { Layout, Empty, Typography, Row, Col, BackTop, Space, Divider, Spin } from 'antd'
 import { EyeOutlined } from '@ant-design/icons'
 import CommentComp from '../../components/blog/comment'
 import { getBlogInfo } from '../../api/blogs'
@@ -9,12 +9,13 @@ import { parseISODate, parseISODateStr, getDateFromNow } from '../../utils/forma
 import Markdown from '../../components/others/markdown'
 import Gitalk from '../../components//others/gitalk'
 import DateComp from '../../components/blog/date'
+import LabelsComp from '../../components/others/labels'
 import config from '../../config/config'
 import Like from '../../components/blog/like'
 import { getLocalUser } from '../../utils/authentication'
 
 
-const { Title, Paragraph, Text } = Typography
+const { Title, Text } = Typography
 
 const Blog = () => {
     const blogIdStr = useParams().blogId
@@ -105,11 +106,7 @@ const Blog = () => {
                                     <Col span={1} offset={7}>
                                     </Col>
                                 </Row>
-                                <Paragraph>
-                                    {blogContent?.labels.map(label => {
-                                        return <Tag key={label.name} color={'#' + label.color}>{label.name}</Tag>
-                                    })}
-                                </Paragraph>
+                                {blogContent && <LabelsComp labelList={blogContent?.labels}></LabelsComp>}
                                 <Markdown blogText={blogContent?.body} />
                                 {
                                     blogContent?.updated_at !== blogContent?.created_at &&

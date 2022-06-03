@@ -178,3 +178,7 @@ export interface BlogLikeReactionResByGraphQl {
         }
     }
 }
+
+export interface LabelsCompoProps {
+    labelList: Array<Label>
+}

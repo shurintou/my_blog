@@ -33,3 +33,7 @@ export const isSameObjectSimple = function (req1: any, req2: any) {
     }
     return str1 === str2
 }
+
+export function lightOrDark(bg2Color: string) {
+    return (parseInt(bg2Color.replace('#', ''), 16) > 0xffffff / 2) ? '#000' : '#fff'
+}

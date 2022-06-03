@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import { Divider, Typography, Tag, Layout, } from 'antd'
+import { Divider, Typography, Layout, } from 'antd'
 import { BlogsListItem } from '../../types/index'
 import { useNavigate } from "react-router-dom"
 import DateComp from '../blog/date'
+import LabelsComp from '../../components/others/labels'
 import Markdown from '../others/markdown/'
 import config from '../../config/config'
 
@@ -26,13 +27,7 @@ const BlogsListItemComp: React.FC<BlogsListItem> = (props) => {
                 dateLocal={props.created_at_local}
                 text={'Created'}
             />
-            {props.labels.length > 0 &&
-                <Paragraph>
-                    {props.labels.map(label => {
-                        return <Tag key={label.name} color={'#' + label.color}>{label.name}</Tag>
-                    })}
-                </Paragraph>
-            }
+            <LabelsComp labelList={props.labels}></LabelsComp>
             <Paragraph
                 onClick={navigateToBlog}
                 style={mouseBlurStyle}
