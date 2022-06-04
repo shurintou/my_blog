@@ -1,5 +1,5 @@
 import React from 'react'
-import { Layout, Row, Col, Typography, Space, Divider, } from 'antd'
+import { Layout, Row, Col, Typography, Space, Divider, BackTop, } from 'antd'
 import Gitalk from '../../components//others/gitalk'
 import config from '../../config/config'
 import aboutStyle from './index.module.css'
@@ -119,6 +119,7 @@ export default class About extends React.Component<{}, { [key: string]: any }>  
                         </Col>
                     </Row>
                 </Space>
+                <BackTop target={() => document} />{/* default target value '()=> window' is not work. */}
             </Layout>
         )
     }
