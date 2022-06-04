@@ -79,20 +79,20 @@ const Blog = () => {
                             <Title
                                 level={3}
                                 style={{
-                                    backgroundColor: pcRenderMode ? config.antdProps.titleBackgroundColor : 'null',
-                                    border: pcRenderMode ? '2px solid' : 'null',
+                                    backgroundColor: config.antdProps.titleBackgroundColor,
+                                    border: '2px solid',
                                     borderColor: config.antdProps.borderColor,
                                     borderRadius: pcRenderMode ? '6px 6px 0px 0px' : '0px',
                                     marginBottom: '0em',
-                                    paddingLeft: pcRenderMode ? '0.5em' : '0em',
+                                    paddingLeft: '0.5em',
                                 }}
                             >{blogContent?.title}</Title>
                             <Layout
                                 style={{
-                                    padding: pcRenderMode ? '1em' : '0em',
-                                    border: pcRenderMode ? '2px solid' : 'null',
+                                    padding: '1em 1em',
+                                    border: '2px solid',
                                     borderColor: config.antdProps.borderColor,
-                                    borderRadius: '0px 0px 6px 6px',
+                                    borderRadius: pcRenderMode ? '0px 0px 6px 6px' : '0px',
                                 }}
                             >
                                 <Row>
@@ -107,6 +107,7 @@ const Blog = () => {
                                     </Col>
                                 </Row>
                                 {blogContent && <LabelsComp labelList={blogContent?.labels}></LabelsComp>}
+                                <Divider style={{ margin: '0em 0em 1em 0em' }} />
                                 <Markdown blogText={blogContent?.body} />
                                 {
                                     blogContent?.updated_at !== blogContent?.created_at &&
@@ -146,7 +147,9 @@ const Blog = () => {
                         :
                         <Empty></Empty>
                     }
-                    {blogIdStr && <Gitalk blogId={parseInt(blogIdStr)} />}
+                    <Layout style={{ padding: pcRenderMode ? '0em' : '0.5em' }}>
+                        {blogIdStr && <Gitalk blogId={parseInt(blogIdStr)} />}
+                    </Layout>
                 </Col>
                 <Col xs={0} sm={0} md={3} lg={3} xl={3}>
                 </Col>

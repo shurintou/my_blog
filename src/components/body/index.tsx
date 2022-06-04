@@ -49,7 +49,7 @@ export default class BlogBody extends React.Component<{}, { [key: string]: any }
 
     render() {
         return (
-            <Layout style={{ margin: '2em 1em' }}>
+            <Layout style={{ margin: '2em 0em' }}>
                 <Routes>
                     <Route path='/home' element={<Home />}></Route>
                     <Route path='/blog/:blogId' element={<Blog />}></Route>

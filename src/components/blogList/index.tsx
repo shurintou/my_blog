@@ -74,7 +74,7 @@ const InfiniteBlogsList = () => {
                     itemLayout="vertical"
                     size="large"
                     dataSource={data}
-                    style={{ border: pcRenderMode ? '2px solid' : 'null', borderColor: config.antdProps.borderColor, borderRadius: '6px' }}
+                    style={{ border: pcRenderMode ? '2px solid' : 'null', borderColor: config.antdProps.borderColor, borderRadius: pcRenderMode ? '6px' : '0px' }}
                     renderItem={(item: BlogsListItem) => (
                         <ListItem key={item.id} {...item}></ListItem>
                     )}

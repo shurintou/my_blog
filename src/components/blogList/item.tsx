@@ -21,14 +21,15 @@ const BlogsListItemComp: React.FC<BlogsListItem> = (props) => {
 
     return (
         <li>
-            <Typography style={{ padding: '16px 24px' }} >
-                <Title level={3} onClick={navigateToBlog}><Text style={mouseBlurStyle} >{props.title}</Text></Title>
+            <Title level={3} onClick={navigateToBlog} style={{ padding: '16px 24px 0px 24px', }}><Text style={mouseBlurStyle} >{props.title}</Text></Title>
+            <Typography style={{ padding: '0px 24px 16px 24px' }} >
                 <DateComp
                     dateFromNow={props.created_from_now}
                     dateLocal={props.created_at_local}
                     text={'Created'}
                 />
                 <LabelsComp labelList={props.labels}></LabelsComp>
+                <Divider style={{ marginTop: '0' }} />
                 <Paragraph
                     onClick={navigateToBlog}
                     style={mouseBlurStyle}

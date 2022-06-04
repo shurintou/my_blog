@@ -30,8 +30,8 @@ export default class About extends React.Component<{}, { [key: string]: any }>  
         const textContent1Height = this.state.windowInnerWdith >= 992 ? '35em' : ''
         const imageContent2Height = this.state.windowInnerWdith >= 992 ? '30em' : '25em'
         const textContent2Height = this.state.windowInnerWdith >= 992 ? '30em' : ''
-        const content1Padding = this.state.windowInnerWdith >= 992 ? '3.75rem 3rem 1.75rem 3rem' : '1em 0rem 0rem'
-        const content2Padding = this.state.windowInnerWdith >= 992 ? '4.25rem 3rem 1.75rem 4.25rem' : '1em 0rem 0rem'
+        const content1Padding = this.state.windowInnerWdith >= 992 ? '3.75rem 3rem 1.75rem 3rem' : '1em 0.5rem 0rem 0.5rem'
+        const content2Padding = this.state.windowInnerWdith >= 992 ? '4.25rem 3rem 1.75rem 4.25rem' : '1em 0.5rem 0rem 0.5rem'
         return (
             <Layout>
                 <Space direction="vertical" size={'large'}>
@@ -112,9 +112,9 @@ export default class About extends React.Component<{}, { [key: string]: any }>  
                     </Row>
                     <Divider />
                     <Row>
-                        <Col xs={0} sm={0} md={3} lg={3} xl={3}>
+                        <Col xs={1} sm={1} md={3} lg={3} xl={3}>
                         </Col>
-                        <Col xs={24} sm={24} md={18} lg={18} xl={18}>
+                        <Col xs={22} sm={22} md={18} lg={18} xl={18}>
                             <Gitalk blogId={config.aboutProps.messageBoardIssueId} />
                         </Col>
                     </Row>

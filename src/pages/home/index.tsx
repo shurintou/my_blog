@@ -13,10 +13,10 @@ export default class Home extends React.Component<{}, { [key: string]: any }> {
 
     render() {
         return (
-            <Layout>
+            <Layout style={{ padding: '0em 0.5em' }}>
                 <Row>
                     <Col
-                        xs={{ offset: 1 }}
+                        xs={{ offset: 0 }}
                         sm={{ offset: 2 }}
                         md={{ offset: 2 }}
                         lg={{ offset: 2 }}
