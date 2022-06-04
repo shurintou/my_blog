@@ -44,21 +44,11 @@ export default class About extends React.Component<{}, { [key: string]: any }>  
                             <Layout style={{ padding: content1Padding }}>
                                 <Title level={1}>About Blog</Title>
                                 <p className={aboutStyle.aboutText}>
-                                    This is a blog that I share some thoughts and experiences in my coding career.
-                                    The topic will mostly includes
-                                    <Text keyboard>Java</Text> (<Text underline>Spring</Text>),
-                                    <Text keyboard>Javascript</Text> (<Text underline>React</Text>, <Text underline>Vue</Text>, <Text underline>Typescript</Text>),
-                                    and web development languages that address most facets of web programming,
-                                    such as &nbsp;
-                                    <Text underline>HTML</Text>,&nbsp;
-                                    <Text underline>CSS(less, sass)</Text>,&nbsp;
-                                    <Text underline>JQuery</Text>
-                                    &nbsp;in frontend,&nbsp;
-                                    <Text underline>SQL</Text>,&nbsp;
-                                    <Text underline>Redis</Text>,&nbsp;
-                                    <Text underline>Ngnix</Text>,&nbsp;
-                                    <Text underline>NodeJs</Text>
-                                    &nbsp;in backend, and so on.
+                                    This is a blog that I regularly share some thoughts and experiences in my coding life.
+                                </p>
+                                <p className={aboutStyle.aboutText}>
+                                    The topic will mostly includes web development languages that address most facets of<Text keyboard>Web Programming</Text>,
+                                    such as Java, Javascript and so on.
                                 </p>
                             </Layout>
 
@@ -73,14 +63,12 @@ export default class About extends React.Component<{}, { [key: string]: any }>  
                             <Layout style={{ padding: content2Padding }}>
                                 <Title level={1}>About Me</Title>
                                 <p className={aboutStyle.aboutText}>
-                                    My name is Shurintou. I am from
-                                    <Text keyboard>China</Text>.
-                                    I came to<Text keyboard>Japan</Text>in 2013 and
-                                    after 5 years study I graduated from<Text keyboard>The University Of Tokyo</Text>.
-                                    I currently work in<Text keyboard>Tokyo</Text>
-                                    as a web developer with {new Date().getFullYear() - 2019} years work experience and several successful projects under my belt.
-                                    One of my key strengths is<Text keyboard>problem-solving</Text>.
-                                    I am adept at identifying the cause of problems and generating the most beneficial solutions.
+                                    I am from<Text keyboard>China</Text>.
+                                    I came to Japan in 2013 and after 2 years Japanese study plus 3 years university research,
+                                    I finally graduated from The University of Tokyo with a master degree.
+                                </p>
+                                <p className={aboutStyle.aboutText}>
+                                    I currently work in<Text keyboard>Tokyo</Text>as a web developer with {new Date().getFullYear() - 2019} years work experience and several successful projects under my belt.
                                 </p>
                             </Layout>
                         </Col>
@@ -92,17 +80,14 @@ export default class About extends React.Component<{}, { [key: string]: any }>  
                         </Col>
                         <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 24 }} lg={{ span: 14, pull: 10 }} xl={{ span: 14, pull: 10 }} style={{ height: textContent2Height }}>
                             <Layout style={{ padding: content1Padding }}>
-                                <Title level={1}>Why Code ?</Title>
+                                <Title level={1}>Why Coding ?</Title>
                                 <p className={aboutStyle.aboutText}>
-                                    I like<Text keyboard>creating stuff</Text> and that's exactly what code does.
-                                    Before becoming a full-time job programmer,
-                                    I spent plenty of time to design and develop my own computer games to have fun with my friend,
-                                    from which I got great satisfaction.
-                                    Even as a job, making a idea into reality can still stimulate me everyday.
+                                    I like<Text keyboard>Creating Stuff</Text>and that's exactly what coding does.
+                                    It makes a idea from zero to reality, from which I got great excitement and satisfaction.
                                 </p>
                                 <p className={aboutStyle.aboutText}>
-                                    Besides, the world of computer science is changing all the time.
-                                    Learning a new technology, language, design pattern or framework can always keep me<Text keyboard>passionate</Text>.
+                                    Besides, the world of computer science is always<Text keyboard>Changing</Text>.
+                                    Learning a new technology, language, design pattern or framework keeps me passionate.
                                 </p>
                             </Layout>
                         </Col>
@@ -116,11 +101,11 @@ export default class About extends React.Component<{}, { [key: string]: any }>  
                             <Layout style={{ padding: content2Padding }}>
                                 <Title level={1}>Getting in Touch</Title>
                                 <p className={aboutStyle.aboutText}>
-                                    If you need any further information, or have any questions to ask, please feel free to contact me at<Text keyboard><Link href="mailto:shurintou@gmail.com?subject = Hello" target="_blank">shurintou@gmail.com</Link></Text>,
-                                    or simply leave a message to the<Text keyboard><Link href='#gitalk-container'>message board</Link></Text> below.
+                                    If you need any further information, please feel free to contact me at <Text copyable underline>shurintou@gmail.com</Text>,
+                                    or simply leave a message to the <Text underline><Link href='#gitalk-container'>message board</Link></Text> below.
                                 </p>
                                 <p className={aboutStyle.aboutText}>
-                                    If you are interested in this blog, or you think the content of the blog is helpful, it would be very kind of you to star me at my<Text keyboard><Link href="https://github.com/shurintou" target="_blank">Github</Link></Text> repository.
+                                    If you are interested in this blog, or think the content of the blog is helpful, it would be very kind of you to star me at my <Text underline><Link href="https://github.com/shurintou" target="_blank">Github</Link></Text> repository.
                                 </p>
                             </Layout>
                         </Col>
