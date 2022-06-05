@@ -30,10 +30,6 @@ export interface LanguageItem {
     [key: string]: any
 }
 
-export interface GetRepoInfoParam {
-
-}
-
 export interface RepoInfoRes {
     has_issues: boolean,
     open_issues_count: number
@@ -181,4 +177,10 @@ export interface BlogLikeReactionResByGraphQl {
 
 export interface LabelsCompoProps {
     labelList: Array<Label>
+}
+
+export interface BlogListFooterProps {
+    total: number,
+    renderMode: boolean,
+    changeHandler: Dispatch<SetStateAction<number>>,
 }

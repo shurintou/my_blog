@@ -1,5 +1,5 @@
 import request from '../utils/request'
-import { GetRepoInfoParam, BlogRequestParam, BlogInfoRequestParam, } from '../types/index'
+import { BlogRequestParam, BlogInfoRequestParam, } from '../types/index'
 import conf from '../config/config'
 
 const auth = {
@@ -9,11 +9,10 @@ const auth = {
 
 const baseURL = 'https://api.github.com'
 
-export function getRepoInfo(params: GetRepoInfoParam) {
+export function getRepoInfo() {
     return request({
         url: baseURL + '/repos/' + conf.gitProps.owner + '/' + conf.gitProps.repo,
         method: 'get',
-        params: params,
         auth: auth
     })
 }
