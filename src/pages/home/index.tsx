@@ -11,6 +11,10 @@ export default class Home extends React.Component<{}, { [key: string]: any }> {
         this.state = {}
     }
 
+    componentDidMount() {
+        window.scroll(0, 0)
+    }
+
     render() {
         return (
             <Layout style={{ padding: '0em 0.5em' }}>

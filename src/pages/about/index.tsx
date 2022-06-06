@@ -19,6 +19,7 @@ export default class About extends React.Component<{}, { [key: string]: any }>  
     componentDidMount() {
         this.setState({ windowInnerWdith: window.innerWidth })
         window.addEventListener('resize', this.state.windowResizeFunc)
+        window.scroll(0, 0)
     }
 
     componentWillUnmount() {

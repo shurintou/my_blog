@@ -4,9 +4,42 @@ import { Layout, Row, Col, Button } from 'antd'
 import { HomeOutlined, ReadOutlined, UserOutlined } from '@ant-design/icons'
 import { Link } from "react-router-dom"
 import { AntdColPropObj } from '../../types/index'
+import headerStyle from './index.module.css'
 const { Header } = Layout
 
 export default class BlogHeader extends React.Component<{}, { [key: string]: any }> {
+    static hideHeaderOverScrollTop = 100
+    static toggleHeaderMinScrollTop = 30
+    constructor(props: Object) {
+        super(props)
+        this.state = {
+            scrolledTop: 0,
+            showHeader: true,
+            scrollHandler: () => {
+                const newScrollTop = document.documentElement.scrollTop | window.pageYOffset | document.body.scrollTop
+                if (newScrollTop >= BlogHeader.hideHeaderOverScrollTop) {
+                    if (this.state.scrolledTop + BlogHeader.toggleHeaderMinScrollTop <= newScrollTop) {
+                        /* hide header if scroll down */
+                        this.setState({ showHeader: false })
+                    }
+                    else if (this.state.scrolledTop > newScrollTop + BlogHeader.toggleHeaderMinScrollTop) {
+                        /* show header if scroll up a little distance even the scroll top is over hideHeaderOverScrollTop */
+                        this.setState({ showHeader: true })
+                    }
+                }
+                this.setState({ scrolledTop: newScrollTop })
+            }
+        }
+    }
+
+    componentDidMount() {
+        window.addEventListener('scroll', this.state.scrollHandler)
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('scroll', this.state.scrollHandler)
+    }
+
 
     render() {
         const spanPropObj: AntdColPropObj = {
@@ -24,7 +57,17 @@ export default class BlogHeader extends React.Component<{}, { [key: string]: any
             'xl': { offset: 4 },
         }
         return (
-            <Header style={{ 'padding': '0 1em' }}>
+            <Header
+                className={
+                    this.state.scrolledTop < BlogHeader.hideHeaderOverScrollTop || this.state.showHeader ? headerStyle.show : headerStyle.hide
+                }
+                style={{
+                    'padding': '0 1em',
+                    position: 'sticky',
+                    top: 0,
+                    zIndex: 1,
+                    width: '100%'
+                }}>
                 <Row>
                     <Col
                         {   /* return a new object that has xs,sm,md,lg,xl properties, 
