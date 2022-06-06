@@ -100,12 +100,12 @@ export default class About extends React.Component<{}, { [key: string]: any }>  
                         <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 24 }} lg={{ span: 14 }} xl={{ span: 14 }} style={{ height: textContent2Height }}>
                             <Layout style={{ padding: content2Padding }}>
                                 <Title level={1}>Getting in Touch</Title>
-                                <p className={aboutStyle.aboutText}>
+                                <div className={aboutStyle.aboutText} style={{ marginBottom: '1em' }}>
                                     If you need any further information, please feel free to contact me at <Text copyable underline>shurintou@gmail.com</Text>,
-                                    or simply leave a message to the <Text underline><Link href='#gitalk-container'>message board</Link></Text> below.
-                                </p>
+                                    or just leave a message to the <Text underline><Link href='#gitalk-container'>message board</Link></Text> below.
+                                </div>
                                 <p className={aboutStyle.aboutText}>
-                                    If you are interested in this blog, or think the content of the blog is helpful, it would be very kind of you to star me at my <Text underline><Link href="https://github.com/shurintou" target="_blank">Github</Link></Text> repository.
+                                    If you are interested in this blog, or think the content of the blog is helpful, it would be very kind of you to star the <Text underline><Link href="https://github.com/shurintou/my_blog" target="_blank">blog repository</Link></Text> .
                                 </p>
                             </Layout>
                         </Col>
