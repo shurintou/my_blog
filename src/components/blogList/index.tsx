@@ -47,6 +47,7 @@ const InfiniteBlogsList = () => {
                         return newData
                     })
                     setData(newDataList)
+                    window.scroll(0, 0)
                 })
                 .catch(() => { })
         }
