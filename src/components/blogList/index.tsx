@@ -1,23 +1,20 @@
 import { useState, useEffect } from 'react'
 import { List, Layout, BackTop } from 'antd'
 import BlogListFooter from './footer'
-import { getRepoInfo, getBlogsList } from '../../api/blogs'
-import { BlogsItemRes, BlogsListItem, RepoInfoRes } from '../../types/index'
+import { searchBlogs } from '../../api/blogs'
+import { BlogsItemRes, BlogsListItem, BlogSearchResponse } from '../../types/index'
 import ListItem from './item'
 import { parseISODate, parseISODateStr, getDateFromNow } from '../../utils/formatter'
 import config from '../../config/config'
 
-const InfiniteBlogsList = () => {
+const BlogList = () => {
     const [data, setData] = useState<Array<BlogsListItem>>([])
     const [page, setPage] = useState(0)
     const [totalBlogsNum, setTotalBlogsNum] = useState(0)
     const [pcRenderMode, setPcRenderMode] = useState(true)
 
     useEffect(() => {
-        getRepoInfo().then((res: RepoInfoRes) => {
-            setPage(1)
-            setTotalBlogsNum(res.open_issues_count)
-        })
+        setPage(1)
         function windowResizeFunc() {
             setPcRenderMode(window.innerWidth >= 768)
         }
@@ -32,10 +29,12 @@ const InfiniteBlogsList = () => {
     useEffect(() => {
         const { blogProps: { blogListItemCountPerPage } } = config
         const loadBlogListData = (page: number) => {
-            getBlogsList({ page: page, per_page: blogListItemCountPerPage })
-                .then((res: Array<BlogsItemRes>) => {
-                    const newDataListLength = res.length
-                    let newDataList: Array<BlogsListItem> = res.map((resItem: BlogsItemRes, index: number) => {
+            searchBlogs({ page: page, per_page: blogListItemCountPerPage, query: '' })
+                .then((res: BlogSearchResponse) => {
+                    const resItemList = res.items
+                    const newDataListLength = resItemList.length
+                    setTotalBlogsNum(res.total_count)
+                    let newDataList: Array<BlogsListItem> = resItemList.map((resItem: BlogsItemRes, index: number) => {
                         let newData: BlogsListItem = Object.assign(resItem, {
                             index: index + 1,
                             listLength: newDataListLength,
@@ -80,5 +79,5 @@ const InfiniteBlogsList = () => {
     )
 }
 
-const infiniteBlogsListModule = () => <InfiniteBlogsList />
-export default infiniteBlogsListModule
+const BlogListCompo = () => <BlogList />
+export default BlogListCompo
