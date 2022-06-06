@@ -5,36 +5,6 @@ export interface GitUser {
     login: string, //username,
 }
 
-export interface ConfigObj {
-    gitProps: GitProps
-}
-
-export interface GitProps {
-    clientID: string,
-    clientSecret: string,
-    repo: string,
-    owner: string,
-    admin: Array<string>
-}
-
-export interface AboutDataList {
-    Skills: Array<LanguageItem>,
-    Languages: Array<LanguageItem>,
-    [key: string]: any
-}
-
-export interface LanguageItem {
-    language: string,
-    imgSrc: string,
-    link: string,
-    [key: string]: any
-}
-
-export interface RepoInfoRes {
-    has_issues: boolean,
-    open_issues_count: number
-}
-
 export interface AntdColPropObj {
     xs: AntdColSubPropObj,
     sm: AntdColSubPropObj,
@@ -55,12 +25,6 @@ export interface PendingRequest {
     data?: any,
 }
 
-
-export interface BlogRequestParam {
-    labels?: Array<string>,
-    page?: number,
-    per_page?: number,
-}
 
 export interface BlogInfoRequestParam {
     number: number,
@@ -183,4 +147,17 @@ export interface BlogListFooterProps {
     total: number,
     renderMode: boolean,
     changeHandler: Dispatch<SetStateAction<number>>,
+}
+
+export interface BlogSearchRequestParam {
+    query: string,
+    page: number,
+    per_page: number,
+    sort?: string,
+    order?: string,
+}
+
+export interface BlogSearchResponse {
+    total_count: number,
+    items: Array<BlogsItemRes>,
 }
