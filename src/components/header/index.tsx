@@ -32,6 +32,10 @@ export default class BlogHeader extends React.Component<{}, { [key: string]: any
         }
     }
 
+    scrollToTop() {
+        window.scroll(0, 0)
+    }
+
     componentDidMount() {
         window.addEventListener('scroll', this.state.scrollHandler)
     }
@@ -89,10 +93,10 @@ export default class BlogHeader extends React.Component<{}, { [key: string]: any
                         <Link to="/"><Button type="primary" icon={<HomeOutlined />}>Home</Button></Link>
                     </Col>
                     <Col {...spanPropObj}>
-                        <Link to="/blogs"> <Button type="primary" icon={<ReadOutlined />}>Blog</Button></Link>
+                        <Link to="/blogs/1"> <Button type="primary" icon={<ReadOutlined />} >Blog</Button></Link>
                     </Col>
                     <Col {...spanPropObj}>
-                        <Link to="/about"><Button type="primary" icon={<UserOutlined />}>About</Button></Link>
+                        <Link to="/about"><Button type="primary" icon={<UserOutlined />} onClick={this.scrollToTop}>About</Button></Link>
                     </Col>
                 </Row>
             </Header>

@@ -53,7 +53,7 @@ export default class BlogBody extends React.Component<{}, { [key: string]: any }
                 <Routes>
                     <Route path='/home' element={<Home />}></Route>
                     <Route path='/blog/:blogId' element={<Blog />}></Route>
-                    <Route path='/blogs' element={<Blogs />}></Route>
+                    <Route path='/blogs/:page' element={<Blogs />}></Route>
                     <Route path='/about' element={<About />}></Route>
                     <Route path='/*' element={<Navigate to='/home' />}></Route>
                 </Routes>
