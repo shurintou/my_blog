@@ -16,7 +16,7 @@ export default class BlogHeader extends React.Component<{}, { [key: string]: any
             scrolledTop: 0,
             showHeader: true,
             scrollHandler: () => {
-                const newScrollTop = document.documentElement.scrollTop | window.pageYOffset | document.body.scrollTop
+                const newScrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop
                 if (newScrollTop >= BlogHeader.hideHeaderOverScrollTop) {
                     if (this.state.scrolledTop + BlogHeader.toggleHeaderMinScrollTop <= newScrollTop) {
                         /* hide header if scroll down */
