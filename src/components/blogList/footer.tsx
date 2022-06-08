@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import { useNavigate } from "react-router-dom"
 import { useLocation } from "react-router-dom"
 import { BlogListFooterProps } from '../../types'
@@ -17,6 +17,24 @@ const BlogListFooterComp: React.FC<BlogListFooterProps> = (props) => {
             setCurrent(parseInt(matchStr[0].slice(6)))
         }
     }, [location])
+
+    const paginationDescription = useMemo(() => {
+        const perPageCount = config.blogProps.blogListItemCountPerPage
+        const totalCount = props.total
+        let max = current * perPageCount
+        let min = (current - 1) * perPageCount + 1
+        let description = ''
+        if (max > totalCount) {
+            max = totalCount
+        }
+        if (max === min) {
+            description = max.toString()
+        }
+        else {
+            description = min.toString() + '~' + max.toString()
+        }
+        return description + ' of total ' + totalCount.toString()
+    }, [current, props.total])
 
     return (
         <Layout style={{
@@ -39,7 +57,7 @@ const BlogListFooterComp: React.FC<BlogListFooterProps> = (props) => {
                 showSizeChanger={false}
                 responsive={true}
                 pageSize={config.blogProps.blogListItemCountPerPage}
-                showTotal={() => <span style={{ color: config.antdProps.paginationTextColor }}>Total {props.total} blogs</span>}
+                showTotal={() => <span style={{ color: config.antdProps.paginationTextColor }}>{paginationDescription}</span>}
                 onChange={(number) => {
                     navigateToBlogsPage(number)
                     setCurrent(number)
