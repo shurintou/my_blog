@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react'
-import { useSearchParams, useLocation } from "react-router-dom"
+import { useSearchParams } from "react-router-dom"
 import { BlogListFooterProps } from '../../types'
 import { Pagination, Layout } from 'antd'
 import config from '../../config/config'
@@ -8,14 +8,11 @@ const BlogListFooterComp: React.FC<BlogListFooterProps> = (props) => {
     const [searchParams, setSearchParams] = useSearchParams()
     const [current, setCurrent] = useState(1)
     const navigateToBlogsPage = (page: number) => { setSearchParams({ page: page.toString() }) }
-    const location = useLocation()
 
     useEffect(() => {
-        if (location.pathname.indexOf('list') > 0) {
-            setCurrent(parseInt(searchParams.get('page') || "1"))
-        }
+        setCurrent(parseInt(searchParams.get('page') || "1"))
         /* eslint-disable-next-line */
-    }, [location])
+    }, [searchParams])
 
     const paginationDescription = useMemo(() => {
         const perPageCount = config.blogProps.blogListItemCountPerPage

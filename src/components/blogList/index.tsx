@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react'
-import { useLocation, useSearchParams } from "react-router-dom"
+import { useSearchParams } from "react-router-dom"
 import { List, Layout, BackTop } from 'antd'
 import BlogListFooter from './footer'
 import { searchBlogs } from '../../api/blogs'
-import { BlogsItemRes, BlogsListItem, BlogSearchResponse } from '../../types/index'
+import { BlogsItemRes, BlogsListItem, BlogSearchResponse, BlogSearchRequestParam } from '../../types/index'
 import ListItem from './item'
 import { parseISODate, parseISODateStr, getDateFromNow } from '../../utils/formatter'
 import config from '../../config/config'
@@ -13,7 +13,6 @@ const BlogList = () => {
     const [data, setData] = useState<Array<BlogsListItem>>([])
     const [totalBlogsNum, setTotalBlogsNum] = useState(0)
     const [pcRenderMode, setPcRenderMode] = useState(true)
-    const location = useLocation()
 
     useEffect(() => {
         function windowResizeFunc() {
@@ -27,8 +26,8 @@ const BlogList = () => {
     }, [])
 
     const { blogProps: { blogListItemCountPerPage } } = config
-    const loadBlogListData = (page: number) => {
-        searchBlogs({ page: page, per_page: blogListItemCountPerPage, query: '' })
+    const loadBlogListData = (searchBlogListParams: BlogSearchRequestParam) => {
+        searchBlogs({ page: searchBlogListParams.page, per_page: blogListItemCountPerPage, query: '' })
             .then((res: BlogSearchResponse) => {
                 const resItemList = res.items
                 const newDataListLength = resItemList.length
@@ -50,11 +49,9 @@ const BlogList = () => {
     }
 
     useEffect(() => {
-        if (location.pathname.indexOf('list') > 0) {
-            loadBlogListData(parseInt(searchParams.get('page') || "1"))
-        }
+        loadBlogListData({ page: parseInt(searchParams.get('page') || "1") })
         /* eslint-disable-next-line */
-    }, [location])
+    }, [searchParams])
 
     useEffect(() => {
         window.scroll(0, 0)

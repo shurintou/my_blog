@@ -149,9 +149,9 @@ export interface BlogListFooterProps {
 }
 
 export interface BlogSearchRequestParam {
-    query: string,
+    query?: string,
     page: number,
-    per_page: number,
+    per_page?: number,
     sort?: string,
     order?: string,
 }
