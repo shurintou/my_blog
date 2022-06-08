@@ -91,7 +91,10 @@ const Blog = () => {
                                     }}
                                 >
                                     <Button
-                                        style={{ backgroundColor: config.antdProps.borderColor }}
+                                        style={{
+                                            backgroundColor: config.antdProps.borderColor,
+                                            verticalAlign: '0px'
+                                        }}
                                         icon={<LeftOutlined />}
                                         /* push a new state to the history stack */
                                         onClick={() => navigate('/list' + window.history.state.usr.backSearchParams)}
