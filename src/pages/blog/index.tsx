@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
-import { useSearchParams } from "react-router-dom"
-import { Layout, Empty, Typography, Row, Col, BackTop, Space, Divider, Spin } from 'antd'
-import { EyeOutlined } from '@ant-design/icons'
+import { useSearchParams, useNavigate } from "react-router-dom"
+import { Layout, Empty, Typography, Row, Col, BackTop, Space, Divider, Spin, Button } from 'antd'
+import { EyeOutlined, LeftOutlined } from '@ant-design/icons'
 import CommentComp from '../../components/blog/comment'
 import { getBlogInfo } from '../../api/blogs'
 import { BlogsItemRes, BlogsListItem, } from '../../types/index'
@@ -18,6 +18,7 @@ import { getLocalUser } from '../../utils/authentication'
 const { Title, Text } = Typography
 
 const Blog = () => {
+    const navigate = useNavigate()
     const [searchParams,] = useSearchParams()
     const blogIdStr = searchParams.get('id')
     const [hasData, setHasData] = useState(false)
@@ -77,17 +78,26 @@ const Blog = () => {
                     {hasData
                         ?
                         <Layout>
-                            <Title
-                                level={3}
-                                style={{
-                                    backgroundColor: config.antdProps.titleBackgroundColor,
-                                    border: '2px solid',
-                                    borderColor: config.antdProps.borderColor,
-                                    borderRadius: pcRenderMode ? '6px 6px 0px 0px' : '0px',
-                                    marginBottom: '0em',
-                                    paddingLeft: '0.5em',
-                                }}
-                            >{blogContent?.title}</Title>
+                            <Layout>
+                                <Title
+                                    level={3}
+                                    style={{
+                                        backgroundColor: config.antdProps.titleBackgroundColor,
+                                        border: '2px solid',
+                                        borderColor: config.antdProps.borderColor,
+                                        borderRadius: pcRenderMode ? '6px 6px 0px 0px' : '0px',
+                                        marginBottom: '0em',
+                                        paddingLeft: '0.5em',
+                                    }}
+                                >
+                                    <Button
+                                        style={{ backgroundColor: config.antdProps.borderColor }}
+                                        icon={<LeftOutlined />}
+                                        /* push a new state to the history stack */
+                                        onClick={() => navigate('/list' + window.history.state.usr.backSearchParams)}
+                                    ></Button>
+                                    {blogContent?.title}</Title>
+                            </Layout>
                             <Layout
                                 style={{
                                     padding: '1em 1em',

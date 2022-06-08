@@ -11,7 +11,7 @@ const { Title, Paragraph, Text } = Typography
 
 const BlogsListItemComp: React.FC<BlogsListItem> = (props) => {
     const navigate = useNavigate()
-    const navigateToBlog = () => navigate(`/blog?id=${props.number}`)
+    const navigateToBlog = () => { navigate(`/blog?id=${props.number}`, { state: { backSearchParams: document.location.search } }) }
     const mouseBlurStyle = { cursor: 'pointer' }
     const [isLastItem, setIsLastItem] = useState(false)
 
