@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useParams } from "react-router-dom"
+import { useSearchParams } from "react-router-dom"
 import { Layout, Empty, Typography, Row, Col, BackTop, Space, Divider, Spin } from 'antd'
 import { EyeOutlined } from '@ant-design/icons'
 import CommentComp from '../../components/blog/comment'
@@ -18,7 +18,8 @@ import { getLocalUser } from '../../utils/authentication'
 const { Title, Text } = Typography
 
 const Blog = () => {
-    const blogIdStr = useParams().blogId
+    const [searchParams,] = useSearchParams()
+    const blogIdStr = searchParams.get('id')
     const [hasData, setHasData] = useState(false)
     const [blogContent, setBlogContent] = useState<BlogsListItem>()
     const [likeCnt, setlikeCnt] = useState(0)

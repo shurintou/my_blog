@@ -52,8 +52,8 @@ export default class BlogBody extends React.Component<{}, { [key: string]: any }
             <Layout style={{ margin: '2em 0em' }}>
                 <Routes>
                     <Route path='/home' element={<Home />}></Route>
-                    <Route path='/blog/:blogId' element={<Blog />}></Route>
-                    <Route path='/blogs/:page' element={<Blogs />}></Route>
+                    <Route path='/blog' element={<Blog />}></Route>
+                    <Route path='/list' element={<Blogs />}></Route>
                     <Route path='/about' element={<About />}></Route>
                     <Route path='/*' element={<Navigate to='/home' />}></Route>
                 </Routes>

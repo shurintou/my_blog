@@ -146,7 +146,6 @@ export interface LabelsCompoProps {
 export interface BlogListFooterProps {
     total: number,
     renderMode: boolean,
-    changeHandler: Dispatch<SetStateAction<number>>,
 }
 
 export interface BlogSearchRequestParam {

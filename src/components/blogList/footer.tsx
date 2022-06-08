@@ -1,21 +1,20 @@
 import React, { useState, useEffect, useMemo } from 'react'
-import { useNavigate } from "react-router-dom"
-import { useLocation } from "react-router-dom"
+import { useSearchParams, useLocation } from "react-router-dom"
 import { BlogListFooterProps } from '../../types'
 import { Pagination, Layout } from 'antd'
 import config from '../../config/config'
 
 const BlogListFooterComp: React.FC<BlogListFooterProps> = (props) => {
+    const [searchParams, setSearchParams] = useSearchParams()
     const [current, setCurrent] = useState(1)
-    const navigate = useNavigate()
-    const navigateToBlogsPage = (page: number) => navigate('/blogs/' + page)
+    const navigateToBlogsPage = (page: number) => { setSearchParams({ page: page.toString() }) }
     const location = useLocation()
 
     useEffect(() => {
-        const matchStr = location.pathname.match(/blogs\/\d/g)
-        if (matchStr) {
-            setCurrent(parseInt(matchStr[0].slice(6)))
+        if (location.pathname.indexOf('list') > 0) {
+            setCurrent(parseInt(searchParams.get('page') || "1"))
         }
+        /* eslint-disable-next-line */
     }, [location])
 
     const paginationDescription = useMemo(() => {
@@ -61,7 +60,6 @@ const BlogListFooterComp: React.FC<BlogListFooterProps> = (props) => {
                 onChange={(number) => {
                     navigateToBlogsPage(number)
                     setCurrent(number)
-                    props.changeHandler(number)
                 }}
             />
         </Layout>

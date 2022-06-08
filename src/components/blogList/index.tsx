@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useParams, useLocation } from "react-router-dom"
+import { useLocation, useSearchParams } from "react-router-dom"
 import { List, Layout, BackTop } from 'antd'
 import BlogListFooter from './footer'
 import { searchBlogs } from '../../api/blogs'
@@ -9,8 +9,8 @@ import { parseISODate, parseISODateStr, getDateFromNow } from '../../utils/forma
 import config from '../../config/config'
 
 const BlogList = () => {
+    const [searchParams,] = useSearchParams()
     const [data, setData] = useState<Array<BlogsListItem>>([])
-    const [page, setPage] = useState(parseInt(useParams().page || "1"))
     const [totalBlogsNum, setTotalBlogsNum] = useState(0)
     const [pcRenderMode, setPcRenderMode] = useState(true)
     const location = useLocation()
@@ -50,14 +50,8 @@ const BlogList = () => {
     }
 
     useEffect(() => {
-        loadBlogListData(page)
-        /* eslint-disable-next-line */
-    }, [page])
-
-    useEffect(() => {
-        const matchStr = location.pathname.match(/blogs\/\d/g)
-        if (matchStr) {
-            loadBlogListData(parseInt(matchStr[0].slice(6)))
+        if (location.pathname.indexOf('list') > 0) {
+            loadBlogListData(parseInt(searchParams.get('page') || "1"))
         }
         /* eslint-disable-next-line */
     }, [location])
@@ -84,7 +78,7 @@ const BlogList = () => {
             >
             </List>
             <Layout style={{ marginTop: '1em' }}>
-                <BlogListFooter total={totalBlogsNum} renderMode={pcRenderMode} changeHandler={setPage}></BlogListFooter>
+                <BlogListFooter total={totalBlogsNum} renderMode={pcRenderMode}></BlogListFooter>
             </Layout>
             <BackTop target={() => document} />{/* default target value '()=> window' is not work. */}
         </Layout>

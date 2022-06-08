@@ -93,7 +93,7 @@ export default class BlogHeader extends React.Component<{}, { [key: string]: any
                         <Link to="/"><Button type="primary" icon={<HomeOutlined />}>Home</Button></Link>
                     </Col>
                     <Col {...spanPropObj}>
-                        <Link to="/blogs/1"> <Button type="primary" icon={<ReadOutlined />} >Blog</Button></Link>
+                        <Link to="/list?page=1"> <Button type="primary" icon={<ReadOutlined />} >Blog</Button></Link>
                     </Col>
                     <Col {...spanPropObj}>
                         <Link to="/about"><Button type="primary" icon={<UserOutlined />} onClick={this.scrollToTop}>About</Button></Link>
