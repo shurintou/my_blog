@@ -10,6 +10,7 @@ const { Header } = Layout
 export default class BlogHeader extends React.Component<{}, { [key: string]: any }> {
     static hideHeaderOverScrollTop = 100
     static toggleHeaderMinScrollTop = 30
+    static firstPageUrl = "/list?page=1"
     constructor(props: Object) {
         super(props)
         this.state = {
@@ -29,6 +30,12 @@ export default class BlogHeader extends React.Component<{}, { [key: string]: any
                 }
                 this.setState({ scrolledTop: newScrollTop })
             }
+        }
+    }
+
+    blogsClickHandler() {
+        if (document.location.href.indexOf(BlogHeader.firstPageUrl) > 0) {
+            window.scroll(0, 0)
         }
     }
 
@@ -93,7 +100,7 @@ export default class BlogHeader extends React.Component<{}, { [key: string]: any
                         <Link to="/"><Button type="primary" icon={<HomeOutlined />}>Home</Button></Link>
                     </Col>
                     <Col {...spanPropObj}>
-                        <Link to="/list?page=1"> <Button type="primary" icon={<ReadOutlined />} >Blog</Button></Link>
+                        <Link to={BlogHeader.firstPageUrl}> <Button type="primary" icon={<ReadOutlined />} onClick={this.blogsClickHandler}>Blog</Button></Link>
                     </Col>
                     <Col {...spanPropObj}>
                         <Link to="/about"><Button type="primary" icon={<UserOutlined />} onClick={this.scrollToTop}>About</Button></Link>
