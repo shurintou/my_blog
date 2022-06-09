@@ -15,7 +15,7 @@ export default class BlogBody extends React.Component<{}, { [key: string]: any }
         this.state = {
             /* handler the 'Bad credentials' error that be thrown from gitalk but not be caught */
             unhandledrejectionFunc: function (event: PromiseRejectionEvent | null) {
-                const res = event?.reason.response
+                const res = event?.reason?.response
                 if (res?.status === 401) {
                     message.warning('Please login your github account first.')
                 }

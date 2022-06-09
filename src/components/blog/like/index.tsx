@@ -23,6 +23,7 @@ function LikeCompo<T>(props: LikeCompProps<T>) {
                 getReactionsByGraphQl(getReactionsReq)
                     .then(getReactionsHandler)
                     .then(() => clearInterval(intervalId))
+                    .catch(e => { })
                 if (failTolerantTime <= 0) {
                     clearInterval(intervalId)
                 }
