@@ -12,7 +12,7 @@
         "@types/react": "^18.0.8",
         "@types/react-dom": "^18.0.0",
         "@types/react-redux": "^7.1.24",
-        "antd": "^4.19.5",
+        "antd": "^4.21.0",
         "axios": "^0.26.1",
         "craco": "0.0.3",
         "craco-antd": "^1.19.0",
