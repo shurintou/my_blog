@@ -1,5 +1,5 @@
 import React from 'react'
-import { Typography, Tooltip, Space } from 'antd'
+import { Typography, Tooltip, } from 'antd'
 import { CommentCompProps } from '../../../types/index'
 import config from '../../../config/config'
 
@@ -7,14 +7,17 @@ const { Text } = Typography
 
 const commentComp: React.FC<CommentCompProps> = (props) => {
     return (
-        <Tooltip title={props.title} color={config.antdProps.themeColor}>
-            <Space size="small">
-                {props.slot}
-                <Text>
-                    {props.text}
-                </Text>
-            </Space>
-        </Tooltip>
+        <span>
+            <Tooltip title={props.title} color={config.antdProps.themeColor}>
+                <span>
+                    {props.slot}
+                </span>
+            </Tooltip>
+
+            <Text style={{ marginLeft: '1em' }}>
+                {props.text}
+            </Text>
+        </span>
     )
 }
 

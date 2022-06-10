@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import { LikeCompProps, BlogLikeReactionResByGraphQl, BlogLikeReactionByGraphQl } from '../../../types/index'
-import { Layout } from 'antd'
 import { HeartOutlined, HeartTwoTone } from '@ant-design/icons'
 import { getReactionsByGraphQl, postLike, deleteLike } from '../../../api/like'
 import { getLocalUser } from '../../../utils/authentication'
@@ -68,9 +67,9 @@ function LikeCompo<T>(props: LikeCompProps<T>) {
     }
 
     return (
-        <Layout style={{ cursor: 'pointer' }} onClick={likeClickHandler}>
+        <span style={{ cursor: 'pointer' }} onClick={likeClickHandler}>
             {userLikeId !== 0 ? <HeartTwoTone /> : <HeartOutlined />}
-        </Layout>
+        </span>
     )
 }
 
