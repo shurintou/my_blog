@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import { Divider, Typography, Layout, } from 'antd'
+import { Divider, Typography, Layout, Space } from 'antd'
+import { HeartOutlined, CommentOutlined } from '@ant-design/icons'
 import { BlogsListItem } from '../../types/index'
 import { useNavigate } from "react-router-dom"
 import DateComp from '../blog/date'
+import CommentComp from '../../components/blog/comment'
 import LabelsComp from '../../components/others/labels'
 import Markdown from '../others/markdown/'
 import config from '../../config/config'
@@ -48,17 +50,36 @@ const BlogsListItemComp: React.FC<BlogsListItem> = (props) => {
                         <Markdown blogText={props.body}></Markdown>
                     </Layout>
                 </Paragraph>
-                <Paragraph>
+                <Layout style={{ marginBottom: '1em' }} >
                     <Text
                         onClick={navigateToBlog}
                         style={{
                             cursor: 'pointer',
-                            color: config.antdProps.themeColor
+                            color: config.antdProps.themeColor,
+                            marginBottom: '1em',
                         }}
                         underline
                     >Read more
                     </Text>
-                </Paragraph>
+                    <Space split={<Divider type="vertical" style={{ borderLeftColor: 'rgba(0,0,0,0.6)' }} />}>
+                        <CommentComp
+                            title='Like'
+                            slot={<HeartOutlined onClick={navigateToBlog} />}
+                            text={<Text>{
+                                props.reactions['+1']
+                                + props.reactions.hooray
+                                + props.reactions.laugh
+                                + props.reactions.rocket
+                                + props.reactions.heart}
+                            </Text>} />
+                        <CommentComp
+                            title='Comment'
+                            slot={<CommentOutlined onClick={navigateToBlog} />}
+                            text={<Text>{props.comments
+                            }
+                            </Text>} />
+                    </Space>
+                </Layout>
             </Typography>
             {!isLastItem && <Divider style={{ borderTopColor: 'rgba(0,0,0,0.2)', margin: 0 }} />}
         </li>
