@@ -25,6 +25,15 @@ const Blog = () => {
     const [blogContent, setBlogContent] = useState<BlogsListItem>()
     const [likeCnt, setlikeCnt] = useState(0)
     const [pcRenderMode, setPcRenderMode] = useState(true)
+    const backToBlogList = () => {
+        const backSearchParams = window.history.state?.usr?.backSearchParams || sessionStorage.getItem('backSearchParams')
+        if (backSearchParams) {
+            navigate('/list' + backSearchParams)
+        }
+        else {
+            navigate('/list?page=1')
+        }
+    }
 
     useEffect(() => {
         if (blogIdStr) {
@@ -96,8 +105,7 @@ const Blog = () => {
                                             verticalAlign: '0px'
                                         }}
                                         icon={<LeftOutlined />}
-                                        /* push a new state to the history stack */
-                                        onClick={() => navigate('/list' + window.history.state.usr.backSearchParams)}
+                                        onClick={backToBlogList}
                                     ></Button>
                                     {blogContent?.title}</Title>
                             </Layout>
