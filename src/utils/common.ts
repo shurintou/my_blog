@@ -37,3 +37,13 @@ export const isSameObjectSimple = function (req1: any, req2: any) {
 export function lightOrDark(bg2Color: string) {
     return (parseInt(bg2Color.replace('#', ''), 16) > 0xffffff / 2) ? '#000' : '#fff'
 }
+
+export function debounce(fn: Function, delay?: number) {
+    let timer: ReturnType<typeof setTimeout>
+    return function (this: any, ...args: any) {
+        if (timer) clearTimeout(timer)
+        timer = setTimeout(() => {
+            fn.call(this, args)
+        }, delay ? delay : 300)
+    }
+}

@@ -3,6 +3,7 @@ import { useSearchParams } from "react-router-dom"
 import { List, Layout, BackTop } from 'antd'
 import BlogListFooter from './footer'
 import { searchBlogs } from '../../api/blogs'
+import { debounce } from '../../utils/common'
 import { BlogsItemRes, BlogsListItem, BlogSearchResponse, BlogSearchRequestParam } from '../../types/index'
 import ListItem from './item'
 import { parseISODate, parseISODateStr, getDateFromNow } from '../../utils/formatter'
@@ -18,10 +19,11 @@ const BlogList = () => {
         function windowResizeFunc() {
             setPcRenderMode(window.innerWidth >= 768)
         }
+        const windowResizeDebounceFunc = debounce(windowResizeFunc, config.eventProps.resizeDebounceDelay)
         windowResizeFunc()
-        window.addEventListener('resize', windowResizeFunc)
+        window.addEventListener('resize', windowResizeDebounceFunc)
         return () => {
-            window.removeEventListener('resize', windowResizeFunc)
+            window.removeEventListener('resize', windowResizeDebounceFunc)
         }
     }, [])
 

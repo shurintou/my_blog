@@ -10,6 +10,7 @@ import Markdown from '../../components/others/markdown'
 import Gitalk from '../../components//others/gitalk'
 import DateComp from '../../components/blog/date'
 import LabelsComp from '../../components/others/labels'
+import { debounce } from '../../utils/common'
 import config from '../../config/config'
 import Like from '../../components/blog/like'
 import { getLocalUser } from '../../utils/authentication'
@@ -70,10 +71,11 @@ const Blog = () => {
         function windowResizeFunc() {
             setPcRenderMode(window.innerWidth >= 768)
         }
+        const windowResizeDebounceFunc = debounce(windowResizeFunc, config.eventProps.resizeDebounceDelay)
         windowResizeFunc()
-        window.addEventListener('resize', windowResizeFunc)
+        window.addEventListener('resize', windowResizeDebounceFunc)
         return () => {
-            window.removeEventListener('resize', windowResizeFunc)
+            window.removeEventListener('resize', windowResizeDebounceFunc)
         }
         /* eslint-disable-next-line */
     }, [])

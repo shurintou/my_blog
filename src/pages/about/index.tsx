@@ -2,11 +2,14 @@ import React from 'react'
 import { Layout, Row, Col, Typography, Space, Divider, BackTop, } from 'antd'
 import Gitalk from '../../components//others/gitalk'
 import config from '../../config/config'
+import { debounce } from '../../utils/common'
 import aboutStyle from './index.module.css'
 const { Text, Title, Link } = Typography
 
 export default class About extends React.Component<{}, { [key: string]: any }>  {
     private imgDivRefs: Array<HTMLDivElement | null>
+    private windowScrollDebounceFunc: () => any
+    private windowResizeDebounceFunc: () => any
     constructor(props: Object) {
         super(props)
         this.imgDivRefs = []
@@ -27,19 +30,21 @@ export default class About extends React.Component<{}, { [key: string]: any }>  
                 this.setState({ loadImg: newLoadImg })
             }
         }
+        this.windowResizeDebounceFunc = debounce(this.state.windowResizeFunc, config.eventProps.resizeDebounceDelay)
+        this.windowScrollDebounceFunc = debounce(this.state.windowScrollFunc, config.eventProps.scrollDebounceDelay)
     }
 
 
     componentDidMount() {
         this.state.windowScrollFunc()
         this.setState({ windowInnerWdith: window.innerWidth })
-        window.addEventListener('resize', this.state.windowResizeFunc)
-        window.addEventListener('scroll', this.state.windowScrollFunc)
+        window.addEventListener('resize', this.windowResizeDebounceFunc)
+        window.addEventListener('scroll', this.windowScrollDebounceFunc)
     }
 
     componentWillUnmount() {
-        window.removeEventListener('resize', this.state.windowResizeFunc)
-        window.removeEventListener('scroll', this.state.windowScrollFunc)
+        window.removeEventListener('resize', this.windowResizeDebounceFunc)
+        window.removeEventListener('scroll', this.windowScrollDebounceFunc)
     }
 
     render() {
