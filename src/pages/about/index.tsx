@@ -8,52 +8,58 @@ const { Text, Title, Link } = Typography
 
 export default class About extends React.Component<{}, { [key: string]: any }>  {
     private imgDivRefs: Array<HTMLDivElement | null>
-    private windowScrollDebounceFunc: () => any
     private windowResizeDebounceFunc: () => any
     constructor(props: Object) {
         super(props)
         this.imgDivRefs = []
         this.state = {
+            pcRenderMode: window.innerWidth >= 992 || document.documentElement.clientWidth >= 992,
             loadImg: [false, false, false, false],
-            windowInnerWdith: window.innerHeight || document.documentElement.clientHeight,
+            showImgDistance: -100,
+            windowInnerWidth: window.innerWidth || document.documentElement.clientWidth,
+            windowInnerHeight: window.innerHeight || document.documentElement.clientHeight,
             windowResizeFunc: () => {
-                this.setState({ windowInnerWdith: window.innerWidth || document.documentElement.clientHeight })
+                const newWindowInnerWidth = window.innerWidth || document.documentElement.clientWidth
+                const newWindowInnerHeight = window.innerHeight || document.documentElement.clientHeight
+                this.setState({ showImgDistance: newWindowInnerWidth >= 992 ? (-newWindowInnerHeight / 4) : (-newWindowInnerHeight / 3) })
+                this.setState({ pcRenderMode: newWindowInnerWidth >= 992 })
+                this.setState({ windowInnerWidth: newWindowInnerWidth })
+                this.setState({ windowInnerHeight: newWindowInnerHeight })
             },
             windowScrollFunc: () => {
                 let newLoadImg: Array<boolean> = this.state.loadImg
                 for (let i = 0; i < 4; i++) {
                     const imgDiv = this.imgDivRefs[i]
                     if (imgDiv && !newLoadImg[i]) {
-                        newLoadImg.splice(i, 1, this.state.windowInnerWdith - imgDiv.getBoundingClientRect().top > -100)
+                        newLoadImg.splice(i, 1, this.state.windowInnerHeight - imgDiv.getBoundingClientRect().top > (this.state.showImgDistance))
                     }
                 }
                 this.setState({ loadImg: newLoadImg })
             }
         }
         this.windowResizeDebounceFunc = debounce(this.state.windowResizeFunc, config.eventProps.resizeDebounceDelay)
-        this.windowScrollDebounceFunc = debounce(this.state.windowScrollFunc, config.eventProps.scrollDebounceDelay)
     }
 
 
     componentDidMount() {
+        this.state.windowResizeFunc()
         this.state.windowScrollFunc()
-        this.setState({ windowInnerWdith: window.innerWidth })
         window.addEventListener('resize', this.windowResizeDebounceFunc)
-        window.addEventListener('scroll', this.windowScrollDebounceFunc)
+        window.addEventListener('scroll', this.state.windowScrollFunc)
     }
 
     componentWillUnmount() {
         window.removeEventListener('resize', this.windowResizeDebounceFunc)
-        window.removeEventListener('scroll', this.windowScrollDebounceFunc)
+        window.removeEventListener('scroll', this.state.windowScrollFunc)
     }
 
     render() {
-        const imageContent1Height = this.state.windowInnerWdith >= 992 ? '35em' : '25em'
-        const textContent1Height = this.state.windowInnerWdith >= 992 ? '35em' : ''
-        const imageContent2Height = this.state.windowInnerWdith >= 992 ? '30em' : '25em'
-        const textContent2Height = this.state.windowInnerWdith >= 992 ? '30em' : ''
-        const content1Padding = this.state.windowInnerWdith >= 992 ? '3.75rem 3rem 1.75rem 3rem' : '1em 0.5rem 0rem 0.5rem'
-        const content2Padding = this.state.windowInnerWdith >= 992 ? '4.25rem 3rem 1.75rem 4.25rem' : '1em 0.5rem 0rem 0.5rem'
+        const imageContent1Height = this.state.pcRenderMode ? '35em' : '25em'
+        const textContent1Height = this.state.pcRenderMode ? '35em' : ''
+        const imageContent2Height = this.state.pcRenderMode ? '30em' : '25em'
+        const textContent2Height = this.state.pcRenderMode ? '30em' : ''
+        const content1Padding = this.state.pcRenderMode ? '3.75rem 3rem 1.75rem 3rem' : '1em 0.5rem 0rem 0.5rem'
+        const content2Padding = this.state.pcRenderMode ? '4.25rem 3rem 1.75rem 4.25rem' : '1em 0.5rem 0rem 0.5rem'
         return (
             <Layout>
                 <Space direction="vertical" size={'large'}>
