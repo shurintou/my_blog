@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useSearchParams, useNavigate } from "react-router-dom"
+import { useParams, useNavigate } from "react-router-dom"
 import { Layout, Empty, Typography, Row, Col, BackTop, Space, Divider, Spin, Button } from 'antd'
 import { EyeOutlined, LeftOutlined } from '@ant-design/icons'
 import CommentComp from '../../components/blog/comment'
@@ -20,8 +20,7 @@ const { Title, Text } = Typography
 
 const Blog = () => {
     const navigate = useNavigate()
-    const [searchParams,] = useSearchParams()
-    const blogIdStr = searchParams.get('id')
+    const blogIdStr = useParams().blogId
     const [hasData, setHasData] = useState(false)
     const [blogContent, setBlogContent] = useState<BlogsListItem>()
     const [likeCnt, setlikeCnt] = useState(0)

@@ -15,7 +15,7 @@ const BlogsListItemComp: React.FC<BlogsListItem> = (props) => {
     const navigate = useNavigate()
     const navigateToBlog = () => {
         const backSearchParams = document.location.search
-        navigate(`/blog?id=${props.number}`, { state: { backSearchParams: backSearchParams } })
+        navigate('/blog/' + props.number, { state: { backSearchParams: backSearchParams } })
         /* to fix the bug that when redirected after github login, the back button in blog title not work */
         sessionStorage.setItem('backSearchParams', backSearchParams)
     }
