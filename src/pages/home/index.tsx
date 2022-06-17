@@ -33,7 +33,7 @@ export default class Home extends React.Component<{}, { [key: string]: any }> {
                             <Paragraph>
                                 <p className={homeStyle.homeText}>I'm a&nbsp;
                                     <Text underline><Link href="https://en.wikipedia.org/wiki/Web_developer" target="_blank">Web developer</Link></Text>
-                                    , now working in Tokyo.</p>
+                                    &nbsp;working in Tokyo.</p>
                                 <p className={homeStyle.homeText}>I love coding and want to become a full stack engineer.</p>
                                 <p className={homeStyle.homeText}>I mainly write program in Javascript (
                                     <Text underline><Link href='https://vuejs.org/' target="_blank">Vue</Link></Text>,&nbsp;
