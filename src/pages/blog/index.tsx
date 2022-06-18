@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
-import { useParams, useNavigate } from "react-router-dom"
+import { useSearchParams, useNavigate } from "react-router-dom"
 import { Layout, Empty, Typography, Row, Col, BackTop, Space, Divider, Spin, Button } from 'antd'
-import { EyeOutlined, LeftOutlined } from '@ant-design/icons'
+import { CommentOutlined, LeftOutlined } from '@ant-design/icons'
 import CommentComp from '../../components/blog/comment'
 import { getBlogInfo } from '../../api/blogs'
 import { BlogsItemRes, BlogsListItem, } from '../../types/index'
@@ -10,7 +10,7 @@ import Markdown from '../../components/others/markdown'
 import Gitalk from '../../components//others/gitalk'
 import DateComp from '../../components/blog/date'
 import LabelsComp from '../../components/others/labels'
-import { debounce } from '../../utils/common'
+import { debounce, doScrolling } from '../../utils/common'
 import config from '../../config/config'
 import Like from '../../components/blog/like'
 import { getLocalUser } from '../../utils/authentication'
@@ -20,7 +20,8 @@ const { Title, Text } = Typography
 
 const Blog = () => {
     const navigate = useNavigate()
-    const blogIdStr = useParams().blogId
+    const [searchParams,] = useSearchParams()
+    const blogIdStr = searchParams.get('id')
     const [hasData, setHasData] = useState(false)
     const [blogContent, setBlogContent] = useState<BlogsListItem>()
     const [likeCnt, setlikeCnt] = useState(0)
@@ -35,6 +36,13 @@ const Blog = () => {
         }
     }
 
+    const scrollToGitalk = () => {
+        const gitalkEl: Element | null = document.getElementById('gitalk-container')
+        if (gitalkEl) {
+            doScrolling(gitalkEl, 500)
+        }
+    }
+
     useEffect(() => {
         if (blogIdStr) {
             const blogId = parseInt(blogIdStr)
@@ -46,24 +54,6 @@ const Blog = () => {
                     updated_from_now: getDateFromNow(parseISODate(res.updated_at)),
                 }))
                 setHasData(true)
-                const parentEl = document.head
-                let busuanziScriptSrc = ''
-                const scriptElementArray: Array<HTMLScriptElement> = Array.from(document.getElementsByTagName('script'))
-                scriptElementArray.forEach((script, index) => {
-                    if (script.id === 'busuanzi-script') {
-                        busuanziScriptSrc = script.src
-                    }
-                    if (index > 0) {
-                        parentEl.removeChild(script)
-                    }
-                })
-                // to make busuanzi script to support SPA application. remove/add it every single popstate of route .
-                const newScriptEl = document.createElement('script')
-                newScriptEl.setAttribute('type', 'text/javascript')
-                document.head.appendChild(newScriptEl)
-                newScriptEl.setAttribute('src', busuanziScriptSrc)
-                newScriptEl.setAttribute('async', 'true')
-                newScriptEl.setAttribute('id', 'busuanzi-script')
             })
         }
 
@@ -160,9 +150,9 @@ const Blog = () => {
                                         }
                                     />
                                     <CommentComp
-                                        title='View'
-                                        slot={<EyeOutlined />}
-                                        text={<Text id="busuanzi_value_page_pv"><Spin /></Text>}
+                                        title='Comment'
+                                        slot={<CommentOutlined onClick={scrollToGitalk} />}
+                                        text={!blogContent ? <Spin /> : <Text>{blogContent.comments}</Text>}
                                     />
                                 </Space>
                             </Layout>
