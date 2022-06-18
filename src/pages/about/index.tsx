@@ -2,13 +2,14 @@ import React from 'react'
 import { Layout, Row, Col, Typography, Space, Divider, BackTop, } from 'antd'
 import Gitalk from '../../components//others/gitalk'
 import config from '../../config/config'
-import { debounce } from '../../utils/common'
+import { debounce, doScrolling } from '../../utils/common'
 import aboutStyle from './index.module.css'
 const { Text, Title, Link } = Typography
 
 export default class About extends React.Component<{}, { [key: string]: any }>  {
     private imgDivRefs: Array<HTMLDivElement | null>
     private windowResizeDebounceFunc: () => any
+    private scrollToGitalk: () => any
     constructor(props: Object) {
         super(props)
         this.imgDivRefs = []
@@ -38,6 +39,12 @@ export default class About extends React.Component<{}, { [key: string]: any }>  
             }
         }
         this.windowResizeDebounceFunc = debounce(this.state.windowResizeFunc, config.eventProps.resizeDebounceDelay)
+        this.scrollToGitalk = () => {
+            const gitalkEl: Element | null = document.getElementById('gitalk-container')
+            if (gitalkEl) {
+                doScrolling(gitalkEl, 500)
+            }
+        }
     }
 
 
@@ -130,7 +137,7 @@ export default class About extends React.Component<{}, { [key: string]: any }>  
                                 <Title level={1}>Getting in Touch</Title>
                                 <div className={aboutStyle.aboutText} style={{ marginBottom: '1em' }}>
                                     If you need any further information, please feel free to contact me at <Text copyable underline>shurintou@gmail.com</Text>,
-                                    or just leave a message to the <Text underline><Link href='#gitalk-container'>message board</Link></Text> below.
+                                    or just leave a message to the <Text underline><Link onClick={this.scrollToGitalk}>message board</Link></Text> below.
                                 </div>
                                 <p className={aboutStyle.aboutText}>
                                     If you are interested in this blog, or think the content of the blog is helpful, it would be very kind of you to star the <Text underline><Link href="https://github.com/shurintou/my_blog" target="_blank">blog repository</Link></Text> .
