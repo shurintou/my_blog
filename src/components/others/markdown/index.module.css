@@ -1,3 +1,7 @@
 .pTagInsideBlockquote p {
     margin: 0
 }
+
+.textFontSize {
+    font-size: 1.3em;
+}

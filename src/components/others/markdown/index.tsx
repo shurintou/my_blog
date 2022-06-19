@@ -1,22 +1,53 @@
 import React from 'react'
 import ReactMarkdown from 'react-markdown'
+import { Typography, } from 'antd'
 import remarkGfm from 'remark-gfm'
 import remarkBreaks from 'remark-breaks'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { tomorrow } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import { MarkdownProps } from '../../../types/index'
 import config from '../../../config/config'
-import pTagInsideBlockQuote from './index.module.css'
+import { doScrolling } from '../../../utils/common'
+import markdownStyle from './index.module.css'
+const { Link } = Typography
 
 const Markdown: React.FC<MarkdownProps> = (props) => {
     const { blogText } = props
+    const anchorStr = '#anchor'
+    const hRenderFunc = ({ level, children, }: { [key: string]: any }) => {
+        const fontSize = (7 - level) * 0.5 + 0.5
+        const reg = new RegExp(anchorStr + '\\d', 'i')
+        const match = String(children).match(reg)
+        children = String(children).replace(reg, '')
+        let hProps: { [key: string]: any } = { style: { fontSize: fontSize + 'em', marginBottom: '0em' }, children: children }
+        if (match) {
+            hProps['id'] = match[0].split('#')[1]
+        }
+        return React.createElement('h' + level, hProps)
+    }
+    const scrollToAnchor = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>, anchorId: string | undefined) => {
+        e.preventDefault()
+        if (anchorId) {
+            const anchorEl = document.querySelector(anchorId)
+            if (anchorEl) {
+                doScrolling(anchorEl, 500)
+            }
+        }
+        return false
+    }
 
     return (
         <ReactMarkdown
             children={blogText ? blogText : ''}
             remarkPlugins={[remarkGfm, remarkBreaks]}
+            className={markdownStyle.textFontSize}
             components={{
-                h3: 'h2',
+                h1: hRenderFunc,
+                h2: hRenderFunc,
+                h3: hRenderFunc,
+                h4: hRenderFunc,
+                h5: hRenderFunc,
+                h6: hRenderFunc,
                 code({ node, inline, className, children, ...props }) {
                     const match = /language-(\w+)/.exec(className || '')
                     return !inline && match ? (
@@ -32,7 +63,6 @@ const Markdown: React.FC<MarkdownProps> = (props) => {
                             style={{
                                 padding: '.2em .4em',
                                 margin: 0,
-                                fontSize: '85%',
                                 backgroundColor: 'rgba(175,184,193,0.2)',
                                 borderRadius: '6px',
                             }}
@@ -47,7 +77,7 @@ const Markdown: React.FC<MarkdownProps> = (props) => {
                         <blockquote
                             {...props}
                             /* set the margin of p tag in blockquote 0, to prevent the overflow of borderLeft.  */
-                            className={pTagInsideBlockQuote.pTagInsideBlockquote}
+                            className={markdownStyle.pTagInsideBlockquote}
                             style={{
                                 borderLeft: '.25em solid',
                                 borderLeftColor: config.antdProps.borderColor,
@@ -56,6 +86,12 @@ const Markdown: React.FC<MarkdownProps> = (props) => {
                             {children}
                         </blockquote>
                     )
+                },
+                a({ children, href }) {
+                    return href && href.startsWith('#') ?
+                        <Link onClick={(e) => scrollToAnchor(e, href)}>{children}</Link>
+                        :
+                        <Link href={href} target='_blank'>{children}</Link>
                 }
             }}
         />
