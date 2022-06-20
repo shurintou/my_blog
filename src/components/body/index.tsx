@@ -1,13 +1,13 @@
-import React from 'react'
-import { Layout, message } from 'antd'
+import React, { Suspense, lazy } from 'react'
+import { Layout, message, Skeleton } from 'antd'
 import { Routes, Route, Navigate } from "react-router-dom"
 import { getGitUserInfo } from '../../api/user'
 import { setLocalUser } from '../../utils/authentication'
-import Home from '../../pages/home'
-import Blogs from '../../pages/blogs'
-import About from '../../pages/about'
-import Blog from '../../pages/blog'
 import { GitUser } from '../../types/index'
+const Home = lazy(() => import(/* webpackChunkName: 'Home'*/ '../../pages/home'))
+const List = lazy(() => import(/* webpackChunkName: 'List'*/ '../../pages/blogs'))
+const About = lazy(() => import(/* webpackChunkName: 'About'*/ '../../pages/about'))
+const Blog = lazy(() => import(/* webpackChunkName: 'Blog'*/ '../../pages/blog'))
 
 export default class BlogBody extends React.Component<{}, { [key: string]: any }> {
     constructor(props: Object) {
@@ -50,13 +50,15 @@ export default class BlogBody extends React.Component<{}, { [key: string]: any }
     render() {
         return (
             <Layout style={{ margin: '2em 0em' }}>
-                <Routes>
-                    <Route path='/home' element={<Home />}></Route>
-                    <Route path='/blog' element={<Blog />}></Route>
-                    <Route path='/list' element={<Blogs />}></Route>
-                    <Route path='/about' element={<About />}></Route>
-                    <Route path='/*' element={<Navigate to='/home' />}></Route>
-                </Routes>
+                <Suspense fallback={<Skeleton active />}>
+                    <Routes>
+                        <Route path='/home' element={<Home />}></Route>
+                        <Route path='/blog' element={<Blog />}></Route>
+                        <Route path='/list' element={<List />}></Route>
+                        <Route path='/about' element={<About />}></Route>
+                        <Route path='/*' element={<Navigate to='/home' />}></Route>
+                    </Routes>
+                </Suspense>
             </Layout>
         )
     }
