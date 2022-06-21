@@ -7,7 +7,7 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { tomorrow } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import { MarkdownProps } from '../../../types/index'
 import config from '../../../config/config'
-import { doScrolling } from '../../../utils/common'
+import { doScrolling, curry } from '../../../utils/common'
 import markdownStyle from './index.module.css'
 const { Link } = Typography
 
@@ -35,12 +35,18 @@ const Markdown: React.FC<MarkdownProps> = (props) => {
         }
         return false
     }
+    const thTdRenderFunc = (tagName: string, { children }: { [key: string]: any }) => {
+        let thTdProps: { [key: string]: any } = { style: { borderStyle: 'solid', borderWidth: '2px', borderColor: config.markdownProps.trBorderColor, padding: '0.4em 0.8em', textAlign: 'center' }, children: children }
+        return React.createElement(tagName, thTdProps)
+    }
+    const curringThTdRenderFunc = curry(thTdRenderFunc)
 
     return (
         <ReactMarkdown
             children={blogText ? blogText : ''}
             remarkPlugins={[remarkGfm, remarkBreaks]}
             className={markdownStyle.textFontSize}
+            includeElementIndex={true}
             components={{
                 h1: hRenderFunc,
                 h2: hRenderFunc,
@@ -92,7 +98,20 @@ const Markdown: React.FC<MarkdownProps> = (props) => {
                         <Link onClick={(e) => scrollToAnchor(e, href)}>{children}</Link>
                         :
                         <Link href={href} target='_blank'>{children}</Link>
-                }
+                },
+                table({ children }) {
+                    return <div style={{ overflowX: 'auto' }}><table>{children}</table></div>
+                },
+                tr({ children, isHeader, index, }) {
+                    return <tr style={{
+                        borderStyle: 'solid',
+                        borderWidth: '2px',
+                        borderColor: config.markdownProps.trBorderColor,
+                        backgroundColor: (isHeader || (index && index % 2 === 1)) ? undefined : config.markdownProps.trBackgroundColor
+                    }}>{children}</tr>
+                },
+                th: curringThTdRenderFunc('th'),
+                td: curringThTdRenderFunc('td'),
             }}
         />
     )
