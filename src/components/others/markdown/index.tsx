@@ -15,13 +15,23 @@ const Markdown: React.FC<MarkdownProps> = (props) => {
     const { blogText } = props
     const anchorStr = '#anchor'
     const hRenderFunc = ({ level, children, }: { [key: string]: any }) => {
-        const fontSize = (7 - level) * 0.5 + 0.5
+        const fontSize = (7 - level) * 0.15 + 0.8
         const reg = new RegExp(anchorStr + '\\d', 'i')
         const match = String(children).match(reg)
         children = String(children).replace(reg, '')
-        let hProps: { [key: string]: any } = { style: { fontSize: fontSize + 'em', marginBottom: '0em' }, children: children }
+        let hProps: { [key: string]: any } = { style: { fontSize: fontSize + 'em', marginBottom: level <= 3 ? '' : '0em', fontWeight: 700 }, children: children }
         if (match) {
             hProps['id'] = match[0].split('#')[1]
+        }
+        if (level === 3) {
+            let style = hProps['style']
+            style['borderLeft'] = config.markdownProps.hLeftBorderColor + ' solid 8px'
+            style['paddingLeft'] = '0.5em'
+        }
+        else if (level < 3) {
+            let style = hProps['style']
+            style['borderBottom'] = config.markdownProps.hBottomBorderColor + ' solid ' + (level === 1 ? '8px' : '4px')
+            style['paddingLeft'] = '0.5em'
         }
         return React.createElement('h' + level, hProps)
     }
@@ -95,9 +105,9 @@ const Markdown: React.FC<MarkdownProps> = (props) => {
                 },
                 a({ children, href }) {
                     return href && href.startsWith('#') ?
-                        <Link onClick={(e) => scrollToAnchor(e, href)}>{children}</Link>
+                        <Link underline onClick={(e) => scrollToAnchor(e, href)}>{children}</Link>
                         :
-                        <Link href={href} target='_blank'>{children}</Link>
+                        <Link underline href={href} target='_blank'>{children}</Link>
                 },
                 table({ children }) {
                     return <div style={{ overflowX: 'auto' }}><table>{children}</table></div>
