@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactMarkdown from 'react-markdown'
-import { Typography, } from 'antd'
+import { Typography, Image } from 'antd'
 import remarkGfm from 'remark-gfm'
 import remarkBreaks from 'remark-breaks'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
@@ -122,6 +122,9 @@ const Markdown: React.FC<MarkdownProps> = (props) => {
                 },
                 th: curringThTdRenderFunc('th'),
                 td: curringThTdRenderFunc('td'),
+                img({ src, alt, }) {
+                    return <Image alt={alt} src={src} style={{ maxWidth: '100%' }} />
+                }
             }}
         />
     )
