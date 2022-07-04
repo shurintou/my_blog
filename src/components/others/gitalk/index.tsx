@@ -9,9 +9,7 @@ const GitalkCompo: React.FC<GitalkProps> = (props) => {
 
     useEffect(() => {
         function renderGitalk(blogId: number) {
-            let gitalkProps = config.gitProps
-            gitalkProps.number = blogId
-            gitalkProps.perPage = config.blogProps.commentCountPerPage
+            const gitalkProps = { ...config.gitProps, number: blogId, perPage: config.blogProps.commentCountPerPage }
             const gitalk = new Gitalk(gitalkProps)
             gitalk.render('gitalk-container')
         }
