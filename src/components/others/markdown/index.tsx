@@ -35,13 +35,19 @@ const Markdown: React.FC<MarkdownProps> = (props) => {
         }
         return React.createElement('h' + level, hProps)
     }
-    const scrollToAnchor = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>, anchorId: string | undefined) => {
+    const scrollToAnchor = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>, href: string | undefined) => {
         e.preventDefault()
-        if (anchorId) {
-            const anchorEl = document.querySelector(anchorId)
+        if (window.location.href.indexOf('list') >= 0) { // do nothing if the a tag is clicked at the list page.
+            return false
+        }
+        if (href && href.startsWith('#')) {
+            const anchorEl = document.querySelector(href)
             if (anchorEl) {
                 doScrolling(anchorEl, 500)
             }
+        }
+        else {
+            window.open(href, '_blank')
         }
         return false
     }
@@ -104,10 +110,7 @@ const Markdown: React.FC<MarkdownProps> = (props) => {
                     )
                 },
                 a({ children, href }) {
-                    return href && href.startsWith('#') ?
-                        <Link underline onClick={(e) => scrollToAnchor(e, href)}>{children}</Link>
-                        :
-                        <Link underline href={href} target='_blank'>{children}</Link>
+                    return <Link underline onClick={(e) => scrollToAnchor(e, href)}>{children}</Link>
                 },
                 table({ children }) {
                     return <div style={{ overflowX: 'auto' }}><table>{children}</table></div>
