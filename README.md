@@ -1,10 +1,23 @@
-# Getting Started with Create React App
+# Welcome to my blog project !!
+![react](https://img.shields.io/badge/react-%5E18.0.0-blue) ![antd](https://img.shields.io/badge/antd-%5E4.21.0-red) ![gitalk](https://img.shields.io/badge/gitalk-%5E1.7.2-green) ![markdown](https://img.shields.io/badge/react--markdown-%5E8.0.3-orange) ![typescript](https://img.shields.io/badge/typescript-%5E4.6.3-9cf) ![axios](https://img.shields.io/badge/axios-%5E0.26.1-yellowgreen) ![License](https://img.shields.io/badge/license-MIT-yellow)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+:link:**URL: [https://shurintou.github.io](https://shurintou.github.io)**
 
-## Available Scripts
+## :house:What is it ?
 
-In the project directory, you can run:
+This is my blog project which was developed by [React](https://reactjs.org/) and bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+## :bulb:Anything special ?
+
+### Customized theme
+The project can config design theme by using [craco](https://ant.design/docs/react/use-with-create-react-app#Advanced-Guides), to try this, please modify the `craco.config.ts` file in the project.
+
+### Database-free
+All posts of the blog are stored as [Github issue](https://github.com/shurintou/shurintou.github.io/issues), and comments are synchronized by [Gitalk](https://github.com/gitalk/gitalk). 
+
+## :key:How does it work ?
+
+Clone this repository to you local computer and in the project directory, you can run:
 
 ### `npm start`
 
@@ -14,33 +27,10 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 The page will reload if you make edits.\
 You will also see any lint errors in the console.
 
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
 ### `npm run build`
 
 Builds the app for production to the `build` folder.\
 It correctly bundles React in production mode and optimizes the build for the best performance.
 
 The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+The app is ready to be deployed and [here](https://github.com/shurintou/shurintou.github.io) is the github repository where I store it.
