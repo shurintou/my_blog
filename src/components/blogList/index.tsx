@@ -76,7 +76,11 @@ const BlogList = () => {
                 )}
             >
             </List>
-            <Layout style={{ marginTop: '1em' }}>
+            <Layout style={{
+                marginTop: '1em',
+                position: 'sticky',
+                bottom: 0,
+            }}>
                 <BlogListFooter total={totalBlogsNum} renderMode={pcRenderMode}></BlogListFooter>
             </Layout>
             <BackTop target={() => document} />{/* default target value '()=> window' is not work. */}
