@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import { Layout, Typography, Tag, } from 'antd'
+import { Layout, Typography, Tag, Tooltip } from 'antd'
 import { lightOrDark } from '../../../utils/common'
 import { LabelsCompoProps, Label } from '../../../types/index'
+import config from '../../../config/config'
 
 const { Paragraph, Text } = Typography
 
@@ -40,14 +41,18 @@ const LabelsCompo: React.FC<LabelsCompoProps> = (props) => {
         <Layout>
             <Paragraph>
                 <Text style={{ marginRight: '0.5em' }}>Category: </Text>
-                {<Tag style={{ borderRadius: '1em' }} color={category.color}><Text strong>{category.name}</Text></Tag>}
+                <Tooltip title={category.description} color={config.antdProps.themeColor}>
+                    {<Tag style={{ borderRadius: '1em' }} color={category.color}><Text strong>{category.name}</Text></Tag>}
+                </Tooltip>
             </Paragraph>
             {tags.length > 0 && <Paragraph>
                 <Text style={{ marginRight: '0.5em' }}>Tags: </Text>
                 {tags.map(label => {
                     return <span key={label.id}>
-                        <Tag style={{ borderRadius: '1em' }} color={'#' + label.color}><Text strong style={{ color: lightOrDark(label.color) }}>{label.name}</Text></Tag>
-                        &nbsp;
+                        <Tooltip title={label.description} color={config.antdProps.themeColor}>
+                            <Tag style={{ borderRadius: '1em' }} color={'#' + label.color}><Text strong style={{ color: lightOrDark(label.color) }}>{label.name}</Text></Tag>
+                            &nbsp;
+                        </Tooltip>
                     </span>
                 })}
             </Paragraph>}
