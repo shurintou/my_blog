@@ -30,6 +30,24 @@ const configObj = {
         hLeftBorderColor: '#1DA57A',
         hBottomBorderColor: '#d0d7de',
     },
+    languageProps: [
+        {
+            label: 'EN: English',
+            key: 'en',
+        },
+        {
+            label: 'ZH: Chinese',
+            key: 'zh',
+        },
+        {
+            label: 'JA: Japanese',
+            key: 'ja',
+        },
+        {
+            label: 'GB: Global',
+            key: 'gb',
+        },
+    ]
 }
 
 export default configObj
