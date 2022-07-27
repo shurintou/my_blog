@@ -32,20 +32,16 @@ const configObj = {
     },
     languageProps: [
         {
-            label: 'EN: English',
+            label: 'English',
             key: 'en',
         },
         {
-            label: 'ZH: Chinese',
+            label: '简体中文',
             key: 'zh',
         },
         {
-            label: 'JA: Japanese',
+            label: '日本語',
             key: 'ja',
-        },
-        {
-            label: 'GB: Global',
-            key: 'gb',
         },
     ]
 }
