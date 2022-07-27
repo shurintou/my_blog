@@ -1,8 +1,10 @@
 
 import React from 'react'
-import { Layout, Row, Col, Button } from 'antd'
-import { HomeOutlined, ReadOutlined, UserOutlined } from '@ant-design/icons'
+import { Layout, Row, Col, Button, Dropdown, Menu } from 'antd'
+import { HomeOutlined, ReadOutlined, UserOutlined, GlobalOutlined, } from '@ant-design/icons'
 import { Link } from "react-router-dom"
+import config from '../../config/config'
+import { getLocalHtmlLang, setLocalHtmlLang } from '../../utils/userAgent'
 import { AntdColPropObj } from '../../types/index'
 import headerStyle from './index.module.css'
 const { Header } = Layout
@@ -16,6 +18,7 @@ export default class BlogHeader extends React.Component<{}, { [key: string]: any
         this.state = {
             scrolledTop: 0,
             showHeader: true,
+            selectedLanguage: getLocalHtmlLang(),
             scrollHandler: () => {
                 const newScrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop
                 if (newScrollTop >= BlogHeader.hideHeaderOverScrollTop) {
@@ -67,6 +70,30 @@ export default class BlogHeader extends React.Component<{}, { [key: string]: any
             'lg': { offset: 3 },
             'xl': { offset: 4 },
         }
+        const languageSpanPropObj: AntdColPropObj = {
+            'xs': { span: 2 },
+            'sm': { span: 2 },
+            'md': { span: 2 },
+            'lg': { span: 1 },
+            'xl': { span: 1 },
+        }
+        const languageOffsetPropObj: AntdColPropObj = {
+            'xs': { offset: 4 },
+            'sm': { offset: 6 },
+            'md': { offset: 8 },
+            'lg': { offset: 11 },
+            'xl': { offset: 13 },
+        }
+        const menu =
+            <Menu selectedKeys={[this.state.selectedLanguage]}
+                onClick={e => {
+                    if (this.state.selectedLanguage !== e.key) {
+                        this.setState({ selectedLanguage: e.key })
+                    }
+                    setLocalHtmlLang(e.key)
+                }}
+                items={config.languageProps}
+            />
         return (
             <Header
                 className={
@@ -104,6 +131,26 @@ export default class BlogHeader extends React.Component<{}, { [key: string]: any
                     </Col>
                     <Col {...spanPropObj}>
                         <Link to="/about"><Button type="primary" icon={<UserOutlined />} onClick={this.scrollToTop}>About</Button></Link>
+                    </Col>
+                    <Col
+                        {
+
+                        ...Object.assign({},
+                            Object.fromEntries(Object.keys(languageSpanPropObj).map(
+                                key =>
+                                    [
+                                        key,
+                                        Object.assign({},
+                                            languageSpanPropObj[key as keyof AntdColPropObj],
+                                            languageOffsetPropObj[key as keyof AntdColPropObj])
+                                    ]
+                            ))
+                        )
+                        }
+                    >
+                        <Dropdown overlay={menu} placement="bottomRight">
+                            <Button type="primary" icon={<GlobalOutlined />}></Button>
+                        </Dropdown>
                     </Col>
                 </Row>
             </Header>
