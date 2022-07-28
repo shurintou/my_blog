@@ -7,6 +7,7 @@ import DateComp from '../blog/date'
 import CommentComp from '../../components/blog/comment'
 import LabelsComp from '../../components/others/labels'
 import Markdown from '../others/markdown/'
+import { getLocalHtmlLang } from '../../utils/userAgent'
 import config from '../../config/config'
 
 const { Title, Paragraph, Text } = Typography
@@ -21,13 +22,14 @@ const BlogsListItemComp: React.FC<BlogsListItem> = (props) => {
     }
     const mouseBlurStyle = { cursor: 'pointer' }
     const [isLastItem, setIsLastItem] = useState(false)
+    const [blogLang, setBlogLang] = useState(getLocalHtmlLang())
 
     useEffect(() => {
         setIsLastItem((props.index || 0) >= (props.listLength || 0)) //divider of which is the last item would not be shown.
     }, [props.index, props.listLength])
 
     return (
-        <li>
+        <li lang={blogLang}>
             <Title level={3} onClick={navigateToBlog} style={{ padding: '16px 24px 0px 24px', }}><Text style={mouseBlurStyle} >{props.title}</Text></Title>
             <Typography style={{ padding: '0px 24px 16px 24px' }} >
                 <DateComp
@@ -35,7 +37,7 @@ const BlogsListItemComp: React.FC<BlogsListItem> = (props) => {
                     dateLocal={props.created_at_local}
                     text={'Created'}
                 />
-                <LabelsComp labelList={props.labels}></LabelsComp>
+                <LabelsComp labelList={props.labels} setBlogLanguage={setBlogLang}></LabelsComp>
                 <Divider style={{ marginTop: '0' }} />
                 <Paragraph
                     onClick={navigateToBlog}

@@ -23,6 +23,21 @@ const LabelsCompo: React.FC<LabelsCompoProps> = (props) => {
                 else if (labelType === 'language') {
                     languageTag = label
                     languageName = labelName
+                    let htmlLang = ''
+                    switch (languageName.toLowerCase()) {
+                        case 'english':
+                            htmlLang = 'en'
+                            break
+                        case 'chinese':
+                            htmlLang = 'zh'
+                            break
+                        case 'japanese':
+                            htmlLang = 'ja'
+                            break
+                        default:
+                            htmlLang = 'en'
+                    }
+                    props.setBlogLanguage(htmlLang)
                 }
                 else {
                     tagsList.push({ ...label, name: labelName })

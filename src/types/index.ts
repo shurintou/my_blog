@@ -140,7 +140,8 @@ export interface BlogLikeReactionResByGraphQl {
 }
 
 export interface LabelsCompoProps {
-    labelList: Array<Label>
+    labelList: Array<Label>,
+    setBlogLanguage: Dispatch<SetStateAction<string>>,
 }
 
 export interface BlogListFooterProps {

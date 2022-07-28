@@ -13,6 +13,7 @@ import LabelsComp from '../../components/others/labels'
 import { debounce, doScrolling } from '../../utils/common'
 import config from '../../config/config'
 import Like from '../../components/blog/like'
+import { getLocalHtmlLang } from '../../utils/userAgent'
 import { getLocalUser } from '../../utils/authentication'
 
 
@@ -26,6 +27,7 @@ const Blog = () => {
     const [blogContent, setBlogContent] = useState<BlogsListItem>()
     const [likeCnt, setlikeCnt] = useState(0)
     const [pcRenderMode, setPcRenderMode] = useState(true)
+    const [blogLang, setBlogLang] = useState(getLocalHtmlLang())
     const backToBlogList = () => {
         const backSearchParams = window.history.state?.usr?.backSearchParams || sessionStorage.getItem('backSearchParams')
         if (backSearchParams) {
@@ -70,7 +72,7 @@ const Blog = () => {
     }, [])
 
     return (
-        <Layout>
+        <Layout lang={blogLang}>
             <Row>
                 <Col xs={0} sm={0} md={3} lg={3} xl={3}>
                 </Col>
@@ -119,7 +121,7 @@ const Blog = () => {
                                     <Col span={1} offset={7}>
                                     </Col>
                                 </Row>
-                                {blogContent && <LabelsComp labelList={blogContent?.labels}></LabelsComp>}
+                                {blogContent && <LabelsComp labelList={blogContent?.labels} setBlogLanguage={setBlogLang}></LabelsComp>}
                                 <Divider style={{ margin: '0em 0em 1em 0em' }} />
                                 <Markdown blogText={blogContent?.body} />
                                 {
