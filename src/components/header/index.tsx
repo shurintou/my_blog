@@ -4,9 +4,12 @@ import { Layout, Row, Col, Button, Dropdown, Menu } from 'antd'
 import { HomeOutlined, ReadOutlined, UserOutlined, GlobalOutlined, } from '@ant-design/icons'
 import { Link } from "react-router-dom"
 import config from '../../config/config'
-import { getLocalHtmlLang, setLocalHtmlLang } from '../../utils/userAgent'
+import { setLocalHtmlLang } from '../../utils/userAgent'
 import { AntdColPropObj } from '../../types/index'
 import headerStyle from './index.module.css'
+import { useAppSelector, useAppDispatch } from '../../redux/hooks'
+import { changeLocalLanguage } from '../../features/language/languageSlice'
+
 const { Header } = Layout
 
 const BlogHeader: React.FC<{}> = () => {
@@ -15,9 +18,14 @@ const BlogHeader: React.FC<{}> = () => {
     const firstPageUrl = "/list?page=1"
     const [scrolledTop, setScrolledTop] = useState(0)
     const [showHeader, setShowHeader] = useState(true)
-    const [selectedLanguage, setSelectedLanguage] = useState(getLocalHtmlLang())
     const scrolledTopRef = useRef(scrolledTop) // to solve the re-render delay issue. 
     scrolledTopRef.current = scrolledTop
+    const selectedLanguage = useAppSelector((state) => state.language.value)
+    const dispatch = useAppDispatch()
+
+    const setSelectedLanguage = (newLang: string) => {
+        dispatch(changeLocalLanguage(newLang))
+    }
 
     const scrollHandler = () => {
         const newScrollTop = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop
@@ -43,6 +51,17 @@ const BlogHeader: React.FC<{}> = () => {
     const scrollToTop = () => {
         window.scroll(0, 0)
     }
+
+
+    const menuTabNameMap = new Map<string, Array<string>>()
+    menuTabNameMap.set('en', ['Home', 'Post', 'About'])
+    menuTabNameMap.set('zh', ['主页', '文章', '关于'])
+    menuTabNameMap.set('ja', ['トップ', '投稿', 'その他'])
+    const [menuTabNames, setMenuTabNames] = useState(menuTabNameMap.get(selectedLanguage))
+    useEffect(() => {
+        setMenuTabNames(menuTabNameMap.get(selectedLanguage))
+        /* eslint-disable-next-line */
+    }, [selectedLanguage])
 
     useEffect(() => {
         window.addEventListener('scroll', scrollHandler)
@@ -120,13 +139,13 @@ const BlogHeader: React.FC<{}> = () => {
                     )
                     }
                 >
-                    <Link to="/"><Button type="primary" icon={<HomeOutlined />}>Home</Button></Link>
+                    <Link to="/"><Button type="primary" icon={<HomeOutlined />}>{menuTabNames && menuTabNames[0]}</Button></Link>
                 </Col>
                 <Col {...spanPropObj}>
-                    <Link to={firstPageUrl}> <Button type="primary" icon={<ReadOutlined />} onClick={blogsClickHandler}>Blog</Button></Link>
+                    <Link to={firstPageUrl}> <Button type="primary" icon={<ReadOutlined />} onClick={blogsClickHandler}>{menuTabNames && menuTabNames[1]}</Button></Link>
                 </Col>
                 <Col {...spanPropObj}>
-                    <Link to="/about"><Button type="primary" icon={<UserOutlined />} onClick={scrollToTop}>About</Button></Link>
+                    <Link to="/about"><Button type="primary" icon={<UserOutlined />} onClick={scrollToTop}>{menuTabNames && menuTabNames[2]}</Button></Link>
                 </Col>
                 <Col
                     {
