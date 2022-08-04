@@ -161,3 +161,8 @@ export interface BlogSearchResponse {
     total_count: number,
     items: Array<BlogsItemRes>,
 }
+
+export interface LanguageState {
+    value: string
+}
+
