@@ -1,3 +1,5 @@
+import { ZH_LANGUAGE, JA_LANGUAGE, EN_LANGUAGE } from './constant'
+
 const configObj = {
     gitProps: {
         clientID: 'username',
@@ -32,16 +34,16 @@ const configObj = {
     },
     languageProps: [
         {
-            label: 'English',
-            key: 'en',
+            label: EN_LANGUAGE.label,
+            key: EN_LANGUAGE.key,
         },
         {
-            label: '简体中文',
-            key: 'zh',
+            label: ZH_LANGUAGE.label,
+            key: ZH_LANGUAGE.key,
         },
         {
-            label: '日本語',
-            key: 'ja',
+            label: JA_LANGUAGE.label,
+            key: JA_LANGUAGE.key,
         },
     ]
 }

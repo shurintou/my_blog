@@ -3,6 +3,7 @@ import { Layout, Typography, Tag, Tooltip } from 'antd'
 import { lightOrDark } from '../../../utils/common'
 import { LabelsCompoProps, Label } from '../../../types/index'
 import config from '../../../config/config'
+import { ZH_LANGUAGE, JA_LANGUAGE, EN_LANGUAGE } from '../../../config/constant'
 
 const { Paragraph, Text } = Typography
 
@@ -25,17 +26,14 @@ const LabelsCompo: React.FC<LabelsCompoProps> = (props) => {
                     languageName = labelName
                     let htmlLang = ''
                     switch (languageName.toLowerCase()) {
-                        case 'english':
-                            htmlLang = 'en'
+                        case ZH_LANGUAGE.lowerCase:
+                            htmlLang = ZH_LANGUAGE.key
                             break
-                        case 'chinese':
-                            htmlLang = 'zh'
-                            break
-                        case 'japanese':
-                            htmlLang = 'ja'
+                        case JA_LANGUAGE.lowerCase:
+                            htmlLang = JA_LANGUAGE.key
                             break
                         default:
-                            htmlLang = 'en'
+                            htmlLang = EN_LANGUAGE.key
                     }
                     props.setBlogLanguage(htmlLang)
                 }

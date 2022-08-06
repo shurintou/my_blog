@@ -9,6 +9,7 @@ import { AntdColPropObj } from '../../types/index'
 import headerStyle from './index.module.css'
 import { useAppSelector, useAppDispatch } from '../../redux/hooks'
 import { changeLocalLanguage } from '../../features/language/languageSlice'
+import { ZH_LANGUAGE, JA_LANGUAGE, EN_LANGUAGE } from '../../config/constant'
 
 const { Header } = Layout
 
@@ -54,9 +55,9 @@ const BlogHeader: React.FC<{}> = () => {
 
 
     const menuTabNameMap = new Map<string, Array<string>>()
-    menuTabNameMap.set('en', ['Home', 'Post', 'About'])
-    menuTabNameMap.set('zh', ['主页', '文章', '关于'])
-    menuTabNameMap.set('ja', ['トップ', '投稿', 'その他'])
+    menuTabNameMap.set(EN_LANGUAGE.key, ['Home', 'Post', 'About'])
+    menuTabNameMap.set(ZH_LANGUAGE.key, ['主页', '文章', '关于'])
+    menuTabNameMap.set(JA_LANGUAGE.key, ['トップ', '投稿', 'その他'])
     const [menuTabNames, setMenuTabNames] = useState(menuTabNameMap.get(selectedLanguage))
     useEffect(() => {
         setMenuTabNames(menuTabNameMap.get(selectedLanguage))
