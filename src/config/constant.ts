@@ -1,6 +1,8 @@
+import React from 'react'
+
 export const ZH_LANGUAGE = {
     key: 'zh',
-    label: '简体中文',
+    label: React.createElement('span', { lang: 'zh' }, '简体中文'),
     lowerCase: 'chinese',
     upperCase: 'Chinese',
     readmoreText: '展开',
@@ -12,7 +14,7 @@ export const ZH_LANGUAGE = {
 }
 export const JA_LANGUAGE = {
     key: 'ja',
-    label: '日本語',
+    label: React.createElement('span', { lang: 'ja' }, '日本語'),
     lowerCase: 'japanese',
     upperCase: 'Japanese',
     readmoreText: '続きを読む',
@@ -25,7 +27,7 @@ export const JA_LANGUAGE = {
 }
 export const EN_LANGUAGE = {
     key: 'en',
-    label: 'English',
+    label: React.createElement('span', { lang: 'en' }, 'English'),
     lowerCase: 'english',
     upperCase: 'English',
     readmoreText: 'Read more',
