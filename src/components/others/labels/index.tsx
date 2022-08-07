@@ -3,6 +3,7 @@ import { Layout, Typography, Tag, Tooltip } from 'antd'
 import { lightOrDark } from '../../../utils/common'
 import { LabelsCompoProps, Label } from '../../../types/index'
 import config from '../../../config/config'
+import { useAppSelector } from '../../../redux/hooks'
 import { ZH_LANGUAGE, JA_LANGUAGE, EN_LANGUAGE } from '../../../config/constant'
 
 const { Paragraph, Text } = Typography
@@ -10,6 +11,27 @@ const { Paragraph, Text } = Typography
 const LabelsCompo: React.FC<LabelsCompoProps> = (props) => {
     const [category, setCategory] = useState<Label>({ id: 0, name: 'undefined', description: '', color: 'cyan' })
     const [tags, setTags] = useState<Array<Label>>([])
+    const selectedLanguage = useAppSelector((state) => state.language.value)
+
+    const tagCategoryTextMap = new Map<string, { tag: string, category: string }>()
+    tagCategoryTextMap.set(EN_LANGUAGE.key, { tag: 'Tags:', category: 'Category:' })
+    tagCategoryTextMap.set(ZH_LANGUAGE.key, { tag: '标签：', category: '分类：' })
+    tagCategoryTextMap.set(JA_LANGUAGE.key, { tag: 'タグ：', category: 'カテゴリー：' })
+
+    const [tagText, setTagText] = useState(getText('tag'))
+    const [categoryText, setCategoryText] = useState(getText('category'))
+
+    function getText(type: string) {
+        if (type === 'tag' || type === 'category') {
+            return tagCategoryTextMap.get(selectedLanguage)![type]
+        }
+    }
+
+    useEffect(() => {
+        setTagText(getText('tag'))
+        setCategoryText(getText('category'))
+        /* eslint-disable-next-line */
+    }, [selectedLanguage])
 
     useEffect(() => {
         let tagsList: Array<Label> = []
@@ -53,13 +75,13 @@ const LabelsCompo: React.FC<LabelsCompoProps> = (props) => {
     return (
         <Layout>
             <Paragraph>
-                <Text style={{ marginRight: '0.5em' }}>Category: </Text>
+                <Text style={{ marginRight: '0.5em' }}><span lang={selectedLanguage}>{categoryText}</span></Text>
                 <Tooltip title={category.description} color={config.antdProps.themeColor}>
                     {<Tag style={{ borderRadius: '1em' }} color={category.color}><Text strong>{category.name}</Text></Tag>}
                 </Tooltip>
             </Paragraph>
             {tags.length > 0 && <Paragraph>
-                <Text style={{ marginRight: '0.5em' }}>Tags: </Text>
+                <Text style={{ marginRight: '0.5em' }}><span lang={selectedLanguage}>{tagText}</span></Text>
                 {tags.map(label => {
                     return <span key={label.id}>
                         <Tooltip title={label.description} color={config.antdProps.themeColor}>
