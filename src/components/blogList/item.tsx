@@ -37,6 +37,8 @@ const BlogsListItemComp: React.FC<BlogsListItem> = (props) => {
     useEffect(() => {
         setCreateText(getDateFromNowText(selectedLanguage, true))
         setReadmoreText(readmoreTextMap.get(selectedLanguage))
+        setLikeText(likeCommentTextMap.get(selectedLanguage)![0])
+        setCommentText(likeCommentTextMap.get(selectedLanguage)![1])
         /* eslint-disable-next-line */
     }, [selectedLanguage])
 
@@ -45,6 +47,14 @@ const BlogsListItemComp: React.FC<BlogsListItem> = (props) => {
     readmoreTextMap.set(ZH_LANGUAGE.key, ZH_LANGUAGE.readmoreText)
     readmoreTextMap.set(JA_LANGUAGE.key, JA_LANGUAGE.readmoreText)
     const [readmoreText, setReadmoreText] = useState(readmoreTextMap.get(selectedLanguage))
+
+
+    const likeCommentTextMap = new Map<string, Array<string>>()
+    likeCommentTextMap.set(EN_LANGUAGE.key, [EN_LANGUAGE.likeText, EN_LANGUAGE.commentText])
+    likeCommentTextMap.set(ZH_LANGUAGE.key, [ZH_LANGUAGE.likeText, ZH_LANGUAGE.commentText])
+    likeCommentTextMap.set(JA_LANGUAGE.key, [JA_LANGUAGE.likeText, JA_LANGUAGE.commentText])
+    const [likeText, setLikeText] = useState(likeCommentTextMap.get(selectedLanguage)![0])
+    const [commentText, setCommentText] = useState(likeCommentTextMap.get(selectedLanguage)![1])
 
     return (
         <li lang={blogLang}>
@@ -91,7 +101,7 @@ const BlogsListItemComp: React.FC<BlogsListItem> = (props) => {
                     </Text>
                     <Space split={<Divider type="vertical" style={{ borderLeftColor: 'rgba(0,0,0,0.6)' }} />}>
                         <CommentComp
-                            title='Like'
+                            title={likeText}
                             slot={<HeartOutlined onClick={navigateToBlog} />}
                             text={<Text>{
                                 props.reactions['+1']
@@ -101,7 +111,7 @@ const BlogsListItemComp: React.FC<BlogsListItem> = (props) => {
                                 + props.reactions.heart}
                             </Text>} />
                         <CommentComp
-                            title='Comment'
+                            title={commentText}
                             slot={<CommentOutlined onClick={navigateToBlog} />}
                             text={<Text>{props.comments
                             }

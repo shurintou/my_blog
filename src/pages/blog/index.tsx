@@ -16,6 +16,7 @@ import Like from '../../components/blog/like'
 import { getLocalHtmlLang } from '../../utils/userAgent'
 import { getLocalUser } from '../../utils/authentication'
 import { useAppSelector } from '../../redux/hooks'
+import { EN_LANGUAGE, JA_LANGUAGE, ZH_LANGUAGE } from '../../config/constant'
 
 
 const { Title, Text } = Typography
@@ -78,8 +79,17 @@ const Blog = () => {
     useEffect(() => {
         setCreateText(getDateFromNowText(selectedLanguage, true))
         setUpdateText(getDateFromNowText(selectedLanguage, false))
+        setLikeText(likeCommentTextMap.get(selectedLanguage)![0])
+        setCommentText(likeCommentTextMap.get(selectedLanguage)![1])
         /* eslint-disable-next-line */
     }, [selectedLanguage])
+
+    const likeCommentTextMap = new Map<string, Array<string>>()
+    likeCommentTextMap.set(EN_LANGUAGE.key, [EN_LANGUAGE.likeText, EN_LANGUAGE.commentText])
+    likeCommentTextMap.set(ZH_LANGUAGE.key, [ZH_LANGUAGE.likeText, ZH_LANGUAGE.commentText])
+    likeCommentTextMap.set(JA_LANGUAGE.key, [JA_LANGUAGE.likeText, JA_LANGUAGE.commentText])
+    const [likeText, setLikeText] = useState(likeCommentTextMap.get(selectedLanguage)![0])
+    const [commentText, setCommentText] = useState(likeCommentTextMap.get(selectedLanguage)![1])
 
 
     return (
@@ -145,7 +155,7 @@ const Blog = () => {
                                 }
                                 <Space size="small" split={<Divider type="vertical" style={{ borderLeftColor: 'rgba(0,0,0,0.6)' }} />}>
                                     <CommentComp
-                                        title='Like'
+                                        title={likeText}
                                         slot={
                                             <Like number={blogContent ? blogContent?.number : 0} likeHandler={setlikeCnt}></Like>
                                         }
@@ -163,7 +173,7 @@ const Blog = () => {
                                         }
                                     />
                                     <CommentComp
-                                        title='Comment'
+                                        title={commentText}
                                         slot={<CommentOutlined onClick={scrollToGitalk} />}
                                         text={!blogContent ? <Spin /> : <Text>{blogContent.comments}</Text>}
                                     />
