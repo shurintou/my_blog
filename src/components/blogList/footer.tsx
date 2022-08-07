@@ -3,11 +3,14 @@ import { useSearchParams } from "react-router-dom"
 import { BlogListFooterProps } from '../../types'
 import { Pagination, Layout } from 'antd'
 import config from '../../config/config'
+import { useAppSelector } from '../../redux/hooks'
+import { JA_LANGUAGE, ZH_LANGUAGE } from '../../config/constant'
 
 const BlogListFooterComp: React.FC<BlogListFooterProps> = (props) => {
     const [searchParams, setSearchParams] = useSearchParams()
     const [current, setCurrent] = useState(1)
     const navigateToBlogsPage = (page: number) => { setSearchParams({ page: page.toString() }) }
+    const selectedLanguage = useAppSelector((state) => state.language.value)
 
     useEffect(() => {
         setCurrent(parseInt(searchParams.get('page') || "1"))
@@ -29,8 +32,15 @@ const BlogListFooterComp: React.FC<BlogListFooterProps> = (props) => {
         else {
             description = min.toString() + '~' + max.toString()
         }
-        return description + ' of total ' + totalCount.toString()
-    }, [current, props.total])
+        switch (selectedLanguage) {
+            case ZH_LANGUAGE.key:
+                return '第' + description + '条, 共' + totalCount.toString() + '条'
+            case JA_LANGUAGE.key:
+                return description + '件目, 全' + totalCount.toString() + '件'
+            default:
+                return description + ' of total ' + totalCount.toString()
+        }
+    }, [current, props.total, selectedLanguage])
 
     return (
         <Layout style={{
@@ -53,7 +63,7 @@ const BlogListFooterComp: React.FC<BlogListFooterProps> = (props) => {
                 showSizeChanger={false}
                 responsive={true}
                 pageSize={config.blogProps.blogListItemCountPerPage}
-                showTotal={() => <span style={{ color: config.antdProps.paginationTextColor }}>{paginationDescription}</span>}
+                showTotal={() => <span lang={selectedLanguage} style={{ color: config.antdProps.paginationTextColor }}>{paginationDescription}</span>}
                 onChange={(number) => {
                     navigateToBlogsPage(number)
                     setCurrent(number)
