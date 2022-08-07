@@ -55,9 +55,9 @@ const BlogHeader: React.FC<{}> = () => {
 
 
     const menuTabNameMap = new Map<string, Array<string>>()
-    menuTabNameMap.set(EN_LANGUAGE.key, ['Home', 'Post', 'About'])
-    menuTabNameMap.set(ZH_LANGUAGE.key, ['主页', '文章', '关于'])
-    menuTabNameMap.set(JA_LANGUAGE.key, ['トップ', '投稿', 'その他'])
+    menuTabNameMap.set(EN_LANGUAGE.key, EN_LANGUAGE.menuTextList)
+    menuTabNameMap.set(ZH_LANGUAGE.key, ZH_LANGUAGE.menuTextList)
+    menuTabNameMap.set(JA_LANGUAGE.key, JA_LANGUAGE.menuTextList)
     const [menuTabNames, setMenuTabNames] = useState(menuTabNameMap.get(selectedLanguage))
     useEffect(() => {
         setMenuTabNames(menuTabNameMap.get(selectedLanguage))

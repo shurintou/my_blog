@@ -14,9 +14,9 @@ const LabelsCompo: React.FC<LabelsCompoProps> = (props) => {
     const selectedLanguage = useAppSelector((state) => state.language.value)
 
     const tagCategoryTextMap = new Map<string, { tag: string, category: string }>()
-    tagCategoryTextMap.set(EN_LANGUAGE.key, { tag: 'Tags:', category: 'Category:' })
-    tagCategoryTextMap.set(ZH_LANGUAGE.key, { tag: '标签：', category: '分类：' })
-    tagCategoryTextMap.set(JA_LANGUAGE.key, { tag: 'タグ：', category: 'カテゴリー：' })
+    tagCategoryTextMap.set(EN_LANGUAGE.key, EN_LANGUAGE.tagCategoryObj)
+    tagCategoryTextMap.set(ZH_LANGUAGE.key, ZH_LANGUAGE.tagCategoryObj)
+    tagCategoryTextMap.set(JA_LANGUAGE.key, JA_LANGUAGE.tagCategoryObj)
 
     const [tagText, setTagText] = useState(getText('tag'))
     const [categoryText, setCategoryText] = useState(getText('category'))

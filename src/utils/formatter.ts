@@ -16,9 +16,9 @@ export const parseISODateStr = function (date: string) {
 
 
 const momentLocalMap = new Map<string, { locale: string, createText: string, updateText: string }>()
-momentLocalMap.set(EN_LANGUAGE.key, { locale: 'en-gb', createText: 'Created', updateText: 'Updated' })
-momentLocalMap.set(ZH_LANGUAGE.key, { locale: 'zh-cn', createText: '创建于', updateText: '编辑于' })
-momentLocalMap.set(JA_LANGUAGE.key, { locale: 'ja', createText: '作成', updateText: '更新' })
+momentLocalMap.set(EN_LANGUAGE.key, EN_LANGUAGE.momentTextObj)
+momentLocalMap.set(ZH_LANGUAGE.key, ZH_LANGUAGE.momentTextObj)
+momentLocalMap.set(JA_LANGUAGE.key, JA_LANGUAGE.momentTextObj)
 
 const getLocale = function (lang: string) {
     switch (lang) {

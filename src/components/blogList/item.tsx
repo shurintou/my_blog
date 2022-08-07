@@ -41,9 +41,9 @@ const BlogsListItemComp: React.FC<BlogsListItem> = (props) => {
     }, [selectedLanguage])
 
     const readmoreTextMap = new Map<string, string>()
-    readmoreTextMap.set(EN_LANGUAGE.key, 'Read more')
-    readmoreTextMap.set(ZH_LANGUAGE.key, '展开')
-    readmoreTextMap.set(JA_LANGUAGE.key, '続きを読む')
+    readmoreTextMap.set(EN_LANGUAGE.key, EN_LANGUAGE.readmoreText)
+    readmoreTextMap.set(ZH_LANGUAGE.key, ZH_LANGUAGE.readmoreText)
+    readmoreTextMap.set(JA_LANGUAGE.key, JA_LANGUAGE.readmoreText)
     const [readmoreText, setReadmoreText] = useState(readmoreTextMap.get(selectedLanguage))
 
     return (
