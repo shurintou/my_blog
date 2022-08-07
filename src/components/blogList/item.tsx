@@ -11,6 +11,7 @@ import { getLocalHtmlLang } from '../../utils/userAgent'
 import config from '../../config/config'
 import { getDateFromNowText } from '../../utils/formatter'
 import { useAppSelector } from '../../redux/hooks'
+import { EN_LANGUAGE, JA_LANGUAGE, ZH_LANGUAGE } from '../../config/constant'
 
 
 const { Title, Paragraph, Text } = Typography
@@ -35,8 +36,15 @@ const BlogsListItemComp: React.FC<BlogsListItem> = (props) => {
     const [createText, setCreateText] = useState(getDateFromNowText(selectedLanguage, true))
     useEffect(() => {
         setCreateText(getDateFromNowText(selectedLanguage, true))
+        setReadmoreText(readmoreTextMap.get(selectedLanguage))
         /* eslint-disable-next-line */
     }, [selectedLanguage])
+
+    const readmoreTextMap = new Map<string, string>()
+    readmoreTextMap.set(EN_LANGUAGE.key, 'Read more')
+    readmoreTextMap.set(ZH_LANGUAGE.key, '展开')
+    readmoreTextMap.set(JA_LANGUAGE.key, '続きを読む')
+    const [readmoreText, setReadmoreText] = useState(readmoreTextMap.get(selectedLanguage))
 
     return (
         <li lang={blogLang}>
@@ -76,7 +84,10 @@ const BlogsListItemComp: React.FC<BlogsListItem> = (props) => {
                             marginBottom: '1em',
                         }}
                         underline
-                    >Read more
+                    >
+                        <span lang={selectedLanguage}>
+                            {readmoreText}
+                        </span>
                     </Text>
                     <Space split={<Divider type="vertical" style={{ borderLeftColor: 'rgba(0,0,0,0.6)' }} />}>
                         <CommentComp
