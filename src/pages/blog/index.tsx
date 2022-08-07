@@ -5,7 +5,7 @@ import { CommentOutlined, LeftOutlined } from '@ant-design/icons'
 import CommentComp from '../../components/blog/comment'
 import { getBlogInfo } from '../../api/blogs'
 import { BlogsItemRes, BlogsListItem, } from '../../types/index'
-import { parseISODate, parseISODateStr, getDateFromNow } from '../../utils/formatter'
+import { parseISODate, parseISODateStr, getDateFromNow, getDateFromNowText } from '../../utils/formatter'
 import Markdown from '../../components/others/markdown'
 import Gitalk from '../../components//others/gitalk'
 import DateComp from '../../components/blog/date'
@@ -15,6 +15,7 @@ import config from '../../config/config'
 import Like from '../../components/blog/like'
 import { getLocalHtmlLang } from '../../utils/userAgent'
 import { getLocalUser } from '../../utils/authentication'
+import { useAppSelector } from '../../redux/hooks'
 
 
 const { Title, Text } = Typography
@@ -45,6 +46,7 @@ const Blog = () => {
         }
     }
 
+    const selectedLanguage = useAppSelector((state) => state.language.value)
     useEffect(() => {
         if (blogIdStr) {
             const blogId = parseInt(blogIdStr)
@@ -52,8 +54,8 @@ const Blog = () => {
                 setBlogContent(Object.assign(res, {
                     created_at_local: parseISODateStr(res.created_at),
                     updated_at_local: parseISODateStr(res.updated_at),
-                    created_from_now: getDateFromNow(parseISODate(res.created_at)),
-                    updated_from_now: getDateFromNow(parseISODate(res.updated_at)),
+                    created_from_now: getDateFromNow(parseISODate(res.created_at), selectedLanguage),
+                    updated_from_now: getDateFromNow(parseISODate(res.updated_at), selectedLanguage),
                 }))
                 setHasData(true)
             })
@@ -69,7 +71,16 @@ const Blog = () => {
             window.removeEventListener('resize', windowResizeDebounceFunc)
         }
         /* eslint-disable-next-line */
-    }, [])
+    }, [selectedLanguage])
+
+    const [createText, setCreateText] = useState(getDateFromNowText(selectedLanguage, true))
+    const [updateText, setUpdateText] = useState(getDateFromNowText(selectedLanguage, false))
+    useEffect(() => {
+        setCreateText(getDateFromNowText(selectedLanguage, true))
+        setUpdateText(getDateFromNowText(selectedLanguage, false))
+        /* eslint-disable-next-line */
+    }, [selectedLanguage])
+
 
     return (
         <Layout lang={blogLang}>
@@ -115,7 +126,7 @@ const Blog = () => {
                                         <DateComp
                                             dateFromNow={blogContent ? blogContent.created_from_now : ''}
                                             dateLocal={blogContent ? blogContent.created_at_local : ''}
-                                            text={'Created'}
+                                            text={createText}
                                         />
                                     </Col>
                                     <Col span={1} offset={7}>
@@ -129,7 +140,7 @@ const Blog = () => {
                                     <DateComp
                                         dateFromNow={blogContent ? blogContent.updated_from_now : ''}
                                         dateLocal={blogContent ? blogContent.updated_at_local : ''}
-                                        text={'Updated'}
+                                        text={updateText}
                                     />
                                 }
                                 <Space size="small" split={<Divider type="vertical" style={{ borderLeftColor: 'rgba(0,0,0,0.6)' }} />}>

@@ -9,6 +9,9 @@ import LabelsComp from '../../components/others/labels'
 import Markdown from '../others/markdown/'
 import { getLocalHtmlLang } from '../../utils/userAgent'
 import config from '../../config/config'
+import { getDateFromNowText } from '../../utils/formatter'
+import { useAppSelector } from '../../redux/hooks'
+
 
 const { Title, Paragraph, Text } = Typography
 
@@ -28,6 +31,13 @@ const BlogsListItemComp: React.FC<BlogsListItem> = (props) => {
         setIsLastItem((props.index || 0) >= (props.listLength || 0)) //divider of which is the last item would not be shown.
     }, [props.index, props.listLength])
 
+    const selectedLanguage = useAppSelector((state) => state.language.value)
+    const [createText, setCreateText] = useState(getDateFromNowText(selectedLanguage, true))
+    useEffect(() => {
+        setCreateText(getDateFromNowText(selectedLanguage, true))
+        /* eslint-disable-next-line */
+    }, [selectedLanguage])
+
     return (
         <li lang={blogLang}>
             <Title level={3} onClick={navigateToBlog} style={{ padding: '16px 24px 0px 24px', }}><Text style={mouseBlurStyle} >{props.title}</Text></Title>
@@ -35,7 +45,7 @@ const BlogsListItemComp: React.FC<BlogsListItem> = (props) => {
                 <DateComp
                     dateFromNow={props.created_from_now}
                     dateLocal={props.created_at_local}
-                    text={'Created'}
+                    text={createText}
                 />
                 <LabelsComp labelList={props.labels} setBlogLanguage={setBlogLang}></LabelsComp>
                 <Divider style={{ marginTop: '0' }} />

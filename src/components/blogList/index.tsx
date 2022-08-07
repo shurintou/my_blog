@@ -8,12 +8,14 @@ import { BlogsItemRes, BlogsListItem, BlogSearchResponse, BlogSearchRequestParam
 import ListItem from './item'
 import { parseISODate, parseISODateStr, getDateFromNow } from '../../utils/formatter'
 import config from '../../config/config'
+import { useAppSelector } from '../../redux/hooks'
 
 const BlogList = () => {
     const [searchParams,] = useSearchParams()
     const [data, setData] = useState<Array<BlogsListItem>>([])
     const [totalBlogsNum, setTotalBlogsNum] = useState(0)
     const [pcRenderMode, setPcRenderMode] = useState(true)
+    const selectedLanguage = useAppSelector((state) => state.language.value)
 
     useEffect(() => {
         function windowResizeFunc() {
@@ -40,7 +42,7 @@ const BlogList = () => {
                         listLength: newDataListLength,
                         created_at_local: parseISODateStr(resItem.created_at),
                         updated_at_local: '', //blogListItem doesn't use this value so set it ''.
-                        created_from_now: getDateFromNow(parseISODate(resItem.created_at)),
+                        created_from_now: getDateFromNow(parseISODate(resItem.created_at), selectedLanguage),
                         updated_from_now: '', //blogListItem doesn't use this value so set it ''.,
                     })
                     return newData
@@ -53,7 +55,7 @@ const BlogList = () => {
     useEffect(() => {
         loadBlogListData({ page: parseInt(searchParams.get('page') || "1") })
         /* eslint-disable-next-line */
-    }, [searchParams])
+    }, [searchParams, selectedLanguage])
 
     useEffect(() => {
         window.scroll(0, 0)
