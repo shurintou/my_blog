@@ -79,17 +79,23 @@ const Blog = () => {
     useEffect(() => {
         setCreateText(getDateFromNowText(selectedLanguage, true))
         setUpdateText(getDateFromNowText(selectedLanguage, false))
-        setLikeText(likeCommentTextMap.get(selectedLanguage)![0])
-        setCommentText(likeCommentTextMap.get(selectedLanguage)![1])
+        setLikeText(getLikeCommentText(selectedLanguage)![0])
+        setCommentText(getLikeCommentText(selectedLanguage)![1])
         /* eslint-disable-next-line */
     }, [selectedLanguage])
 
-    const likeCommentTextMap = new Map<string, Array<string>>()
-    likeCommentTextMap.set(EN_LANGUAGE.key, [EN_LANGUAGE.likeText, EN_LANGUAGE.commentText])
-    likeCommentTextMap.set(ZH_LANGUAGE.key, [ZH_LANGUAGE.likeText, ZH_LANGUAGE.commentText])
-    likeCommentTextMap.set(JA_LANGUAGE.key, [JA_LANGUAGE.likeText, JA_LANGUAGE.commentText])
-    const [likeText, setLikeText] = useState(likeCommentTextMap.get(selectedLanguage)![0])
-    const [commentText, setCommentText] = useState(likeCommentTextMap.get(selectedLanguage)![1])
+    const getLikeCommentText = (lang: string) => {
+        switch (lang) {
+            case ZH_LANGUAGE.key:
+                return [ZH_LANGUAGE.likeText, ZH_LANGUAGE.commentText]
+            case JA_LANGUAGE.key:
+                return [JA_LANGUAGE.likeText, JA_LANGUAGE.commentText]
+            default:
+                return [EN_LANGUAGE.likeText, EN_LANGUAGE.commentText]
+        }
+    }
+    const [likeText, setLikeText] = useState(getLikeCommentText(selectedLanguage)![0])
+    const [commentText, setCommentText] = useState(getLikeCommentText(selectedLanguage)![1])
 
 
     return (

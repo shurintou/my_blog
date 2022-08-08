@@ -11,6 +11,7 @@ export const ZH_LANGUAGE = {
     momentTextObj: { locale: 'zh-cn', createText: '创建于', updateText: '编辑于' },
     likeText: '点赞',
     commentText: '评论',
+    loginMessage: '请先登录您的Github账号。',
 }
 export const JA_LANGUAGE = {
     key: 'ja',
@@ -23,6 +24,7 @@ export const JA_LANGUAGE = {
     momentTextObj: { locale: 'ja', createText: '作成', updateText: '更新' },
     likeText: 'いいね',
     commentText: 'コメント',
+    loginMessage: '先にGithubアカウントにログインしてください。',
 
 }
 export const EN_LANGUAGE = {
@@ -36,6 +38,7 @@ export const EN_LANGUAGE = {
     momentTextObj: { locale: 'en-gb', createText: 'Created', updateText: 'Updated' },
     likeText: 'Like',
     commentText: 'Comment',
+    loginMessage: 'Please login your github account first.',
 
 }
 

@@ -15,19 +15,14 @@ export const parseISODateStr = function (date: string) {
 }
 
 
-const momentLocalMap = new Map<string, { locale: string, createText: string, updateText: string }>()
-momentLocalMap.set(EN_LANGUAGE.key, EN_LANGUAGE.momentTextObj)
-momentLocalMap.set(ZH_LANGUAGE.key, ZH_LANGUAGE.momentTextObj)
-momentLocalMap.set(JA_LANGUAGE.key, JA_LANGUAGE.momentTextObj)
-
 const getLocale = function (lang: string) {
     switch (lang) {
         case ZH_LANGUAGE.key:
-            return momentLocalMap.get(ZH_LANGUAGE.key)
+            return ZH_LANGUAGE.momentTextObj
         case JA_LANGUAGE.key:
-            return momentLocalMap.get(JA_LANGUAGE.key)
+            return JA_LANGUAGE.momentTextObj
         default:
-            return momentLocalMap.get(EN_LANGUAGE.key)
+            return EN_LANGUAGE.momentTextObj
     }
 }
 

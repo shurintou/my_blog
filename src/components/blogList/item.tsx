@@ -36,25 +36,37 @@ const BlogsListItemComp: React.FC<BlogsListItem> = (props) => {
     const [createText, setCreateText] = useState(getDateFromNowText(selectedLanguage, true))
     useEffect(() => {
         setCreateText(getDateFromNowText(selectedLanguage, true))
-        setReadmoreText(readmoreTextMap.get(selectedLanguage))
-        setLikeText(likeCommentTextMap.get(selectedLanguage)![0])
-        setCommentText(likeCommentTextMap.get(selectedLanguage)![1])
+        setReadmoreText(getReadmoreText(selectedLanguage))
+        setLikeText(getLikeCommentText(selectedLanguage)[0])
+        setCommentText(getLikeCommentText(selectedLanguage)[1])
         /* eslint-disable-next-line */
     }, [selectedLanguage])
 
-    const readmoreTextMap = new Map<string, string>()
-    readmoreTextMap.set(EN_LANGUAGE.key, EN_LANGUAGE.readmoreText)
-    readmoreTextMap.set(ZH_LANGUAGE.key, ZH_LANGUAGE.readmoreText)
-    readmoreTextMap.set(JA_LANGUAGE.key, JA_LANGUAGE.readmoreText)
-    const [readmoreText, setReadmoreText] = useState(readmoreTextMap.get(selectedLanguage))
+    const getReadmoreText = (lang: string) => {
+        switch (lang) {
+            case ZH_LANGUAGE.key:
+                return ZH_LANGUAGE.readmoreText
+            case JA_LANGUAGE.key:
+                return JA_LANGUAGE.readmoreText
+            default:
+                return EN_LANGUAGE.readmoreText
+        }
+    }
+    const [readmoreText, setReadmoreText] = useState(getReadmoreText(selectedLanguage))
 
 
-    const likeCommentTextMap = new Map<string, Array<string>>()
-    likeCommentTextMap.set(EN_LANGUAGE.key, [EN_LANGUAGE.likeText, EN_LANGUAGE.commentText])
-    likeCommentTextMap.set(ZH_LANGUAGE.key, [ZH_LANGUAGE.likeText, ZH_LANGUAGE.commentText])
-    likeCommentTextMap.set(JA_LANGUAGE.key, [JA_LANGUAGE.likeText, JA_LANGUAGE.commentText])
-    const [likeText, setLikeText] = useState(likeCommentTextMap.get(selectedLanguage)![0])
-    const [commentText, setCommentText] = useState(likeCommentTextMap.get(selectedLanguage)![1])
+    const getLikeCommentText = (lang: string) => {
+        switch (lang) {
+            case ZH_LANGUAGE.key:
+                return [ZH_LANGUAGE.likeText, ZH_LANGUAGE.commentText]
+            case JA_LANGUAGE.key:
+                return [JA_LANGUAGE.likeText, JA_LANGUAGE.commentText]
+            default:
+                return [EN_LANGUAGE.likeText, EN_LANGUAGE.commentText]
+        }
+    }
+    const [likeText, setLikeText] = useState(getLikeCommentText(selectedLanguage)[0])
+    const [commentText, setCommentText] = useState(getLikeCommentText(selectedLanguage)[1])
 
     return (
         <li lang={blogLang}>

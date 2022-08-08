@@ -53,14 +53,20 @@ const BlogHeader: React.FC<{}> = () => {
         window.scroll(0, 0)
     }
 
+    const getMenuTextList = (lang: string) => {
+        switch (lang) {
+            case ZH_LANGUAGE.key:
+                return ZH_LANGUAGE.menuTextList
+            case JA_LANGUAGE.key:
+                return JA_LANGUAGE.menuTextList
+            default:
+                return EN_LANGUAGE.menuTextList
+        }
+    }
 
-    const menuTabNameMap = new Map<string, Array<string>>()
-    menuTabNameMap.set(EN_LANGUAGE.key, EN_LANGUAGE.menuTextList)
-    menuTabNameMap.set(ZH_LANGUAGE.key, ZH_LANGUAGE.menuTextList)
-    menuTabNameMap.set(JA_LANGUAGE.key, JA_LANGUAGE.menuTextList)
-    const [menuTabNames, setMenuTabNames] = useState(menuTabNameMap.get(selectedLanguage))
+    const [menuTabNames, setMenuTabNames] = useState(getMenuTextList(selectedLanguage))
     useEffect(() => {
-        setMenuTabNames(menuTabNameMap.get(selectedLanguage))
+        setMenuTabNames(getMenuTextList(selectedLanguage))
         /* eslint-disable-next-line */
     }, [selectedLanguage])
 

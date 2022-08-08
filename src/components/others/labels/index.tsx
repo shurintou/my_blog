@@ -13,23 +13,25 @@ const LabelsCompo: React.FC<LabelsCompoProps> = (props) => {
     const [tags, setTags] = useState<Array<Label>>([])
     const selectedLanguage = useAppSelector((state) => state.language.value)
 
-    const tagCategoryTextMap = new Map<string, { tag: string, category: string }>()
-    tagCategoryTextMap.set(EN_LANGUAGE.key, EN_LANGUAGE.tagCategoryObj)
-    tagCategoryTextMap.set(ZH_LANGUAGE.key, ZH_LANGUAGE.tagCategoryObj)
-    tagCategoryTextMap.set(JA_LANGUAGE.key, JA_LANGUAGE.tagCategoryObj)
+    const [tagText, setTagText] = useState(getText(selectedLanguage, 'tag'))
+    const [categoryText, setCategoryText] = useState(getText(selectedLanguage, 'category'))
 
-    const [tagText, setTagText] = useState(getText('tag'))
-    const [categoryText, setCategoryText] = useState(getText('category'))
-
-    function getText(type: string) {
+    function getText(lang: string, type: string) {
         if (type === 'tag' || type === 'category') {
-            return tagCategoryTextMap.get(selectedLanguage)![type]
+            switch (lang) {
+                case ZH_LANGUAGE.key:
+                    return ZH_LANGUAGE.tagCategoryObj[type]
+                case JA_LANGUAGE.key:
+                    return JA_LANGUAGE.tagCategoryObj[type]
+                default:
+                    return EN_LANGUAGE.tagCategoryObj[type]
+            }
         }
     }
 
     useEffect(() => {
-        setTagText(getText('tag'))
-        setCategoryText(getText('category'))
+        setTagText(getText(selectedLanguage, 'tag'))
+        setCategoryText(getText(selectedLanguage, 'category'))
         /* eslint-disable-next-line */
     }, [selectedLanguage])
 
