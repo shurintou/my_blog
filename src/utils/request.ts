@@ -2,6 +2,8 @@ import axios, { Canceler } from 'axios'
 import { isSameRequest } from './common'
 import { message } from 'antd'
 import { PendingRequest } from '../types/index'
+import { getLocalHtmlLang } from './userAgent'
+import { ZH_LANGUAGE, EN_LANGUAGE, JA_LANGUAGE } from '../config/constant'
 
 const CancelToken = axios.CancelToken
 let cancel: Canceler
@@ -56,7 +58,16 @@ request.interceptors.response.use(
             const status = res.status
             if (process.env.NODE_ENV === 'production') {
                 if (status === 401 && res.config.method !== 'get' && res.config.url.indexOf('graphql') === -1) {
-                    message.warning('Please login your github account first.')
+                    switch (getLocalHtmlLang()) {
+                        case ZH_LANGUAGE.key:
+                            message.warning(ZH_LANGUAGE.loginMessage)
+                            break
+                        case JA_LANGUAGE.key:
+                            message.warning(JA_LANGUAGE.loginMessage)
+                            break
+                        default:
+                            message.warning(EN_LANGUAGE.loginMessage)
+                    }
                 }
             }
         }
