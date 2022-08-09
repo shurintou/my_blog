@@ -19,7 +19,7 @@ export const JA_LANGUAGE = {
     lowerCase: 'japanese',
     upperCase: 'Japanese',
     readmoreText: '続きを読む',
-    menuTextList: ['トップ', '投稿', 'その他'],
+    menuTextList: ['ホーム', '記事　', 'プロフィール'],
     tagCategoryObj: { tag: 'タグ：', category: 'カテゴリー：' },
     momentTextObj: { locale: 'ja', createText: '作成', updateText: '更新' },
     likeText: 'いいね',
