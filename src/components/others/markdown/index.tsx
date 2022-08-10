@@ -63,7 +63,6 @@ const Markdown: React.FC<MarkdownProps> = (props) => {
             children={blogText ? blogText : ''}
             remarkPlugins={[remarkGfm, remarkBreaks]}
             className={markdownStyle.textFontSize}
-            includeElementIndex={true}
             components={{
                 h1: hRenderFunc,
                 h2: hRenderFunc,
