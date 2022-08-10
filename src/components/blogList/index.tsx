@@ -76,7 +76,7 @@ const BlogList = () => {
                     borderStyle: pcRenderMode ? 'solid' : 'null',
                     borderColor: config.antdProps.borderColor,
                     borderRadius: pcRenderMode ? '6px' : '0px',
-                    height: loading ? '10em' : '',
+                    height: loading ? '100%' : '',
                     paddingTop: loading ? '3em' : '',
                 }}
                 renderItem={(item: BlogsListItem) => (
