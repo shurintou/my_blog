@@ -5,7 +5,7 @@ import remarkGfm from 'remark-gfm'
 import remarkBreaks from 'remark-breaks'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { tomorrow } from 'react-syntax-highlighter/dist/esm/styles/prism'
-import { MarkdownProps } from '../../../types/index'
+import { MarkdownProps, MarkdownChild } from '../../../types/index'
 import config from '../../../config/config'
 import { doScrolling, curry } from '../../../utils/common'
 import markdownStyle from './index.module.css'
@@ -57,6 +57,15 @@ const Markdown: React.FC<MarkdownProps> = (props) => {
         return React.createElement(tagName, thTdProps)
     }
     const curringThTdRenderFunc = curry(thTdRenderFunc)
+
+
+
+    const replacePTag = ({ children, }: { [key: string]: any }) => {
+        if (children.some((child: MarkdownChild) => child?.type?.name === 'img')) {
+            return React.createElement('div', { children: children }) // to fix the warning that "validateDOMnesting(...): <div> cannot appear as a descendant of <p>"
+        }
+        return React.createElement('p', { children: children })
+    }
 
     return (
         <ReactMarkdown
@@ -127,7 +136,8 @@ const Markdown: React.FC<MarkdownProps> = (props) => {
                 td: curringThTdRenderFunc('td'),
                 img({ src, alt, }) {
                     return <Image alt={alt} src={src} style={{ maxWidth: '100%' }} />
-                }
+                },
+                p: replacePTag,
             }}
         />
     )

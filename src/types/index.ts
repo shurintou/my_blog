@@ -167,3 +167,6 @@ export interface LanguageState {
     value: string
 }
 
+export interface MarkdownChild {
+    type?: { name?: string }
+}

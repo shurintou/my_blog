@@ -1,11 +1,11 @@
 import React from 'react'
 import { DateCompProps } from '../../../types'
-import { Typography, Tooltip } from 'antd'
+import { Typography, Tooltip, } from 'antd'
 import config from '../../../config/config'
 import { useAppSelector } from '../../../redux/hooks'
 import { JA_LANGUAGE } from '../../../config/constant'
 
-const { Paragraph, Text } = Typography
+const { Text } = Typography
 
 const DateComp: React.FC<DateCompProps> = (props) => {
 
@@ -13,7 +13,7 @@ const DateComp: React.FC<DateCompProps> = (props) => {
     const selectedLanguage = useAppSelector((state) => state.language.value)
 
     return (
-        <Paragraph>
+        <div style={{ marginBottom: '1em' }}>
             <Tooltip title={props.dateLocal} placement="right" color={config.antdProps.themeColor}>
                 <Text type="secondary"><span lang={selectedLanguage}>
 
@@ -25,7 +25,7 @@ const DateComp: React.FC<DateCompProps> = (props) => {
                     }
                 </span></Text>
             </Tooltip>
-        </Paragraph>
+        </div>
     )
 }
 

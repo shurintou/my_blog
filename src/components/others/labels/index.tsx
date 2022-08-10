@@ -6,7 +6,7 @@ import config from '../../../config/config'
 import { useAppSelector } from '../../../redux/hooks'
 import { ZH_LANGUAGE, JA_LANGUAGE, EN_LANGUAGE } from '../../../config/constant'
 
-const { Paragraph, Text } = Typography
+const { Text } = Typography
 
 const LabelsCompo: React.FC<LabelsCompoProps> = (props) => {
     const [category, setCategory] = useState<Label>({ id: 0, name: 'undefined', description: '', color: 'cyan' })
@@ -76,13 +76,13 @@ const LabelsCompo: React.FC<LabelsCompoProps> = (props) => {
 
     return (
         <Layout>
-            <Paragraph>
+            <div style={{ marginBottom: '1em' }}>
                 <Text style={{ marginRight: '0.5em' }}><span lang={selectedLanguage}>{categoryText}</span></Text>
                 <Tooltip title={category.description} color={config.antdProps.themeColor}>
                     {<Tag style={{ borderRadius: '1em' }} color={category.color}><Text strong>{category.name}</Text></Tag>}
                 </Tooltip>
-            </Paragraph>
-            {tags.length > 0 && <Paragraph>
+            </div>
+            {tags.length > 0 && <div style={{ marginBottom: '1em' }}>
                 <Text style={{ marginRight: '0.5em' }}><span lang={selectedLanguage}>{tagText}</span></Text>
                 {tags.map(label => {
                     return <span key={label.id}>
@@ -92,7 +92,7 @@ const LabelsCompo: React.FC<LabelsCompoProps> = (props) => {
                         </Tooltip>
                     </span>
                 })}
-            </Paragraph>}
+            </div>}
         </Layout>
     )
 }

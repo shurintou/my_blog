@@ -14,7 +14,7 @@ import { useAppSelector } from '../../redux/hooks'
 import { EN_LANGUAGE, JA_LANGUAGE, ZH_LANGUAGE, ROUTER_NAME } from '../../config/constant'
 
 
-const { Title, Paragraph, Text } = Typography
+const { Title, Text } = Typography
 
 const BlogsListItemComp: React.FC<BlogsListItem> = (props) => {
     const navigate = useNavigate()
@@ -71,7 +71,7 @@ const BlogsListItemComp: React.FC<BlogsListItem> = (props) => {
     return (
         <li lang={blogLang}>
             <Title level={3} onClick={navigateToBlog} style={{ padding: '16px 24px 0px 24px', }}><Text style={mouseBlurStyle} >{props.title}</Text></Title>
-            <Typography style={{ padding: '0px 24px 16px 24px' }} >
+            <Layout style={{ padding: '0px 24px 16px 24px' }} >
                 <DateComp
                     dateFromNow={props.created_from_now}
                     dateLocal={props.created_at_local}
@@ -79,7 +79,7 @@ const BlogsListItemComp: React.FC<BlogsListItem> = (props) => {
                 />
                 <LabelsComp labelList={props.labels} setBlogLanguage={setBlogLang}></LabelsComp>
                 <Divider style={{ marginTop: '0' }} />
-                <Paragraph
+                <div
                     onClick={navigateToBlog}
                     style={mouseBlurStyle}
                 >
@@ -96,7 +96,7 @@ const BlogsListItemComp: React.FC<BlogsListItem> = (props) => {
                         }}>
                         <Markdown blogText={props.body}></Markdown>
                     </Layout>
-                </Paragraph>
+                </div>
                 <Layout style={{ marginBottom: '1em' }} >
                     <Text
                         onClick={navigateToBlog}
@@ -130,7 +130,7 @@ const BlogsListItemComp: React.FC<BlogsListItem> = (props) => {
                             </Text>} />
                     </Space>
                 </Layout>
-            </Typography>
+            </Layout>
             {!isLastItem && <Divider style={{ borderTopColor: 'rgba(0,0,0,0.2)', margin: 0 }} />}
         </li>
     )
