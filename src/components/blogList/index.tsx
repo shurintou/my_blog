@@ -72,12 +72,12 @@ const BlogList = () => {
                 size="large"
                 dataSource={data}
                 style={{
-                    borderWidth: pcRenderMode ? '2px' : 'null',
-                    borderStyle: pcRenderMode ? 'solid' : 'null',
+                    borderWidth: pcRenderMode && !loading ? '2px' : 'null',
+                    borderStyle: pcRenderMode && !loading ? 'solid' : 'null',
                     borderColor: config.antdProps.borderColor,
-                    borderRadius: pcRenderMode ? '6px' : '0px',
+                    borderRadius: pcRenderMode && !loading ? '6px' : '0px',
                     height: loading ? '100%' : '',
-                    paddingTop: loading ? '3em' : '',
+                    paddingTop: loading && !loading ? '3em' : '',
                 }}
                 renderItem={(item: BlogsListItem) => (
                     <ListItem key={item.id} {...item}></ListItem>
