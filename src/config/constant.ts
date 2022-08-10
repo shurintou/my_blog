@@ -46,3 +46,12 @@ export const EN_LANGUAGE = {
 
 }
 
+export const ROUTER_NAME = {
+    post: '/post',
+    list: '/list',
+    home: '/home',
+    about: '/about',
+    props: {
+        page: 'page',
+    }
+} 

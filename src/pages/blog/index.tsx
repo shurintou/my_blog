@@ -16,7 +16,7 @@ import Like from '../../components/blog/like'
 import { getLocalHtmlLang } from '../../utils/userAgent'
 import { getLocalUser } from '../../utils/authentication'
 import { useAppSelector } from '../../redux/hooks'
-import { EN_LANGUAGE, JA_LANGUAGE, ZH_LANGUAGE } from '../../config/constant'
+import { EN_LANGUAGE, JA_LANGUAGE, ZH_LANGUAGE, ROUTER_NAME } from '../../config/constant'
 
 const { Title, Text } = Typography
 
@@ -33,10 +33,10 @@ const Blog = () => {
     const backToBlogList = () => {
         const backSearchParams = window.history.state?.usr?.backSearchParams || sessionStorage.getItem('backSearchParams')
         if (backSearchParams) {
-            navigate('/list' + backSearchParams)
+            navigate(ROUTER_NAME.list + backSearchParams)
         }
         else {
-            navigate('/list?page=1')
+            navigate(ROUTER_NAME.list + `?${ROUTER_NAME.props.page}=1`)
         }
     }
 

@@ -4,6 +4,7 @@ import { Routes, Route, Navigate } from "react-router-dom"
 import { getGitUserInfo } from '../../api/user'
 import { setLocalUser } from '../../utils/authentication'
 import { GitUser } from '../../types/index'
+import { ROUTER_NAME } from '../../config/constant'
 const Home = lazy(() => import(/* webpackChunkName: 'Home'*/ '../../pages/home'))
 const List = lazy(() => import(/* webpackChunkName: 'List'*/ '../../pages/blogs'))
 const About = lazy(() => import(/* webpackChunkName: 'About'*/ '../../pages/about'))
@@ -52,11 +53,11 @@ export default class BlogBody extends React.Component<{}, { [key: string]: any }
             <Layout style={{ margin: '2em 0em' }}>
                 <Suspense fallback={<Skeleton active />}>
                     <Routes>
-                        <Route path='/home' element={<Home />}></Route>
-                        <Route path='/blog' element={<Blog />}></Route>
-                        <Route path='/list' element={<List />}></Route>
-                        <Route path='/about' element={<About />}></Route>
-                        <Route path='/*' element={<Navigate to='/home' />}></Route>
+                        <Route path={ROUTER_NAME.home} element={<Home />}></Route>
+                        <Route path={ROUTER_NAME.post} element={<Blog />}></Route>
+                        <Route path={ROUTER_NAME.list} element={<List />}></Route>
+                        <Route path={ROUTER_NAME.about} element={<About />}></Route>
+                        <Route path='/*' element={<Navigate to={ROUTER_NAME.home} />}></Route>
                     </Routes>
                 </Suspense>
             </Layout>

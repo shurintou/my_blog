@@ -4,16 +4,16 @@ import { BlogListFooterProps } from '../../types'
 import { Pagination, Layout } from 'antd'
 import config from '../../config/config'
 import { useAppSelector } from '../../redux/hooks'
-import { JA_LANGUAGE, ZH_LANGUAGE } from '../../config/constant'
+import { JA_LANGUAGE, ZH_LANGUAGE, ROUTER_NAME } from '../../config/constant'
 
 const BlogListFooterComp: React.FC<BlogListFooterProps> = (props) => {
     const [searchParams, setSearchParams] = useSearchParams()
     const [current, setCurrent] = useState(1)
-    const navigateToBlogsPage = (page: number) => { setSearchParams({ page: page.toString() }) }
+    const navigateToBlogsPage = (page: number) => { setSearchParams({ [ROUTER_NAME.props.page]: page.toString() }) }
     const selectedLanguage = useAppSelector((state) => state.language.value)
 
     useEffect(() => {
-        setCurrent(parseInt(searchParams.get('page') || "1"))
+        setCurrent(parseInt(searchParams.get(ROUTER_NAME.props.page) || "1"))
         /* eslint-disable-next-line */
     }, [searchParams])
 

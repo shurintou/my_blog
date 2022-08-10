@@ -9,6 +9,7 @@ import { MarkdownProps } from '../../../types/index'
 import config from '../../../config/config'
 import { doScrolling, curry } from '../../../utils/common'
 import markdownStyle from './index.module.css'
+import { ROUTER_NAME } from '../../../config/constant'
 const { Link } = Typography
 
 const Markdown: React.FC<MarkdownProps> = (props) => {
@@ -37,7 +38,7 @@ const Markdown: React.FC<MarkdownProps> = (props) => {
     }
     const scrollToAnchor = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>, href: string | undefined) => {
         e.preventDefault()
-        if (window.location.href.indexOf('list') >= 0) { // do nothing if the a tag is clicked at the list page.
+        if (window.location.href.indexOf(ROUTER_NAME.list) >= 0) { // do nothing if the a tag is clicked at the list page.
             return false
         }
         if (href && href.startsWith('#')) {

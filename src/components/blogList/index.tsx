@@ -9,7 +9,7 @@ import ListItem from './item'
 import { parseISODate, parseISODateStr, getDateFromNow } from '../../utils/formatter'
 import config from '../../config/config'
 import { useAppSelector } from '../../redux/hooks'
-import { EN_LANGUAGE, JA_LANGUAGE, ZH_LANGUAGE } from '../../config/constant'
+import { EN_LANGUAGE, JA_LANGUAGE, ZH_LANGUAGE, ROUTER_NAME } from '../../config/constant'
 
 const BlogList = () => {
     const [searchParams,] = useSearchParams()
@@ -57,7 +57,7 @@ const BlogList = () => {
     }
 
     useEffect(() => {
-        loadBlogListData({ page: parseInt(searchParams.get('page') || "1") })
+        loadBlogListData({ page: parseInt(searchParams.get(ROUTER_NAME.props.page) || "1") })
         /* eslint-disable-next-line */
     }, [searchParams, selectedLanguage])
 

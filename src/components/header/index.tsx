@@ -9,14 +9,14 @@ import { AntdColPropObj } from '../../types/index'
 import headerStyle from './index.module.css'
 import { useAppSelector, useAppDispatch } from '../../redux/hooks'
 import { changeLocalLanguage } from '../../features/language/languageSlice'
-import { ZH_LANGUAGE, JA_LANGUAGE, EN_LANGUAGE } from '../../config/constant'
+import { ZH_LANGUAGE, JA_LANGUAGE, EN_LANGUAGE, ROUTER_NAME } from '../../config/constant'
 
 const { Header } = Layout
 
 const BlogHeader: React.FC<{}> = () => {
     const hideHeaderOverScrollTop = 100
     const toggleHeaderMinScrollTop = 30
-    const firstPageUrl = "/list?page=1"
+    const firstPageUrl = ROUTER_NAME.list + `?${ROUTER_NAME.props.page}=1`
     const [scrolledTop, setScrolledTop] = useState(0)
     const [showHeader, setShowHeader] = useState(true)
     const scrolledTopRef = useRef(scrolledTop) // to solve the re-render delay issue. 
@@ -152,7 +152,7 @@ const BlogHeader: React.FC<{}> = () => {
                     <Link to={firstPageUrl}> <Button type="primary" icon={<ReadOutlined />} onClick={blogsClickHandler}>{menuTabNames && menuTabNames[1]}</Button></Link>
                 </Col>
                 <Col {...spanPropObj}>
-                    <Link to="/about"><Button type="primary" icon={<UserOutlined />} onClick={scrollToTop}>{menuTabNames && menuTabNames[2]}</Button></Link>
+                    <Link to={ROUTER_NAME.about}><Button type="primary" icon={<UserOutlined />} onClick={scrollToTop}>{menuTabNames && menuTabNames[2]}</Button></Link>
                 </Col>
                 <Col
                     {
