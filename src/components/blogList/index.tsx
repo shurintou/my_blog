@@ -9,12 +9,14 @@ import ListItem from './item'
 import { parseISODate, parseISODateStr, getDateFromNow } from '../../utils/formatter'
 import config from '../../config/config'
 import { useAppSelector } from '../../redux/hooks'
+import { EN_LANGUAGE, JA_LANGUAGE, ZH_LANGUAGE } from '../../config/constant'
 
 const BlogList = () => {
     const [searchParams,] = useSearchParams()
     const [data, setData] = useState<Array<BlogsListItem>>([])
     const [totalBlogsNum, setTotalBlogsNum] = useState(0)
     const [pcRenderMode, setPcRenderMode] = useState(true)
+    const [loading, setLoading] = useState(true)
     const selectedLanguage = useAppSelector((state) => state.language.value)
 
     useEffect(() => {
@@ -31,6 +33,7 @@ const BlogList = () => {
 
     const { blogProps: { blogListItemCountPerPage } } = config
     const loadBlogListData = (searchBlogListParams: BlogSearchRequestParam) => {
+        setLoading(true)
         searchBlogs({ page: searchBlogListParams.page, per_page: blogListItemCountPerPage, query: '' })
             .then((res: BlogSearchResponse) => {
                 const resItemList = res.items
@@ -48,6 +51,7 @@ const BlogList = () => {
                     return newData
                 })
                 setData(newDataList)
+                setLoading(false)
             })
             .catch(() => { })
     }
@@ -71,11 +75,24 @@ const BlogList = () => {
                     borderWidth: pcRenderMode ? '2px' : 'null',
                     borderStyle: pcRenderMode ? 'solid' : 'null',
                     borderColor: config.antdProps.borderColor,
-                    borderRadius: pcRenderMode ? '6px' : '0px'
+                    borderRadius: pcRenderMode ? '6px' : '0px',
+                    height: loading ? '10em' : '',
+                    paddingTop: loading ? '3em' : '',
                 }}
                 renderItem={(item: BlogsListItem) => (
                     <ListItem key={item.id} {...item}></ListItem>
                 )}
+                loading={{
+                    spinning: loading,
+                    size: 'large',
+                    tip:
+                        selectedLanguage === ZH_LANGUAGE.key ?
+                            ZH_LANGUAGE.loading
+                            :
+                            selectedLanguage === JA_LANGUAGE.key ?
+                                JA_LANGUAGE.loading :
+                                EN_LANGUAGE.loading
+                }}
             >
             </List>
             <Layout style={{

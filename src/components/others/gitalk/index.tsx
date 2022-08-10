@@ -23,9 +23,9 @@ const GitalkCompo: React.FC<GitalkProps> = (props) => {
             }
             gitalk.render('gitalk-container')
         }
-        renderGitalk(blogId)
+        if (props.shouldRender) renderGitalk(blogId)
 
-    }, [blogId, selectedLanguage])
+    }, [blogId, selectedLanguage, props.shouldRender])
 
     return (
         <div id="gitalk-container" lang={selectedLanguage}></div>

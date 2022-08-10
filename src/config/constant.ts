@@ -12,6 +12,8 @@ export const ZH_LANGUAGE = {
     likeText: '点赞',
     commentText: '评论',
     loginMessage: '请先登录您的Github账号。',
+    loading: '加载中...',
+
 }
 export const JA_LANGUAGE = {
     key: 'ja',
@@ -25,6 +27,7 @@ export const JA_LANGUAGE = {
     likeText: 'いいね',
     commentText: 'コメント',
     loginMessage: '先にGithubアカウントにログインしてください。',
+    loading: '読込中...',
 
 }
 export const EN_LANGUAGE = {
@@ -39,6 +42,7 @@ export const EN_LANGUAGE = {
     likeText: 'Like',
     commentText: 'Comment',
     loginMessage: 'Please login your github account first.',
+    loading: 'loading...',
 
 }
 

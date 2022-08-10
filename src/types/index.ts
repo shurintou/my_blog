@@ -76,7 +76,8 @@ export interface MarkdownProps {
 }
 
 export interface GitalkProps {
-    blogId: number
+    blogId: number,
+    shouldRender: boolean,
 }
 
 export interface DateCompProps {

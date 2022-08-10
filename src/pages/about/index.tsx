@@ -266,7 +266,7 @@ const AboutCompo: React.FC<{}> = () => {
                     <Col xs={1} sm={1} md={3} lg={3} xl={3}>
                     </Col>
                     <Col xs={22} sm={22} md={18} lg={18} xl={18}>
-                        <Gitalk blogId={config.aboutProps.messageBoardIssueId} />
+                        <Gitalk blogId={config.aboutProps.messageBoardIssueId} shouldRender={true} />
                     </Col>
                 </Row>
             </Space>

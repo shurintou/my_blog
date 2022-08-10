@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useSearchParams, useNavigate } from "react-router-dom"
-import { Layout, Empty, Typography, Row, Col, BackTop, Space, Divider, Spin, Button } from 'antd'
+import { Layout, Typography, Row, Col, BackTop, Space, Divider, Spin, Button } from 'antd'
 import { CommentOutlined, LeftOutlined } from '@ant-design/icons'
 import CommentComp from '../../components/blog/comment'
 import { getBlogInfo } from '../../api/blogs'
@@ -18,7 +18,6 @@ import { getLocalUser } from '../../utils/authentication'
 import { useAppSelector } from '../../redux/hooks'
 import { EN_LANGUAGE, JA_LANGUAGE, ZH_LANGUAGE } from '../../config/constant'
 
-
 const { Title, Text } = Typography
 
 const Blog = () => {
@@ -30,6 +29,7 @@ const Blog = () => {
     const [likeCnt, setlikeCnt] = useState(0)
     const [pcRenderMode, setPcRenderMode] = useState(true)
     const [blogLang, setBlogLang] = useState(getLocalHtmlLang())
+    const [gitalkShouldRender, setGitalkShouldRender] = useState(false)
     const backToBlogList = () => {
         const backSearchParams = window.history.state?.usr?.backSearchParams || sessionStorage.getItem('backSearchParams')
         if (backSearchParams) {
@@ -51,6 +51,7 @@ const Blog = () => {
     useEffect(() => {
         if (blogIdStr) {
             const blogId = parseInt(blogIdStr)
+            setGitalkShouldRender(false)
             getBlogInfo({ number: blogId }).then((res: BlogsItemRes) => {
                 setBlogContent(Object.assign(res, {
                     created_at_local: parseISODateStr(res.created_at),
@@ -59,6 +60,7 @@ const Blog = () => {
                     updated_from_now: getDateFromNow(parseISODate(res.updated_at), selectedLanguage),
                 }))
                 setHasData(true)
+                setGitalkShouldRender(true)
             })
         }
 
@@ -187,10 +189,22 @@ const Blog = () => {
                             </Layout>
                         </Layout>
                         :
-                        <Empty></Empty>
+                        <Layout style={{ marginTop: '5em' }}>
+                            <Spin
+                                size='large'
+                                tip={
+                                    selectedLanguage === ZH_LANGUAGE.key ?
+                                        ZH_LANGUAGE.loading
+                                        :
+                                        selectedLanguage === JA_LANGUAGE.key ?
+                                            JA_LANGUAGE.loading :
+                                            EN_LANGUAGE.loading
+                                }
+                            />
+                        </Layout>
                     }
                     <Layout style={{ padding: pcRenderMode ? '0em' : '0.5em' }}>
-                        {blogIdStr && <Gitalk blogId={parseInt(blogIdStr)} />}
+                        {blogIdStr && <Gitalk blogId={parseInt(blogIdStr)} shouldRender={gitalkShouldRender} />}
                     </Layout>
                 </Col>
                 <Col xs={0} sm={0} md={3} lg={3} xl={3}>
