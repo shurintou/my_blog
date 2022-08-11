@@ -1,6 +1,6 @@
 import { Component } from 'react'
 import { Layout, Row, Col } from 'antd'
-import BlogsList from '../../components/blogList'
+import BlogsList from '../../components/list'
 
 export default class Blogs extends Component {
     render() {

@@ -5,10 +5,10 @@ import { getGitUserInfo } from '../../api/user'
 import { setLocalUser } from '../../utils/authentication'
 import { GitUser } from '../../types/index'
 import { ROUTER_NAME } from '../../config/constant'
-const Home = lazy(() => import(/* webpackChunkName: 'Home'*/ '../../pages/home'))
-const List = lazy(() => import(/* webpackChunkName: 'List'*/ '../../pages/blogs'))
-const About = lazy(() => import(/* webpackChunkName: 'About'*/ '../../pages/about'))
-const Blog = lazy(() => import(/* webpackChunkName: 'Blog'*/ '../../pages/blog'))
+const Home = lazy(() => import(/* webpackChunkName: 'Home'*/ '../../pages' + ROUTER_NAME.home))
+const List = lazy(() => import(/* webpackChunkName: 'List'*/ '../../pages' + ROUTER_NAME.list))
+const About = lazy(() => import(/* webpackChunkName: 'About'*/ '../../pages' + ROUTER_NAME.about))
+const Post = lazy(() => import(/* webpackChunkName: 'Post'*/ '../../pages' + ROUTER_NAME.post))
 
 export default class BlogBody extends React.Component<{}, { [key: string]: any }> {
     constructor(props: Object) {
@@ -54,7 +54,7 @@ export default class BlogBody extends React.Component<{}, { [key: string]: any }
                 <Suspense fallback={<Skeleton active />}>
                     <Routes>
                         <Route path={ROUTER_NAME.home} element={<Home />}></Route>
-                        <Route path={ROUTER_NAME.post} element={<Blog />}></Route>
+                        <Route path={ROUTER_NAME.post} element={<Post />}></Route>
                         <Route path={ROUTER_NAME.list} element={<List />}></Route>
                         <Route path={ROUTER_NAME.about} element={<About />}></Route>
                         <Route path='/*' element={<Navigate to={ROUTER_NAME.home} />}></Route>
