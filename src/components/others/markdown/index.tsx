@@ -135,6 +135,9 @@ const Markdown: React.FC<MarkdownProps> = (props) => {
                 th: curringThTdRenderFunc('th'),
                 td: curringThTdRenderFunc('td'),
                 img({ src, alt, }) {
+                    if (window.location.href.indexOf(ROUTER_NAME.list) >= 0) {
+                        return <span></span> //not render img when at the list page.
+                    }
                     return <Image alt={alt} src={src} style={{ maxWidth: '100%' }} />
                 },
                 p: replacePTag,
