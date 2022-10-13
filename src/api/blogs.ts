@@ -27,6 +27,7 @@ export function searchBlogs(params: BlogSearchRequestParam) {
     Object.getOwnPropertyNames(baseSearchQuery).forEach((key: string) => {
         comBinequery += key + ':' + baseSearchQuery[key] + '+'
     })
+    comBinequery += params.query
 
     return request({
         url: baseURL + '/search/issues?q=' + comBinequery,

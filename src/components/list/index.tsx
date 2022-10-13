@@ -12,7 +12,7 @@ import { useAppSelector } from '../../redux/hooks'
 import { EN_LANGUAGE, JA_LANGUAGE, ZH_LANGUAGE, ROUTER_NAME } from '../../config/constant'
 
 const BlogList = () => {
-    const [searchParams,] = useSearchParams()
+    const [searchParams, setSearchParams] = useSearchParams()
     const [data, setData] = useState<Array<BlogsListItem>>([])
     const [totalBlogsNum, setTotalBlogsNum] = useState(0)
     const [pcRenderMode, setPcRenderMode] = useState(true)
@@ -34,7 +34,19 @@ const BlogList = () => {
     const { blogProps: { blogListItemCountPerPage } } = config
     const loadBlogListData = (searchBlogListParams: BlogSearchRequestParam) => {
         setLoading(true)
-        searchBlogs({ page: searchBlogListParams.page, per_page: blogListItemCountPerPage, query: '' })
+        let languageQuery: string
+        switch (selectedLanguage) {
+            case ZH_LANGUAGE.key:
+                languageQuery = ZH_LANGUAGE.upperCase
+                break
+            case JA_LANGUAGE.key:
+                languageQuery = JA_LANGUAGE.upperCase
+                break
+            default:
+                languageQuery = EN_LANGUAGE.upperCase
+        }
+        const queryStr: string = 'label:language:' + languageQuery
+        searchBlogs({ page: searchBlogListParams.page, per_page: blogListItemCountPerPage, query: queryStr })
             .then((res: BlogSearchResponse) => {
                 const resItemList = res.items
                 const newDataListLength = resItemList.length
@@ -59,7 +71,13 @@ const BlogList = () => {
     useEffect(() => {
         loadBlogListData({ page: parseInt(searchParams.get(ROUTER_NAME.props.page) || "1") })
         /* eslint-disable-next-line */
-    }, [searchParams, selectedLanguage])
+    }, [searchParams])
+
+    useEffect(() => {
+        loadBlogListData({ page: 1 })
+        setSearchParams({ [ROUTER_NAME.props.page]: "1" })
+        /* eslint-disable-next-line */
+    }, [selectedLanguage])
 
     useEffect(() => {
         window.scroll(0, 0)
