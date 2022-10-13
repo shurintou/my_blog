@@ -240,7 +240,7 @@ const AboutCompo: React.FC<{}> = () => {
                                             <Title level={1}>お問い合わせ</Title>
                                             <div className={aboutStyle.aboutText} style={{ marginBottom: '1em' }}>
                                                 何かご用がございましたら、お気軽に <Text copyable underline>shurintou@gmail.com</Text> まで聞いていただくか、
-                                                下記の <Text underline><Link onClick={scrollToGitalk}>メッセージボード</Link></Text> にコメントをください。
+                                                下記の <Text underline><Link onClick={scrollToGitalk}>メッセージボード</Link></Text> にコメントしてください。
                                             </div>
                                             <p className={aboutStyle.aboutText}>
                                                 また、当サイトがお気に入りでしたら、<Text underline><Link href="https://github.com/shurintou/my_blog" target="_blank">Github リポジトリ</Link></Text> にスターをいただければ幸いです。
