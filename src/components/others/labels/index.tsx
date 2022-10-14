@@ -38,18 +38,14 @@ const LabelsCompo: React.FC<LabelsCompoProps> = (props) => {
     useEffect(() => {
         let tagsList: Array<Label> = []
         if (props.labelList.length > 0) {
-            let languageTag: Label = { id: 0, name: '', color: '', description: '' }
-            let languageName: string = ''
             props.labelList.forEach((label: Label, index) => {
                 const [labelType, labelName] = label.name.split(':')
                 if (labelType === 'category') {
                     setCategory({ ...label, color: 'cyan', name: labelName })
                 }
                 else if (labelType === 'language') {
-                    languageTag = label
-                    languageName = labelName
                     let htmlLang = ''
-                    switch (languageName.toLowerCase()) {
+                    switch (labelName.toLowerCase()) {
                         case ZH_LANGUAGE.lowerCase:
                             htmlLang = ZH_LANGUAGE.key
                             break
@@ -66,9 +62,6 @@ const LabelsCompo: React.FC<LabelsCompoProps> = (props) => {
                 }
             })
             tagsList.sort((a, b) => a.name.localeCompare(b.name))
-            if (languageTag.id !== 0) {
-                tagsList.unshift({ ...languageTag, name: languageName })
-            }
             setTags(tagsList)
         }
         /* eslint-disable-next-line */
