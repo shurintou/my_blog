@@ -145,7 +145,7 @@ export interface LabelsCompoProps {
     setBlogLanguage: Dispatch<SetStateAction<string>>,
 }
 
-export interface BlogListFooterProps {
+export interface BlogListPaginationrProps {
     total: number,
     renderMode: boolean,
 }

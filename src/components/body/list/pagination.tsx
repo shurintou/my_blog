@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import { useSearchParams } from "react-router-dom"
-import { BlogListFooterProps } from '../../../types'
+import { BlogListPaginationrProps } from '../../../types'
 import { Pagination, Layout } from 'antd'
 import config from '../../../config/config'
 import { useAppSelector } from '../../../redux/hooks'
 import { JA_LANGUAGE, ZH_LANGUAGE, ROUTER_NAME } from '../../../config/constant'
 
-const BlogListFooterComp: React.FC<BlogListFooterProps> = (props) => {
+const BlogListPaginationComp: React.FC<BlogListPaginationrProps> = (props) => {
     const [searchParams, setSearchParams] = useSearchParams()
     const [current, setCurrent] = useState(1)
     const navigateToBlogsPage = (page: number) => { setSearchParams({ [ROUTER_NAME.props.page]: page.toString() }) }
@@ -73,4 +73,4 @@ const BlogListFooterComp: React.FC<BlogListFooterProps> = (props) => {
     )
 }
 
-export default BlogListFooterComp
+export default BlogListPaginationComp

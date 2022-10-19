@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useSearchParams } from "react-router-dom"
 import { List, Layout, BackTop } from 'antd'
-import BlogListFooter from './footer'
+import BlogListPagination from './pagination'
 import { searchBlogs } from '../../../api/blogs'
 import { debounce } from '../../../utils/common'
 import { BlogsItemRes, BlogsListItem, BlogSearchResponse, BlogSearchRequestParam } from '../../../types/index'
@@ -118,7 +118,7 @@ const BlogList = () => {
                 position: 'sticky',
                 bottom: 0,
             }}>
-                <BlogListFooter total={totalBlogsNum} renderMode={pcRenderMode}></BlogListFooter>
+                <BlogListPagination total={totalBlogsNum} renderMode={pcRenderMode}></BlogListPagination>
             </Layout>
             <BackTop target={() => document} />{/* default target value '()=> window' is not work. */}
         </Layout>
