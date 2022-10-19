@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react'
 import { Divider, Typography, Layout, Space } from 'antd'
 import { HeartOutlined, CommentOutlined } from '@ant-design/icons'
-import { BlogsListItem } from '../../types/index'
+import { BlogsListItem } from '../../../types/index'
 import { useNavigate } from "react-router-dom"
-import DateComp from '../post/date'
-import CommentComp from '../../components/post/comment'
-import LabelsComp from '../../components/others/labels'
-import Markdown from '../others/markdown/'
-import { getLocalHtmlLang } from '../../utils/userAgent'
-import config from '../../config/config'
-import { getDateFromNowText } from '../../utils/formatter'
-import { useAppSelector } from '../../redux/hooks'
-import { EN_LANGUAGE, JA_LANGUAGE, ZH_LANGUAGE, ROUTER_NAME } from '../../config/constant'
+import DateComp from '../post/date/'
+import CommentComp from '../post/comment/'
+import LabelsComp from '../../common/labels/'
+import Markdown from '../../common/markdown'
+import { getLocalHtmlLang } from '../../../utils/userAgent'
+import config from '../../../config/config'
+import { getDateFromNowText } from '../../../utils/formatter'
+import { useAppSelector } from '../../../redux/hooks'
+import { EN_LANGUAGE, JA_LANGUAGE, ZH_LANGUAGE, ROUTER_NAME } from '../../../config/constant'
 
 
 const { Title, Text } = Typography

@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import { useSearchParams } from "react-router-dom"
-import { BlogListFooterProps } from '../../types'
+import { BlogListFooterProps } from '../../../types'
 import { Pagination, Layout } from 'antd'
-import config from '../../config/config'
-import { useAppSelector } from '../../redux/hooks'
-import { JA_LANGUAGE, ZH_LANGUAGE, ROUTER_NAME } from '../../config/constant'
+import config from '../../../config/config'
+import { useAppSelector } from '../../../redux/hooks'
+import { JA_LANGUAGE, ZH_LANGUAGE, ROUTER_NAME } from '../../../config/constant'
 
 const BlogListFooterComp: React.FC<BlogListFooterProps> = (props) => {
     const [searchParams, setSearchParams] = useSearchParams()

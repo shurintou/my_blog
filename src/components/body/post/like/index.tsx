@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
-import { LikeCompProps, BlogLikeReactionResByGraphQl, BlogLikeReactionByGraphQl } from '../../../types/index'
+import { LikeCompProps, BlogLikeReactionResByGraphQl, BlogLikeReactionByGraphQl } from '../../../../types/index'
 import { HeartOutlined, HeartTwoTone } from '@ant-design/icons'
-import { getReactionsByGraphQl, postLike, deleteLike } from '../../../api/like'
-import { getLocalUser } from '../../../utils/authentication'
+import { getReactionsByGraphQl, postLike, deleteLike } from '../../../../api/like'
+import { getLocalUser } from '../../../../utils/authentication'
 
 function LikeCompo<T>(props: LikeCompProps<T>) {
     const [userLikeId, setUserLikeId] = useState(0)

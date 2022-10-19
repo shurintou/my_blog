@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { Layout, Row, Col, Typography, Space, Divider, BackTop, } from 'antd'
-import Gitalk from '../../components//others/gitalk'
+import Gitalk from '../../components/common/gitalk'
 import config from '../../config/config'
 import { debounce, doScrolling } from '../../utils/common'
 import aboutStyle from './index.module.css'

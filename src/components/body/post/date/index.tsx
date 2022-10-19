@@ -1,9 +1,9 @@
 import React from 'react'
-import { DateCompProps } from '../../../types'
+import { DateCompProps } from '../../../../types'
 import { Typography, Tooltip, } from 'antd'
-import config from '../../../config/config'
-import { useAppSelector } from '../../../redux/hooks'
-import { JA_LANGUAGE } from '../../../config/constant'
+import config from '../../../../config/config'
+import { useAppSelector } from '../../../../redux/hooks'
+import { JA_LANGUAGE } from '../../../../config/constant'
 
 const { Text } = Typography
 

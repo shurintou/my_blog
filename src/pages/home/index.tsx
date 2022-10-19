@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { Layout, Row, Col, Typography } from 'antd'
-import BlogAvatar from '../../components/avatar'
+import BlogAvatar from '../../components/body/home/avatar'
 import homeStyle from './index.module.css'
 import { useAppSelector } from '../../redux/hooks'
 import { JA_LANGUAGE, ZH_LANGUAGE } from '../../config/constant'

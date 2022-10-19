@@ -1,7 +1,7 @@
 import { Component } from 'react'
 import { Avatar } from 'antd'
 import { AntDesignOutlined } from '@ant-design/icons'
-import avatarJpg from '../../static/images/avatar/avatar.jpg'
+import avatarJpg from '../../../../static/images/avatar/avatar.jpg'
 
 
 export default class BlogAvatar extends Component {
