@@ -6,7 +6,8 @@ import { searchBlogs } from '../../../api/blogs'
 import { debounce } from '../../../utils/common'
 import { BlogsItemRes, BlogsListItem, BlogSearchResponse, BlogSearchRequestParam } from '../../../types/index'
 import ListItem from './item'
-import { parseISODate, parseISODateStr, getDateFromNow } from '../../../utils/formatter'
+import FilterBar from './filterBar'
+import { parseISODate, parseISODateStr, getDateFromNow, transferLabelWithSpaceByURLEncode } from '../../../utils/formatter'
 import config from '../../../config/config'
 import { useAppSelector } from '../../../redux/hooks'
 import { EN_LANGUAGE, JA_LANGUAGE, ZH_LANGUAGE, ROUTER_NAME } from '../../../config/constant'
@@ -16,8 +17,10 @@ const BlogList = () => {
     const [data, setData] = useState<Array<BlogsListItem>>([])
     const [totalBlogsNum, setTotalBlogsNum] = useState(0)
     const [pcRenderMode, setPcRenderMode] = useState(true)
+    const [itemClickable, setItemClickable] = useState(true)
     const [loading, setLoading] = useState(true)
     const selectedLanguage = useAppSelector((state) => state.language.value)
+    const selectedFilterLabel = useAppSelector((state) => state.filterLabel.value)
 
     useEffect(() => {
         function windowResizeFunc() {
@@ -45,8 +48,10 @@ const BlogList = () => {
             default:
                 languageQuery = EN_LANGUAGE.upperCase
         }
-        const queryStr: string = 'label:language:' + languageQuery
-        searchBlogs({ page: searchBlogListParams.page, per_page: blogListItemCountPerPage, query: queryStr })
+        const languageQueryStr: string = 'label:language:' + languageQuery
+        let categoryQueryStr: string = ''
+        selectedFilterLabel.forEach(category => categoryQueryStr += '+label:' + transferLabelWithSpaceByURLEncode(category.name))
+        searchBlogs({ page: searchBlogListParams.page, per_page: blogListItemCountPerPage, query: languageQueryStr + categoryQueryStr })
             .then((res: BlogSearchResponse) => {
                 const resItemList = res.items
                 const newDataListLength = resItemList.length
@@ -59,6 +64,7 @@ const BlogList = () => {
                         updated_at_local: '', //blogListItem doesn't use this value so set it ''.
                         created_from_now: getDateFromNow(parseISODate(resItem.created_at), selectedLanguage),
                         updated_from_now: '', //blogListItem doesn't use this value so set it ''.,
+                        clickable: itemClickable,
                     })
                     return newData
                 })
@@ -66,6 +72,15 @@ const BlogList = () => {
                 setLoading(false)
             })
             .catch(() => { })
+    }
+
+    const setItemClickableRef = (flg: boolean) => {
+        setTimeout(() => {
+            setItemClickable(flg)
+            const newDataList = data
+            newDataList.forEach(item => item.clickable = flg)
+            setData(newDataList)
+        }, 200) // 200 delay to avoid the click action still work even the clickable flg turn to be false.
     }
 
     useEffect(() => {
@@ -77,7 +92,7 @@ const BlogList = () => {
         loadBlogListData({ page: 1 })
         setSearchParams({ [ROUTER_NAME.props.page]: "1" })
         /* eslint-disable-next-line */
-    }, [selectedLanguage])
+    }, [selectedLanguage, selectedFilterLabel])
 
     useEffect(() => {
         window.scroll(0, 0)
@@ -85,6 +100,7 @@ const BlogList = () => {
 
     return (
         <Layout>
+            <FilterBar isLoading={loading} renderMode={pcRenderMode} itemClickableHandler={setItemClickableRef}></FilterBar>
             <List
                 itemLayout="vertical"
                 size="large"

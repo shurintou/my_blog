@@ -1,3 +1,4 @@
+import { StringifyOptions } from "querystring"
 import { ReactElement } from "react"
 
 export interface GitUser {
@@ -61,6 +62,7 @@ export interface BlogsListItem extends BlogsItemRes {
     updated_from_now: string,
     index?: number,
     listLength?: number,
+    clickable?: boolean,
 }
 
 export interface Label {
@@ -170,3 +172,14 @@ export interface LanguageState {
 export interface MarkdownChild {
     type?: { name?: string }
 }
+
+export interface FilterLabelState {
+    value: Array<Label>
+}
+
+export interface BlogListSearchBarProps {
+    isLoading: boolean,
+    renderMode: boolean,
+    itemClickableHandler: Function,
+}
+

@@ -38,3 +38,12 @@ export const getDateFromNowText = function (lang: string, createType: boolean) {
     }
     return getLocale(lang)!.updateText
 }
+
+export const transferLabelWithSpaceByURLEncode = (str: string) => {
+    if (str.indexOf(' ') > 0) {
+        let resStrList = str.split(':')
+        resStrList[1] = resStrList[1].replace(' ', '%20')
+        return '%22' + resStrList[0] + ':' + resStrList[1] + '%22'
+    }
+    return str
+}

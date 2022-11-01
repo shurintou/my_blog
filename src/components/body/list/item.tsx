@@ -19,10 +19,12 @@ const { Title, Text } = Typography
 const BlogsListItemComp: React.FC<BlogsListItem> = (props) => {
     const navigate = useNavigate()
     const navigateToBlog = () => {
-        const backSearchParams = document.location.search
-        navigate(`${ROUTER_NAME.post}?id=${props.number}`, { state: { backSearchParams: backSearchParams } })
-        /* to fix the bug that when redirected after github login, the back button in blog title not work */
-        sessionStorage.setItem('backSearchParams', backSearchParams)
+        if (props.clickable) { // if the search bar is opening, the item will not be clickable.
+            const backSearchParams = document.location.search
+            navigate(`${ROUTER_NAME.post}?id=${props.number}`, { state: { backSearchParams: backSearchParams } })
+            /* to fix the bug that when redirected after github login, the back button in blog title not work */
+            sessionStorage.setItem('backSearchParams', backSearchParams)
+        }
     }
     const mouseBlurStyle = { cursor: 'pointer' }
     const [isLastItem, setIsLastItem] = useState(false)
