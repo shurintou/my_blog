@@ -127,6 +127,14 @@ const BlogList = () => {
                                 JA_LANGUAGE.loading :
                                 EN_LANGUAGE.loading
                 }}
+                locale={{
+                    emptyText: selectedLanguage === ZH_LANGUAGE.key ?
+                        ZH_LANGUAGE.emptyText
+                        :
+                        selectedLanguage === JA_LANGUAGE.key ?
+                            JA_LANGUAGE.emptyText :
+                            EN_LANGUAGE.emptyText
+                }}
             >
             </List>
             <Layout style={{

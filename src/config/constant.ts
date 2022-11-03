@@ -14,6 +14,7 @@ export const ZH_LANGUAGE = {
     loginMessage: '请先登录您的Github账号。',
     loading: '加载中...',
     selectLabel: '请选择感兴趣的分类或标签',
+    emptyText: '暂无匹配该条件的文章',
 
 }
 export const JA_LANGUAGE = {
@@ -30,6 +31,7 @@ export const JA_LANGUAGE = {
     loginMessage: '先にGithubアカウントにログインしてください。',
     loading: '読込中...',
     selectLabel: 'ご興味のあるラベルを選択してください',
+    emptyText: '該当するポストがありません',
 
 }
 export const EN_LANGUAGE = {
@@ -45,7 +47,8 @@ export const EN_LANGUAGE = {
     commentText: 'Comment',
     loginMessage: 'Please login your github account first.',
     loading: 'loading...',
-    selectLabel: 'Please select labels you are interested in'
+    selectLabel: 'Please select labels you are interested in',
+    emptyText: 'No matching post found',
 
 }
 
