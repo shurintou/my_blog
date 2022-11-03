@@ -3,8 +3,9 @@ import { Layout, Typography, Tag, Tooltip } from 'antd'
 import { lightOrDark } from '../../../utils/common'
 import { LabelsCompoProps, Label } from '../../../types/index'
 import config from '../../../config/config'
-import { useAppSelector } from '../../../redux/hooks'
-import { ZH_LANGUAGE, JA_LANGUAGE, EN_LANGUAGE } from '../../../config/constant'
+import { useAppSelector, useAppDispatch } from '../../../redux/hooks'
+import { changeFilterLabel } from '../../../features/filterLabel/filterLabelSlice'
+import { ZH_LANGUAGE, JA_LANGUAGE, EN_LANGUAGE, ROUTER_NAME } from '../../../config/constant'
 
 const { Text } = Typography
 
@@ -12,7 +13,8 @@ const LabelsCompo: React.FC<LabelsCompoProps> = (props) => {
     const [category, setCategory] = useState<Label>({ id: 0, name: 'undefined', description: '', color: 'cyan' })
     const [tags, setTags] = useState<Array<Label>>([])
     const selectedLanguage = useAppSelector((state) => state.language.value)
-
+    const selectedFilterLabel = useAppSelector((state) => state.filterLabel.value)
+    const dispatch = useAppDispatch()
     const [tagText, setTagText] = useState(getText(selectedLanguage, 'tag'))
     const [categoryText, setCategoryText] = useState(getText(selectedLanguage, 'category'))
 
@@ -29,6 +31,24 @@ const LabelsCompo: React.FC<LabelsCompoProps> = (props) => {
         }
     }
 
+    const clickLabelHandler = (clicedLabel: Label) => {
+        if (selectedFilterLabel.findIndex(filterLabel => filterLabel.id === clicedLabel.id) === -1) {
+            let newList = selectedFilterLabel.filter(() => true)
+            newList.push(clicedLabel)
+            dispatch(changeFilterLabel(newList))
+        }
+        else {
+            removeSelectedFilterLabel(clicedLabel)
+        }
+    }
+
+    const closableHandler = (label: Label) => window.location.href.indexOf(ROUTER_NAME.list) >= 0 && selectedFilterLabel.findIndex(filterLabel => filterLabel.id === label.id) >= 0
+
+    const removeSelectedFilterLabel = (closedLabel: Label) => {
+        let newList = selectedFilterLabel.filter((label) => label.id !== closedLabel.id)
+        dispatch(changeFilterLabel(newList))
+    }
+
     useEffect(() => {
         setTagText(getText(selectedLanguage, 'tag'))
         setCategoryText(getText(selectedLanguage, 'category'))
@@ -39,13 +59,15 @@ const LabelsCompo: React.FC<LabelsCompoProps> = (props) => {
         let tagsList: Array<Label> = []
         if (props.labelList.length > 0) {
             props.labelList.forEach((label: Label, index) => {
-                const [labelType, labelName] = label.name.split(':')
+                const splitedLabelName = label.name.split(':')
+                const labelType = splitedLabelName[0]
                 if (labelType === 'category') {
-                    setCategory({ ...label, color: 'cyan', name: labelName })
+                    setCategory({ ...label, color: 'cyan' })
                 }
                 else if (labelType === 'language') {
+                    const language = splitedLabelName[1]
                     let htmlLang = ''
-                    switch (labelName.toLowerCase()) {
+                    switch (language.toLowerCase()) {
                         case ZH_LANGUAGE.lowerCase:
                             htmlLang = ZH_LANGUAGE.key
                             break
@@ -58,7 +80,7 @@ const LabelsCompo: React.FC<LabelsCompoProps> = (props) => {
                     props.setBlogLanguage(htmlLang)
                 }
                 else {
-                    tagsList.push({ ...label, name: labelName })
+                    tagsList.push(label)
                 }
             })
             tagsList.sort((a, b) => a.name.localeCompare(b.name))
@@ -72,7 +94,19 @@ const LabelsCompo: React.FC<LabelsCompoProps> = (props) => {
             <div style={{ marginBottom: '1em' }}>
                 <Text style={{ marginRight: '0.5em' }}><span lang={selectedLanguage}>{categoryText}</span></Text>
                 <Tooltip title={category.description} color={config.antdProps.themeColor}>
-                    {<Tag style={{ borderRadius: '1em' }} color={category.color}><Text strong>{category.name}</Text></Tag>}
+                    {<Tag
+                        style={{
+                            borderRadius: '1em',
+                            cursor: 'pointer',
+                            display: 'inline-block' // to avoid the tag display css turn to be none when closed.
+                        }}
+                        color={category.color}
+                        onClick={() => clickLabelHandler(category)}
+                        closable={closableHandler(category)}
+                        onClose={() => { removeSelectedFilterLabel(category) }}
+                    >
+                        <Text strong>{category.name.split(':')[1]}</Text>
+                    </Tag>}
                 </Tooltip>
             </div>
             {tags.length > 0 && <div style={{ marginBottom: '1em' }}>
@@ -80,7 +114,18 @@ const LabelsCompo: React.FC<LabelsCompoProps> = (props) => {
                 {tags.map(label => {
                     return <span key={label.id}>
                         <Tooltip title={label.description} color={config.antdProps.themeColor}>
-                            <Tag style={{ borderRadius: '1em' }} color={'#' + label.color}><Text strong style={{ color: lightOrDark(label.color) }}>{label.name}</Text></Tag>
+                            <Tag
+                                style={{
+                                    borderRadius: '1em',
+                                    cursor: 'pointer',
+                                    display: 'inline-block' // to avoid the tag display css turn to be none when closed.
+                                }}
+                                color={'#' + label.color}
+                                onClick={() => clickLabelHandler(label)}
+                                closable={closableHandler(label)}
+                                onClose={() => { removeSelectedFilterLabel(label) }}
+                            ><Text strong style={{ color: lightOrDark(label.color) }}>{label.name.split(':')[1]}</Text>
+                            </Tag>
                             &nbsp;
                         </Tooltip>
                     </span>
