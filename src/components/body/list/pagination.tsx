@@ -20,26 +20,29 @@ const BlogListPaginationComp: React.FC<BlogListPaginationrProps> = (props) => {
     const paginationDescription = useMemo(() => {
         const perPageCount = config.blogProps.blogListItemCountPerPage
         const totalCount = props.total
-        let max = current * perPageCount
-        let min = (current - 1) * perPageCount + 1
-        let description = ''
-        if (max > totalCount) {
-            max = totalCount
+        if (totalCount > 0) {
+            let max = current * perPageCount
+            let min = (current - 1) * perPageCount + 1
+            let description = ''
+            if (max > totalCount) {
+                max = totalCount
+            }
+            if (max === min) {
+                description = max.toString()
+            }
+            else {
+                description = min.toString() + '~' + max.toString()
+            }
+            switch (selectedLanguage) {
+                case ZH_LANGUAGE.key:
+                    return '第' + description + '条, 共' + totalCount.toString() + '条'
+                case JA_LANGUAGE.key:
+                    return description + '件目, 全' + totalCount.toString() + '件'
+                default:
+                    return description + ' of total ' + totalCount.toString()
+            }
         }
-        if (max === min) {
-            description = max.toString()
-        }
-        else {
-            description = min.toString() + '~' + max.toString()
-        }
-        switch (selectedLanguage) {
-            case ZH_LANGUAGE.key:
-                return '第' + description + '条, 共' + totalCount.toString() + '条'
-            case JA_LANGUAGE.key:
-                return description + '件目, 全' + totalCount.toString() + '件'
-            default:
-                return description + ' of total ' + totalCount.toString()
-        }
+        return ''
     }, [current, props.total, selectedLanguage])
 
     return (
