@@ -32,13 +32,15 @@ const LabelsCompo: React.FC<LabelsCompoProps> = (props) => {
     }
 
     const clickLabelHandler = (clicedLabel: Label) => {
-        if (selectedFilterLabel.findIndex(filterLabel => filterLabel.id === clicedLabel.id) === -1) {
-            let newList = selectedFilterLabel.filter(() => true)
-            newList.push(clicedLabel)
-            dispatch(changeFilterLabel(newList))
-        }
-        else {
-            removeSelectedFilterLabel(clicedLabel)
+        if (window.location.href.indexOf(ROUTER_NAME.list) >= 0) { // make the label only be clicked at the list page would do the logic below
+            if (selectedFilterLabel.findIndex(filterLabel => filterLabel.id === clicedLabel.id) === -1) {
+                let newList = selectedFilterLabel.filter(() => true)
+                newList.push(clicedLabel)
+                dispatch(changeFilterLabel(newList))
+            }
+            else {
+                removeSelectedFilterLabel(clicedLabel)
+            }
         }
     }
 
@@ -97,7 +99,7 @@ const LabelsCompo: React.FC<LabelsCompoProps> = (props) => {
                     {<Tag
                         style={{
                             borderRadius: '1em',
-                            cursor: 'pointer',
+                            cursor: window.location.href.indexOf(ROUTER_NAME.list) >= 0 ? 'pointer' : 'default',
                             display: 'inline-block' // to avoid the tag display css turn to be none when closed.
                         }}
                         color={category.color}
@@ -117,7 +119,7 @@ const LabelsCompo: React.FC<LabelsCompoProps> = (props) => {
                             <Tag
                                 style={{
                                     borderRadius: '1em',
-                                    cursor: 'pointer',
+                                    cursor: window.location.href.indexOf(ROUTER_NAME.list) >= 0 ? 'pointer' : 'default',
                                     display: 'inline-block' // to avoid the tag display css turn to be none when closed.
                                 }}
                                 color={'#' + label.color}
