@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Layout, Typography, Tag, Tooltip } from 'antd'
 import { lightOrDark } from '../../../utils/common'
+import { mobileAndTabletCheck } from '../../../utils/userAgent'
 import { LabelsCompoProps, Label } from '../../../types/index'
 import config from '../../../config/config'
 import { useAppSelector, useAppDispatch } from '../../../redux/hooks'
@@ -31,8 +32,10 @@ const LabelsCompo: React.FC<LabelsCompoProps> = (props) => {
         }
     }
 
+    const routerAtListPage = window.location.href.indexOf(ROUTER_NAME.list) >= 0
+
     const clickLabelHandler = (clicedLabel: Label) => {
-        if (window.location.href.indexOf(ROUTER_NAME.list) >= 0) { // make the label only be clicked at the list page would do the logic below
+        if (routerAtListPage) { // make the label only be clicked at the list page would do the logic below
             if (selectedFilterLabel.findIndex(filterLabel => filterLabel.id === clicedLabel.id) === -1) {
                 let newList = selectedFilterLabel.filter(() => true)
                 newList.push(clicedLabel)
@@ -44,7 +47,7 @@ const LabelsCompo: React.FC<LabelsCompoProps> = (props) => {
         }
     }
 
-    const closableHandler = (label: Label) => window.location.href.indexOf(ROUTER_NAME.list) >= 0 && selectedFilterLabel.findIndex(filterLabel => filterLabel.id === label.id) >= 0
+    const closableHandler = (label: Label) => routerAtListPage && selectedFilterLabel.findIndex(filterLabel => filterLabel.id === label.id) >= 0
 
     const removeSelectedFilterLabel = (closedLabel: Label) => {
         let newList = selectedFilterLabel.filter((label) => label.id !== closedLabel.id)
@@ -91,45 +94,54 @@ const LabelsCompo: React.FC<LabelsCompoProps> = (props) => {
         /* eslint-disable-next-line */
     }, [])
 
+
+    const RenderTag: React.FC<{ label: Label }> = ({ label }) => {
+        const isHexadecimalColor = /^[A-F0-9]+$/i.test(label.color)
+        return (
+            <Tag
+                style={{
+                    borderRadius: '1em',
+                    cursor: routerAtListPage ? 'pointer' : 'default',
+                    display: 'inline-block' // to avoid the tag display css turn to be none when closed.
+                }}
+                color={(isHexadecimalColor ? '#' : '') + label.color}
+                onClick={() => clickLabelHandler(label)}
+                closable={closableHandler(label)}
+                onClose={() => { removeSelectedFilterLabel(label) }}
+            >
+                <Text strong style={{ color: isHexadecimalColor ? lightOrDark(label.color) : '' }}>
+                    {label.name.split(':')[1]}
+                </Text>
+            </Tag>
+        )
+    }
+
+    const RenderTooltipWithTag: React.FC<{ tag: Label }> = ({ tag }) => {
+        return (
+            routerAtListPage && mobileAndTabletCheck() ?
+                <RenderTag label={tag} />
+                :
+                <Tooltip
+                    title={tag.description}
+                    color={config.antdProps.themeColor}
+                    trigger={['hover', 'click', 'focus']}
+                >
+                    <RenderTag label={tag} />&nbsp;
+                </Tooltip>
+        )
+    }
+
     return (
         <Layout>
             <div style={{ marginBottom: '1em' }}>
                 <Text style={{ marginRight: '0.5em' }}><span lang={selectedLanguage}>{categoryText}</span></Text>
-                <Tooltip title={category.description} color={config.antdProps.themeColor}>
-                    {<Tag
-                        style={{
-                            borderRadius: '1em',
-                            cursor: window.location.href.indexOf(ROUTER_NAME.list) >= 0 ? 'pointer' : 'default',
-                            display: 'inline-block' // to avoid the tag display css turn to be none when closed.
-                        }}
-                        color={category.color}
-                        onClick={() => clickLabelHandler(category)}
-                        closable={closableHandler(category)}
-                        onClose={() => { removeSelectedFilterLabel(category) }}
-                    >
-                        <Text strong>{category.name.split(':')[1]}</Text>
-                    </Tag>}
-                </Tooltip>
+                <RenderTooltipWithTag tag={category} />
             </div>
             {tags.length > 0 && <div style={{ marginBottom: '1em' }}>
                 <Text style={{ marginRight: '0.5em' }}><span lang={selectedLanguage}>{tagText}</span></Text>
                 {tags.map(label => {
                     return <span key={label.id}>
-                        <Tooltip title={label.description} color={config.antdProps.themeColor}>
-                            <Tag
-                                style={{
-                                    borderRadius: '1em',
-                                    cursor: window.location.href.indexOf(ROUTER_NAME.list) >= 0 ? 'pointer' : 'default',
-                                    display: 'inline-block' // to avoid the tag display css turn to be none when closed.
-                                }}
-                                color={'#' + label.color}
-                                onClick={() => clickLabelHandler(label)}
-                                closable={closableHandler(label)}
-                                onClose={() => { removeSelectedFilterLabel(label) }}
-                            ><Text strong style={{ color: lightOrDark(label.color) }}>{label.name.split(':')[1]}</Text>
-                            </Tag>
-                            &nbsp;
-                        </Tooltip>
+                        <RenderTooltipWithTag tag={label} />
                     </span>
                 })}
             </div>}
