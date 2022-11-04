@@ -1,4 +1,5 @@
 import conf from '../config/config'
+import { STORAGE_KEY } from '../config/constant'
 
 function getBrowserLanguage() {
     const browserLanguage = navigator.language.toLowerCase()
@@ -9,21 +10,20 @@ function getBrowserLanguage() {
     return conf.languageProps[0] //default language 'en'
 }
 
-const localStorageHtmlLangKey = 'html_lang'
 
 export function setLocalHtmlLang(lang: string) {
     const lowerCaseLang = lang.toLowerCase()
     document.querySelector('html')?.setAttribute('lang', lowerCaseLang)
     if (languageExistInConfig(lowerCaseLang)) {
-        localStorage.setItem(localStorageHtmlLangKey, lowerCaseLang)
+        localStorage.setItem(STORAGE_KEY.htmlLang, lowerCaseLang)
     }
     else {
-        localStorage.setItem(localStorageHtmlLangKey, getBrowserLanguage().key)
+        localStorage.setItem(STORAGE_KEY.htmlLang, getBrowserLanguage().key)
     }
 }
 
 export function getLocalHtmlLang() {
-    const localHtmlLang = localStorage.getItem(localStorageHtmlLangKey)
+    const localHtmlLang = localStorage.getItem(STORAGE_KEY.htmlLang)
     if (localHtmlLang != null && languageExistInConfig(localHtmlLang)) {
         return localHtmlLang
     }

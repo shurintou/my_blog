@@ -11,7 +11,7 @@ import { getLocalHtmlLang } from '../../../utils/userAgent'
 import config from '../../../config/config'
 import { getDateFromNowText } from '../../../utils/formatter'
 import { useAppSelector } from '../../../redux/hooks'
-import { EN_LANGUAGE, JA_LANGUAGE, ZH_LANGUAGE, ROUTER_NAME } from '../../../config/constant'
+import { EN_LANGUAGE, JA_LANGUAGE, ZH_LANGUAGE, ROUTER_NAME, STORAGE_KEY } from '../../../config/constant'
 
 
 const { Title, Text } = Typography
@@ -23,7 +23,7 @@ const BlogsListItemComp: React.FC<BlogsListItem> = (props) => {
             const backSearchParams = document.location.search
             navigate(`${ROUTER_NAME.post}?id=${props.number}`, { state: { backSearchParams: backSearchParams } })
             /* to fix the bug that when redirected after github login, the back button in blog title not work */
-            sessionStorage.setItem('backSearchParams', backSearchParams)
+            sessionStorage.setItem(STORAGE_KEY.backSearchParams, backSearchParams)
         }
     }
     const mouseBlurStyle = { cursor: 'pointer' }

@@ -16,7 +16,7 @@ import Like from '../../components/body/post/like'
 import { getLocalHtmlLang } from '../../utils/userAgent'
 import { getLocalUser } from '../../utils/authentication'
 import { useAppSelector } from '../../redux/hooks'
-import { EN_LANGUAGE, JA_LANGUAGE, ZH_LANGUAGE, ROUTER_NAME } from '../../config/constant'
+import { EN_LANGUAGE, JA_LANGUAGE, ZH_LANGUAGE, ROUTER_NAME, STORAGE_KEY } from '../../config/constant'
 
 const { Title, Text } = Typography
 
@@ -31,7 +31,7 @@ const Blog = () => {
     const [blogLang, setBlogLang] = useState(getLocalHtmlLang())
     const [gitalkShouldRender, setGitalkShouldRender] = useState(false)
     const backToBlogList = () => {
-        const backSearchParams = window.history.state?.usr?.backSearchParams || sessionStorage.getItem('backSearchParams')
+        const backSearchParams = window.history.state?.usr?.backSearchParams || sessionStorage.getItem(STORAGE_KEY.backSearchParams)
         if (backSearchParams) {
             navigate(ROUTER_NAME.list + backSearchParams)
         }
