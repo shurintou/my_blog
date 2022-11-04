@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { LikeCompProps, BlogLikeReactionResByGraphQl, BlogLikeReactionByGraphQl } from '../../../../types/index'
+import { LikeCompProps, PostLikeReactionResByGraphQl, PostLikeReactionByGraphQl } from '../../../../types/index'
 import { HeartOutlined, HeartTwoTone } from '@ant-design/icons'
 import { getReactionsByGraphQl, postLike, deleteLike } from '../../../../api/like'
 import { getLocalUser } from '../../../../utils/authentication'
@@ -32,12 +32,12 @@ function LikeCompo<T>(props: LikeCompProps<T>) {
         /* eslint-disable-next-line */
     }, [])
 
-    const getReactionsHandler = (res: BlogLikeReactionResByGraphQl) => {
+    const getReactionsHandler = (res: PostLikeReactionResByGraphQl) => {
         const likeReactions = res.data.repository.issue.reactions.edges
         const likeNum = likeReactions.length
         props.likeHandler(likeNum)
         if (likeNum > 0) {
-            const userLikeReaction: BlogLikeReactionByGraphQl | undefined = likeReactions.find(reaction => reaction.node.user.databaseId === getLocalUser().id && reaction.node.user.login === getLocalUser().login)
+            const userLikeReaction: PostLikeReactionByGraphQl | undefined = likeReactions.find(reaction => reaction.node.user.databaseId === getLocalUser().id && reaction.node.user.login === getLocalUser().login)
             if (userLikeReaction !== undefined) {
                 setUserLikeId(userLikeReaction.node.databaseId)
             }

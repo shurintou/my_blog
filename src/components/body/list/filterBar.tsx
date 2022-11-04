@@ -2,7 +2,7 @@ import { useState, useEffect, } from 'react'
 import type { CustomTagProps } from 'rc-select/lib/BaseSelect';
 import { getAllLabels } from '../../../api/labels'
 import { Layout, Select, Tag, Typography } from 'antd'
-import { BlogListSearchBarProps, Label } from '../../../types/index'
+import { PostListSearchBarProps, Label } from '../../../types/index'
 import config from '../../../config/config'
 import { lightOrDark } from '../../../utils/common'
 import { useAppSelector, useAppDispatch } from '../../../redux/hooks'
@@ -10,7 +10,7 @@ import { changeFilterLabel } from '../../../features/filterLabel/filterLabelSlic
 import { EN_LANGUAGE, JA_LANGUAGE, ZH_LANGUAGE, STORAGE_KEY } from '../../../config/constant'
 const { Text } = Typography
 
-const FilterBar: React.FC<BlogListSearchBarProps> = (props) => {
+const FilterBar: React.FC<PostListSearchBarProps> = (props) => {
     const [labels, setLabels] = useState<Array<Label>>([])
     const [renderLabels, setRenderLabels] = useState<Array<Label>>([])
     const [placeHolderText, setPlaceHolderText] = useState<string>()
@@ -154,5 +154,5 @@ const FilterBar: React.FC<BlogListSearchBarProps> = (props) => {
     </Layout>)
 }
 
-const FilterBarCompo = (props: BlogListSearchBarProps) => <FilterBar {...props} />
+const FilterBarCompo = (props: PostListSearchBarProps) => <FilterBar {...props} />
 export default FilterBarCompo

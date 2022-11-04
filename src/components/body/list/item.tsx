@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Divider, Typography, Layout, Space } from 'antd'
 import { HeartOutlined, CommentOutlined } from '@ant-design/icons'
-import { BlogsListItem } from '../../../types/index'
+import { PostsListItem } from '../../../types/index'
 import { useNavigate } from "react-router-dom"
 import DateComp from '../post/date/'
 import CommentComp from '../post/comment/'
@@ -16,19 +16,19 @@ import { EN_LANGUAGE, JA_LANGUAGE, ZH_LANGUAGE, ROUTER_NAME, STORAGE_KEY } from 
 
 const { Title, Text } = Typography
 
-const BlogsListItemComp: React.FC<BlogsListItem> = (props) => {
+const PostsListItemComp: React.FC<PostsListItem> = (props) => {
     const navigate = useNavigate()
-    const navigateToBlog = () => {
+    const navigateToPost = () => {
         if (props.clickable) { // if the search bar is opening, the item will not be clickable.
             const backSearchParams = document.location.search
             navigate(`${ROUTER_NAME.post}?id=${props.number}`, { state: { backSearchParams: backSearchParams } })
-            /* to fix the bug that when redirected after github login, the back button in blog title not work */
+            /* to fix the bug that when redirected after github login, the back button in post title not work */
             sessionStorage.setItem(STORAGE_KEY.backSearchParams, backSearchParams)
         }
     }
     const mouseBlurStyle = { cursor: 'pointer' }
     const [isLastItem, setIsLastItem] = useState(false)
-    const [blogLang, setBlogLang] = useState(getLocalHtmlLang())
+    const [postLang, setPostLang] = useState(getLocalHtmlLang())
 
     useEffect(() => {
         setIsLastItem((props.index || 0) >= (props.listLength || 0)) //divider of which is the last item would not be shown.
@@ -71,37 +71,37 @@ const BlogsListItemComp: React.FC<BlogsListItem> = (props) => {
     const [commentText, setCommentText] = useState(getLikeCommentText(selectedLanguage)[1])
 
     return (
-        <li lang={blogLang}>
-            <Title level={3} onClick={navigateToBlog} style={{ padding: '16px 24px 0px 24px', }}><Text style={mouseBlurStyle} >{props.title}</Text></Title>
+        <li lang={postLang}>
+            <Title level={3} onClick={navigateToPost} style={{ padding: '16px 24px 0px 24px', }}><Text style={mouseBlurStyle} >{props.title}</Text></Title>
             <Layout style={{ padding: '0px 24px 16px 24px' }} >
                 <DateComp
                     dateFromNow={props.created_from_now}
                     dateLocal={props.created_at_local}
                     text={createText}
                 />
-                <LabelsComp labelList={props.labels} setBlogLanguage={setBlogLang}></LabelsComp>
+                <LabelsComp labelList={props.labels} setPostLanguage={setPostLang}></LabelsComp>
                 <Divider style={{ marginTop: '0' }} />
                 <div
-                    onClick={navigateToBlog}
+                    onClick={navigateToPost}
                     style={mouseBlurStyle}
                 >
                     <Layout
                         style={{
-                            WebkitLineClamp: config.blogProps.previewLine,
-                            lineClamp: config.blogProps.previewLine,
+                            WebkitLineClamp: config.postProps.previewLine,
+                            lineClamp: config.postProps.previewLine,
                             display: '-webkit-box',
                             WebkitBoxOrient: 'vertical',
                             overflow: 'hidden',
                             lineHeight: '2em',
-                            maxHeight: 5 * (config.blogProps.previewLine) + 'em',
+                            maxHeight: 5 * (config.postProps.previewLine) + 'em',
                             wordWrap: 'break-word',
                         }}>
-                        <Markdown blogText={props.body}></Markdown>
+                        <Markdown postText={props.body}></Markdown>
                     </Layout>
                 </div>
                 <Layout style={{ marginBottom: '1em' }} >
                     <Text
-                        onClick={navigateToBlog}
+                        onClick={navigateToPost}
                         style={{
                             cursor: 'pointer',
                             color: config.antdProps.themeColor,
@@ -116,7 +116,7 @@ const BlogsListItemComp: React.FC<BlogsListItem> = (props) => {
                     <Space split={<Divider type="vertical" style={{ borderLeftColor: 'rgba(0,0,0,0.6)' }} />}>
                         <CommentComp
                             title={likeText}
-                            slot={<HeartOutlined onClick={navigateToBlog} />}
+                            slot={<HeartOutlined onClick={navigateToPost} />}
                             text={<Text>{
                                 props.reactions['+1']
                                 + props.reactions.hooray
@@ -126,7 +126,7 @@ const BlogsListItemComp: React.FC<BlogsListItem> = (props) => {
                             </Text>} />
                         <CommentComp
                             title={commentText}
-                            slot={<CommentOutlined onClick={navigateToBlog} />}
+                            slot={<CommentOutlined onClick={navigateToPost} />}
                             text={<Text>{props.comments
                             }
                             </Text>} />
@@ -138,6 +138,6 @@ const BlogsListItemComp: React.FC<BlogsListItem> = (props) => {
     )
 }
 
-const listItemModule = (props: BlogsListItem) => <BlogsListItemComp {...props} />
+const listItemModule = (props: PostsListItem) => <PostsListItemComp {...props} />
 
 export default listItemModule

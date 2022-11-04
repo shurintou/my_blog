@@ -27,11 +27,11 @@ export interface PendingRequest {
 }
 
 
-export interface BlogInfoRequestParam {
+export interface PostInfoRequestParam {
     number: number,
 }
 
-export interface BlogsItemRes {
+export interface PostsItemRes {
     id: number,
     number: number,
     title: string,
@@ -55,7 +55,7 @@ export interface Reactions {
     "eyes": number
 }
 
-export interface BlogsListItem extends BlogsItemRes {
+export interface PostsListItem extends PostsItemRes {
     created_at_local: string,
     updated_at_local: string,
     created_from_now: string,
@@ -74,11 +74,11 @@ export interface Label {
 
 
 export interface MarkdownProps {
-    blogText: string | undefined
+    postText: string | undefined
 }
 
 export interface GitalkProps {
-    blogId: number,
+    postId: number,
     shouldRender: boolean,
 }
 
@@ -103,23 +103,23 @@ export interface LikeCompProps<S> {
     likeHandler: Dispatch<SetStateAction<number>>,
 }
 
-export interface BlogGetLikeData {
+export interface PostGetLikeData {
     issue_number: number,
     content: string,
     per_page: number,
 }
 
-export interface BlogPostLikeData {
+export interface PostPostLikeData {
     number: number,
     content: string,
 }
 
-export interface DeleteBlogReactionData {
+export interface DeletePostReactionData {
     id: number,
     number: number,
 }
 
-export interface BlogLikeReactionByGraphQl {
+export interface PostLikeReactionByGraphQl {
     node: {
         databaseId: number,
         content: string,
@@ -130,12 +130,12 @@ export interface BlogLikeReactionByGraphQl {
     }
 }
 
-export interface BlogLikeReactionResByGraphQl {
+export interface PostLikeReactionResByGraphQl {
     data: {
         repository: {
             issue: {
                 reactions: {
-                    edges: Array<BlogLikeReactionByGraphQl>
+                    edges: Array<PostLikeReactionByGraphQl>
                 }
             }
         }
@@ -144,15 +144,15 @@ export interface BlogLikeReactionResByGraphQl {
 
 export interface LabelsCompoProps {
     labelList: Array<Label>,
-    setBlogLanguage: Dispatch<SetStateAction<string>>,
+    setPostLanguage: Dispatch<SetStateAction<string>>,
 }
 
-export interface BlogListPaginationrProps {
+export interface PostListPaginationrProps {
     total: number,
     renderMode: boolean,
 }
 
-export interface BlogSearchRequestParam {
+export interface PostSearchRequestParam {
     query?: string,
     page: number,
     per_page?: number,
@@ -160,9 +160,9 @@ export interface BlogSearchRequestParam {
     order?: string,
 }
 
-export interface BlogSearchResponse {
+export interface PostSearchResponse {
     total_count: number,
-    items: Array<BlogsItemRes>,
+    items: Array<PostsItemRes>,
 }
 
 export interface LanguageState {
@@ -177,7 +177,7 @@ export interface FilterLabelState {
     value: Array<Label>
 }
 
-export interface BlogListSearchBarProps {
+export interface PostListSearchBarProps {
     isLoading: boolean,
     renderMode: boolean,
     itemClickableHandler: Function,

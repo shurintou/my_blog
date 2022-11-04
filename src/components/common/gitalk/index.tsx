@@ -8,11 +8,11 @@ import { useAppSelector } from '../../../redux/hooks'
 const GitalkCompo: React.FC<GitalkProps> = (props) => {
     const selectedLanguage = useAppSelector((state) => state.language.value)
 
-    const { blogId } = props
+    const { postId } = props
 
     useEffect(() => {
-        function renderGitalk(blogId: number) {
-            const gitalkProps = { ...config.gitProps, language: selectedLanguage, number: blogId, perPage: config.blogProps.commentCountPerPage }
+        function renderGitalk(postId: number) {
+            const gitalkProps = { ...config.gitProps, language: selectedLanguage, number: postId, perPage: config.postProps.commentCountPerPage }
             const gitalk = new Gitalk(gitalkProps)
             const gitalkContainerEl = document.querySelector('#gitalk-container')
             if (gitalkContainerEl) { // gitalk didn't offer any api to rerender the component so do it manually.
@@ -23,9 +23,9 @@ const GitalkCompo: React.FC<GitalkProps> = (props) => {
             }
             gitalk.render('gitalk-container')
         }
-        if (props.shouldRender) renderGitalk(blogId)
+        if (props.shouldRender) renderGitalk(postId)
 
-    }, [blogId, selectedLanguage, props.shouldRender])
+    }, [postId, selectedLanguage, props.shouldRender])
 
     return (
         <div id="gitalk-container" lang={selectedLanguage}></div>

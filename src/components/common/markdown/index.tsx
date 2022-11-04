@@ -13,7 +13,7 @@ import { ROUTER_NAME } from '../../../config/constant'
 const { Link } = Typography
 
 const Markdown: React.FC<MarkdownProps> = (props) => {
-    const { blogText } = props
+    const { postText } = props
     const anchorStr = '#anchor'
     const hRenderFunc = ({ level, children, }: { [key: string]: any }) => {
         const fontSize = (7 - level) * 0.15 + 0.8
@@ -69,7 +69,7 @@ const Markdown: React.FC<MarkdownProps> = (props) => {
 
     return (
         <ReactMarkdown
-            children={blogText ? blogText : ''}
+            children={postText ? postText : ''}
             remarkPlugins={[remarkGfm, remarkBreaks]}
             className={markdownStyle.textFontSize}
             components={{

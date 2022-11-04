@@ -14,8 +14,8 @@ const configObj = {
         titleBackgroundColor: '#d0d7de',
         paginationTextColor: '#FFFFFF',
     },
-    blogProps: {
-        blogListItemCountPerPage: 5,
+    postProps: {
+        postListItemCountPerPage: 5,
         commentCountPerPage: 10,
         previewLine: 5,
     },

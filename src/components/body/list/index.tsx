@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react'
 import { useSearchParams } from "react-router-dom"
 import { List, Layout, BackTop } from 'antd'
-import BlogListPagination from './pagination'
-import { searchBlogs } from '../../../api/blogs'
+import PostListPagination from './pagination'
+import { searchPosts } from '../../../api/posts'
 import { debounce } from '../../../utils/common'
-import { BlogsItemRes, BlogsListItem, BlogSearchResponse, BlogSearchRequestParam } from '../../../types/index'
+import { PostsItemRes, PostsListItem, PostSearchResponse, PostSearchRequestParam } from '../../../types/index'
 import ListItem from './item'
 import FilterBar from './filterBar'
 import { parseISODate, parseISODateStr, getDateFromNow, transferLabelWithSpaceByURLEncode } from '../../../utils/formatter'
@@ -12,10 +12,10 @@ import config from '../../../config/config'
 import { useAppSelector } from '../../../redux/hooks'
 import { EN_LANGUAGE, JA_LANGUAGE, ZH_LANGUAGE, ROUTER_NAME } from '../../../config/constant'
 
-const BlogList = () => {
+const PostList = () => {
     const [searchParams, setSearchParams] = useSearchParams()
-    const [data, setData] = useState<Array<BlogsListItem>>([])
-    const [totalBlogsNum, setTotalBlogsNum] = useState(0)
+    const [data, setData] = useState<Array<PostsListItem>>([])
+    const [totalPostsNum, setTotalPostsNum] = useState(0)
     const [pcRenderMode, setPcRenderMode] = useState(true)
     const [itemClickable, setItemClickable] = useState(true)
     const [loading, setLoading] = useState(true)
@@ -34,8 +34,8 @@ const BlogList = () => {
         }
     }, [])
 
-    const { blogProps: { blogListItemCountPerPage } } = config
-    const loadBlogListData = (searchBlogListParams: BlogSearchRequestParam) => {
+    const { postProps: { postListItemCountPerPage } } = config
+    const loadPostListData = (searchPostListParams: PostSearchRequestParam) => {
         setLoading(true)
         let languageQuery: string
         switch (selectedLanguage) {
@@ -51,19 +51,19 @@ const BlogList = () => {
         const languageQueryStr: string = 'label:language:' + languageQuery
         let categoryQueryStr: string = ''
         selectedFilterLabel.forEach(category => categoryQueryStr += '+label:' + transferLabelWithSpaceByURLEncode(category.name))
-        searchBlogs({ page: searchBlogListParams.page, per_page: blogListItemCountPerPage, query: languageQueryStr + categoryQueryStr })
-            .then((res: BlogSearchResponse) => {
+        searchPosts({ page: searchPostListParams.page, per_page: postListItemCountPerPage, query: languageQueryStr + categoryQueryStr })
+            .then((res: PostSearchResponse) => {
                 const resItemList = res.items
                 const newDataListLength = resItemList.length
-                setTotalBlogsNum(res.total_count)
-                let newDataList: Array<BlogsListItem> = resItemList.map((resItem: BlogsItemRes, index: number) => {
-                    let newData: BlogsListItem = Object.assign(resItem, {
+                setTotalPostsNum(res.total_count)
+                let newDataList: Array<PostsListItem> = resItemList.map((resItem: PostsItemRes, index: number) => {
+                    let newData: PostsListItem = Object.assign(resItem, {
                         index: index + 1,
                         listLength: newDataListLength,
                         created_at_local: parseISODateStr(resItem.created_at),
-                        updated_at_local: '', //blogListItem doesn't use this value so set it ''.
+                        updated_at_local: '', //postListItem doesn't use this value so set it ''.
                         created_from_now: getDateFromNow(parseISODate(resItem.created_at), selectedLanguage),
-                        updated_from_now: '', //blogListItem doesn't use this value so set it ''.,
+                        updated_from_now: '', //postListItem doesn't use this value so set it ''.,
                         clickable: itemClickable,
                     })
                     return newData
@@ -84,12 +84,12 @@ const BlogList = () => {
     }
 
     useEffect(() => {
-        loadBlogListData({ page: parseInt(searchParams.get(ROUTER_NAME.props.page) || "1") })
+        loadPostListData({ page: parseInt(searchParams.get(ROUTER_NAME.props.page) || "1") })
         /* eslint-disable-next-line */
     }, [searchParams])
 
     useEffect(() => {
-        loadBlogListData({ page: 1 })
+        loadPostListData({ page: 1 })
         setSearchParams({ [ROUTER_NAME.props.page]: "1" })
         /* eslint-disable-next-line */
     }, [selectedLanguage, selectedFilterLabel])
@@ -113,7 +113,7 @@ const BlogList = () => {
                     height: loading ? '100%' : '',
                     paddingTop: loading && !loading ? '3em' : '',
                 }}
-                renderItem={(item: BlogsListItem) => (
+                renderItem={(item: PostsListItem) => (
                     <ListItem key={item.id} {...item}></ListItem>
                 )}
                 loading={{
@@ -142,7 +142,7 @@ const BlogList = () => {
                 position: 'sticky',
                 bottom: 0,
             }}>
-                <BlogListPagination total={totalBlogsNum} renderMode={pcRenderMode}></BlogListPagination>
+                <PostListPagination total={totalPostsNum} renderMode={pcRenderMode}></PostListPagination>
             </Layout>
             <BackTop target={() => document} />{/* default target value '()=> window' is not work. */}
         </Layout>
@@ -150,5 +150,5 @@ const BlogList = () => {
     )
 }
 
-const BlogListCompo = () => <BlogList />
-export default BlogListCompo
+const PostListCompo = () => <PostList />
+export default PostListCompo

@@ -82,7 +82,7 @@ const LabelsCompo: React.FC<LabelsCompoProps> = (props) => {
                         default:
                             htmlLang = EN_LANGUAGE.key
                     }
-                    props.setBlogLanguage(htmlLang)
+                    props.setPostLanguage(htmlLang)
                 }
                 else {
                     tagsList.push(label)

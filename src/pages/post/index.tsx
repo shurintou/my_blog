@@ -3,8 +3,8 @@ import { useSearchParams, useNavigate } from "react-router-dom"
 import { Layout, Typography, Row, Col, BackTop, Space, Divider, Spin, Button } from 'antd'
 import { CommentOutlined, LeftOutlined } from '@ant-design/icons'
 import CommentComp from '../../components/body/post/comment'
-import { getBlogInfo } from '../../api/blogs'
-import { BlogsItemRes, BlogsListItem, } from '../../types/index'
+import { getPostInfo } from '../../api/posts'
+import { PostsItemRes, PostsListItem, } from '../../types/index'
 import { parseISODate, parseISODateStr, getDateFromNow, getDateFromNowText } from '../../utils/formatter'
 import Markdown from '../../components/common/markdown'
 import Gitalk from '../../components//common/gitalk'
@@ -20,17 +20,17 @@ import { EN_LANGUAGE, JA_LANGUAGE, ZH_LANGUAGE, ROUTER_NAME, STORAGE_KEY } from 
 
 const { Title, Text } = Typography
 
-const Blog = () => {
+const Post = () => {
     const navigate = useNavigate()
     const [searchParams,] = useSearchParams()
-    const blogIdStr = searchParams.get('id')
+    const postIdStr = searchParams.get('id')
     const [hasData, setHasData] = useState(false)
-    const [blogContent, setBlogContent] = useState<BlogsListItem>()
+    const [postContent, setPostContent] = useState<PostsListItem>()
     const [likeCnt, setlikeCnt] = useState(0)
     const [pcRenderMode, setPcRenderMode] = useState(true)
-    const [blogLang, setBlogLang] = useState(getLocalHtmlLang())
+    const [postLang, setPostLang] = useState(getLocalHtmlLang())
     const [gitalkShouldRender, setGitalkShouldRender] = useState(false)
-    const backToBlogList = () => {
+    const backToPostList = () => {
         const backSearchParams = window.history.state?.usr?.backSearchParams || sessionStorage.getItem(STORAGE_KEY.backSearchParams)
         if (backSearchParams) {
             navigate(ROUTER_NAME.list + backSearchParams)
@@ -49,27 +49,27 @@ const Blog = () => {
 
     const selectedLanguage = useAppSelector((state) => state.language.value)
     useEffect(() => {
-        if (blogIdStr) {
-            const blogId = parseInt(blogIdStr)
-            const sessionStorageBlog = sessionStorage.getItem(STORAGE_KEY.postId + blogId)
+        if (postIdStr) {
+            const postId = parseInt(postIdStr)
+            const sessionStoragePost = sessionStorage.getItem(STORAGE_KEY.postId + postId)
             setGitalkShouldRender(false)
-            if (sessionStorageBlog) {
-                setBlogContent(JSON.parse(sessionStorageBlog)) // get post data from session storage if exists.
+            if (sessionStoragePost) {
+                setPostContent(JSON.parse(sessionStoragePost)) // get post data from session storage if exists.
                 setHasData(true)
                 setGitalkShouldRender(true)
             }
             else {
-                getBlogInfo({ number: blogId }).then((res: BlogsItemRes) => {
-                    const blogData = Object.assign(res, {
+                getPostInfo({ number: postId }).then((res: PostsItemRes) => {
+                    const postData = Object.assign(res, {
                         created_at_local: parseISODateStr(res.created_at),
                         updated_at_local: parseISODateStr(res.updated_at),
                         created_from_now: getDateFromNow(parseISODate(res.created_at), selectedLanguage),
                         updated_from_now: getDateFromNow(parseISODate(res.updated_at), selectedLanguage),
                     })
-                    setBlogContent(blogData)
+                    setPostContent(postData)
                     setHasData(true)
                     setGitalkShouldRender(true)
-                    sessionStorage.setItem(STORAGE_KEY.postId + blogId, JSON.stringify(blogData))
+                    sessionStorage.setItem(STORAGE_KEY.postId + postId, JSON.stringify(postData))
                 })
             }
         }
@@ -111,7 +111,7 @@ const Blog = () => {
 
 
     return (
-        <Layout lang={blogLang}>
+        <Layout lang={postLang}>
             <Row>
                 <Col xs={0} sm={0} md={3} lg={3} xl={3}>
                 </Col>
@@ -137,9 +137,9 @@ const Blog = () => {
                                             verticalAlign: '0px'
                                         }}
                                         icon={<LeftOutlined />}
-                                        onClick={backToBlogList}
+                                        onClick={backToPostList}
                                     ></Button>
-                                    {blogContent?.title}</Title>
+                                    {postContent?.title}</Title>
                             </Layout>
                             <Layout
                                 style={{
@@ -152,22 +152,22 @@ const Blog = () => {
                                 <Row>
                                     <Col span={16}>
                                         <DateComp
-                                            dateFromNow={blogContent ? blogContent.created_from_now : ''}
-                                            dateLocal={blogContent ? blogContent.created_at_local : ''}
+                                            dateFromNow={postContent ? postContent.created_from_now : ''}
+                                            dateLocal={postContent ? postContent.created_at_local : ''}
                                             text={createText}
                                         />
                                     </Col>
                                     <Col span={1} offset={7}>
                                     </Col>
                                 </Row>
-                                {blogContent && <LabelsComp labelList={blogContent?.labels} setBlogLanguage={setBlogLang}></LabelsComp>}
+                                {postContent && <LabelsComp labelList={postContent?.labels} setPostLanguage={setPostLang}></LabelsComp>}
                                 <Divider style={{ margin: '0em 0em 1em 0em' }} />
-                                <Markdown blogText={blogContent?.body} />
+                                <Markdown postText={postContent?.body} />
                                 {
-                                    blogContent?.updated_at !== blogContent?.created_at &&
+                                    postContent?.updated_at !== postContent?.created_at &&
                                     <DateComp
-                                        dateFromNow={blogContent ? blogContent.updated_from_now : ''}
-                                        dateLocal={blogContent ? blogContent.updated_at_local : ''}
+                                        dateFromNow={postContent ? postContent.updated_from_now : ''}
+                                        dateLocal={postContent ? postContent.updated_at_local : ''}
                                         text={updateText}
                                     />
                                 }
@@ -175,17 +175,17 @@ const Blog = () => {
                                     <CommentComp
                                         title={likeText}
                                         slot={
-                                            <Like number={blogContent ? blogContent?.number : 0} likeHandler={setlikeCnt}></Like>
+                                            <Like number={postContent ? postContent?.number : 0} likeHandler={setlikeCnt}></Like>
                                         }
                                         text={
-                                            !blogContent ? <Spin /> :
+                                            !postContent ? <Spin /> :
                                                 <Text>
                                                     {
-                                                        blogContent.reactions['+1']
-                                                        + blogContent.reactions.hooray
-                                                        + blogContent.reactions.laugh
-                                                        + blogContent.reactions.rocket
-                                                        + (getLocalUser()?.id === 0 ? blogContent.reactions.heart : likeCnt)
+                                                        postContent.reactions['+1']
+                                                        + postContent.reactions.hooray
+                                                        + postContent.reactions.laugh
+                                                        + postContent.reactions.rocket
+                                                        + (getLocalUser()?.id === 0 ? postContent.reactions.heart : likeCnt)
                                                     }
                                                 </Text>
                                         }
@@ -193,7 +193,7 @@ const Blog = () => {
                                     <CommentComp
                                         title={commentText}
                                         slot={<CommentOutlined onClick={scrollToGitalk} />}
-                                        text={!blogContent ? <Spin /> : <Text>{blogContent.comments}</Text>}
+                                        text={!postContent ? <Spin /> : <Text>{postContent.comments}</Text>}
                                     />
                                 </Space>
                             </Layout>
@@ -214,7 +214,7 @@ const Blog = () => {
                         </Layout>
                     }
                     <Layout style={{ padding: pcRenderMode ? '0em' : '0.5em' }}>
-                        {blogIdStr && <Gitalk blogId={parseInt(blogIdStr)} shouldRender={gitalkShouldRender} />}
+                        {postIdStr && <Gitalk postId={parseInt(postIdStr)} shouldRender={gitalkShouldRender} />}
                     </Layout>
                 </Col>
                 <Col xs={0} sm={0} md={3} lg={3} xl={3}>
@@ -225,6 +225,6 @@ const Blog = () => {
     )
 }
 
-const BlogModule = () => <Blog></Blog>
+const PostModule = () => <Post></Post>
 
-export default BlogModule
+export default PostModule

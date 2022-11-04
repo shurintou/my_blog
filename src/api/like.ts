@@ -1,11 +1,11 @@
 import request from '../utils/request'
-import { BlogPostLikeData, BlogGetLikeData, DeleteBlogReactionData } from '../types/index'
+import { PostPostLikeData, PostGetLikeData, DeletePostReactionData } from '../types/index'
 import conf from '../config/config'
 import { getGitAccessToken } from '../utils/authentication'
 
 const baseURL = 'https://api.github.com'
 
-export function getReactionsByGraphQl(data: BlogGetLikeData) {
+export function getReactionsByGraphQl(data: PostGetLikeData) {
     if (getGitAccessToken()) {
         return request({
             url: baseURL + '/graphql',
@@ -41,7 +41,7 @@ export function getReactionsByGraphQl(data: BlogGetLikeData) {
     return Promise.reject()
 }
 
-export function postLike(data: BlogPostLikeData) {
+export function postLike(data: PostPostLikeData) {
     return request({
         url: baseURL + '/repos/' + conf.gitProps.owner + '/' + conf.gitProps.repo + '/issues/' + data.number + '/reactions',
         method: 'post',
@@ -53,7 +53,7 @@ export function postLike(data: BlogPostLikeData) {
     })
 }
 
-export function deleteLike(data: DeleteBlogReactionData) {
+export function deleteLike(data: DeletePostReactionData) {
     return request({
         url: baseURL + '/repos/' + conf.gitProps.owner + '/' + conf.gitProps.repo + '/issues/' + data.number + '/reactions/' + data.id,
         method: 'delete',

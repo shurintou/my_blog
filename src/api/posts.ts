@@ -1,5 +1,5 @@
 import request from '../utils/request'
-import { BlogInfoRequestParam, BlogSearchRequestParam } from '../types/index'
+import { PostInfoRequestParam, PostSearchRequestParam } from '../types/index'
 import conf from '../config/config'
 
 const auth = {
@@ -9,7 +9,7 @@ const auth = {
 
 const baseURL = 'https://api.github.com'
 
-export function getBlogInfo(params: BlogInfoRequestParam) {
+export function getPostInfo(params: PostInfoRequestParam) {
     return request({
         url: baseURL + '/repos/' + conf.gitProps.owner + '/' + conf.gitProps.repo + '/issues/' + params.number,
         method: 'get',
@@ -17,7 +17,7 @@ export function getBlogInfo(params: BlogInfoRequestParam) {
     })
 }
 
-export function searchBlogs(params: BlogSearchRequestParam) {
+export function searchPosts(params: PostSearchRequestParam) {
     const baseSearchQuery: { [key: string]: any } = {
         author: 'shurintou',
         repo: 'shurintou/shurintou.github.io',
