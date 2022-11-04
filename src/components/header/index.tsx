@@ -9,6 +9,7 @@ import { AntdColPropObj } from '../../types/index'
 import headerStyle from './index.module.css'
 import { useAppSelector, useAppDispatch } from '../../redux/hooks'
 import { changeLocalLanguage } from '../../features/language/languageSlice'
+import { changeFilterLabel } from '../../features/filterLabel/filterLabelSlice'
 import { ZH_LANGUAGE, JA_LANGUAGE, EN_LANGUAGE, ROUTER_NAME } from '../../config/constant'
 
 const { Header } = Layout
@@ -43,15 +44,23 @@ const BlogHeader: React.FC<{}> = () => {
         setScrolledTop(newScrollTop)
     }
 
-    const blogsClickHandler = () => {
-        if (document.location.href.indexOf(firstPageUrl) > 0) {
-            scrollToTop()
-        }
+    const homeClickHandler = () => clearSelectedFilterLabel()
+
+
+    const aboutClickHandler = () => {
+        scrollToTop()
+        clearSelectedFilterLabel()
     }
 
-    const scrollToTop = () => {
-        window.scroll(0, 0)
+    const clearSelectedFilterLabel = () => dispatch(changeFilterLabel([]))
+
+
+    const postClickHandler = () => {
+        if (document.location.href.indexOf(firstPageUrl) > 0) scrollToTop()
     }
+
+    const scrollToTop = () => window.scroll(0, 0)
+
 
     const getMenuTextList = (lang: string) => {
         switch (lang) {
@@ -146,13 +155,13 @@ const BlogHeader: React.FC<{}> = () => {
                     )
                     }
                 >
-                    <Link to="/"><Button type="primary" icon={<HomeOutlined />}>{menuTabNames && menuTabNames[0]}</Button></Link>
+                    <Link to="/"><Button type="primary" icon={<HomeOutlined />} onClick={homeClickHandler}>{menuTabNames && menuTabNames[0]}</Button></Link>
                 </Col>
                 <Col {...spanPropObj}>
-                    <Link to={firstPageUrl}> <Button type="primary" icon={<ReadOutlined />} onClick={blogsClickHandler}>{menuTabNames && menuTabNames[1]}</Button></Link>
+                    <Link to={firstPageUrl}> <Button type="primary" icon={<ReadOutlined />} onClick={postClickHandler}>{menuTabNames && menuTabNames[1]}</Button></Link>
                 </Col>
                 <Col {...spanPropObj}>
-                    <Link to={ROUTER_NAME.about}><Button type="primary" icon={<UserOutlined />} onClick={scrollToTop}>{menuTabNames && menuTabNames[2]}</Button></Link>
+                    <Link to={ROUTER_NAME.about}><Button type="primary" icon={<UserOutlined />} onClick={aboutClickHandler}>{menuTabNames && menuTabNames[2]}</Button></Link>
                 </Col>
                 <Col
                     {
