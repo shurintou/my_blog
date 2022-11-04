@@ -7,7 +7,7 @@ import config from '../../../config/config'
 import { lightOrDark } from '../../../utils/common'
 import { useAppSelector, useAppDispatch } from '../../../redux/hooks'
 import { changeFilterLabel } from '../../../features/filterLabel/filterLabelSlice'
-import { EN_LANGUAGE, JA_LANGUAGE, ZH_LANGUAGE, } from '../../../config/constant'
+import { EN_LANGUAGE, JA_LANGUAGE, ZH_LANGUAGE, STORAGE_KEY } from '../../../config/constant'
 const { Text } = Typography
 
 const FilterBar: React.FC<BlogListSearchBarProps> = (props) => {
@@ -93,11 +93,19 @@ const FilterBar: React.FC<BlogListSearchBarProps> = (props) => {
     }, [labels, selectedLanguage])
 
     useEffect(() => {
-        getAllLabels().then((res: Array<Label>) => {
-            if (res && res.length > 0) {
-                setLabels(res.filter((label: Label) => !label.name.startsWith('language')))
-            }
-        })
+        const filterLabelsList = sessionStorage.getItem(STORAGE_KEY.filterLabelsList)
+        if (filterLabelsList) {
+            setLabels(JSON.parse(filterLabelsList))
+        }
+        else {
+            getAllLabels().then((res: Array<Label>) => {
+                if (res && res.length > 0) {
+                    const newfilterLabelsList = res.filter((label: Label) => !label.name.startsWith('language'))
+                    setLabels(newfilterLabelsList)
+                    sessionStorage.setItem(STORAGE_KEY.filterLabelsList, JSON.stringify(newfilterLabelsList))
+                }
+            })
+        }
         /* eslint-disable-next-line */
     }, [])
 
