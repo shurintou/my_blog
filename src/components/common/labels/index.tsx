@@ -61,7 +61,7 @@ const LabelsCompo: React.FC<LabelsCompoProps> = (props) => {
     }, [selectedLanguage])
 
     useEffect(() => {
-        let tagsList: Array<Label> = []
+        let tagList: Array<Label> = []
         if (props.labelList.length > 0) {
             props.labelList.forEach((label: Label, index) => {
                 const splitedLabelName = label.name.split(':')
@@ -85,11 +85,11 @@ const LabelsCompo: React.FC<LabelsCompoProps> = (props) => {
                     props.setPostLanguage(htmlLang)
                 }
                 else {
-                    tagsList.push(label)
+                    tagList.push(label)
                 }
             })
-            tagsList.sort((a, b) => a.name.localeCompare(b.name))
-            setTags(tagsList)
+            tagList.sort((a, b) => a.name.localeCompare(b.name))
+            setTags(tagList)
         }
         /* eslint-disable-next-line */
     }, [])

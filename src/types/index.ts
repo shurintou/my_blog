@@ -55,7 +55,7 @@ export interface Reactions {
     "eyes": number
 }
 
-export interface PostsListItem extends PostsItemRes {
+export interface PostListItem extends PostsItemRes {
     created_at_local: string,
     updated_at_local: string,
     created_from_now: string,

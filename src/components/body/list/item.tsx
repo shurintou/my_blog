@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { Divider, Typography, Layout, Space } from 'antd'
 import { HeartOutlined, CommentOutlined } from '@ant-design/icons'
-import { PostsListItem } from '../../../types/index'
+import { PostListItem } from '../../../types/index'
 import { useNavigate } from "react-router-dom"
 import DateComp from '../post/date/'
 import CommentComp from '../post/comment/'
-import LabelsComp from '../../common/labels/'
+import LabelsComp from '../../common/labels'
 import Markdown from '../../common/markdown'
 import { getLocalHtmlLang } from '../../../utils/userAgent'
 import config from '../../../config/config'
@@ -16,7 +16,7 @@ import { EN_LANGUAGE, JA_LANGUAGE, ZH_LANGUAGE, ROUTER_NAME, STORAGE_KEY } from 
 
 const { Title, Text } = Typography
 
-const PostsListItemComp: React.FC<PostsListItem> = (props) => {
+const PostListItemComp: React.FC<PostListItem> = (props) => {
     const navigate = useNavigate()
     const navigateToPost = () => {
         if (props.clickable) { // if the search bar is opening, the item will not be clickable.
@@ -138,6 +138,6 @@ const PostsListItemComp: React.FC<PostsListItem> = (props) => {
     )
 }
 
-const listItemModule = (props: PostsListItem) => <PostsListItemComp {...props} />
+const listItemModule = (props: PostListItem) => <PostListItemComp {...props} />
 
 export default listItemModule

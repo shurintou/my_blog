@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react'
 import { useSearchParams } from "react-router-dom"
 import { List, Layout, BackTop } from 'antd'
 import PostListPagination from './pagination'
-import { searchPosts } from '../../../api/posts'
+import { searchPosts } from '../../../api/post'
 import { debounce } from '../../../utils/common'
-import { PostsItemRes, PostsListItem, PostSearchResponse, PostSearchRequestParam } from '../../../types/index'
+import { PostsItemRes, PostListItem, PostSearchResponse, PostSearchRequestParam } from '../../../types/index'
 import ListItem from './item'
 import FilterBar from './filterBar'
 import { parseISODate, parseISODateStr, getDateFromNow, transferLabelWithSpaceByURLEncode } from '../../../utils/formatter'
@@ -14,7 +14,7 @@ import { EN_LANGUAGE, JA_LANGUAGE, ZH_LANGUAGE, ROUTER_NAME } from '../../../con
 
 const PostList = () => {
     const [searchParams, setSearchParams] = useSearchParams()
-    const [data, setData] = useState<Array<PostsListItem>>([])
+    const [data, setData] = useState<Array<PostListItem>>([])
     const [totalPostsNum, setTotalPostsNum] = useState(0)
     const [pcRenderMode, setPcRenderMode] = useState(true)
     const [itemClickable, setItemClickable] = useState(true)
@@ -56,8 +56,8 @@ const PostList = () => {
                 const resItemList = res.items
                 const newDataListLength = resItemList.length
                 setTotalPostsNum(res.total_count)
-                let newDataList: Array<PostsListItem> = resItemList.map((resItem: PostsItemRes, index: number) => {
-                    let newData: PostsListItem = Object.assign(resItem, {
+                let newDataList: Array<PostListItem> = resItemList.map((resItem: PostsItemRes, index: number) => {
+                    let newData: PostListItem = Object.assign(resItem, {
                         index: index + 1,
                         listLength: newDataListLength,
                         created_at_local: parseISODateStr(resItem.created_at),
@@ -113,7 +113,7 @@ const PostList = () => {
                     height: loading ? '100%' : '',
                     paddingTop: loading && !loading ? '3em' : '',
                 }}
-                renderItem={(item: PostsListItem) => (
+                renderItem={(item: PostListItem) => (
                     <ListItem key={item.id} {...item}></ListItem>
                 )}
                 loading={{

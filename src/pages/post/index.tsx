@@ -3,8 +3,8 @@ import { useSearchParams, useNavigate } from "react-router-dom"
 import { Layout, Typography, Row, Col, BackTop, Space, Divider, Spin, Button } from 'antd'
 import { CommentOutlined, LeftOutlined } from '@ant-design/icons'
 import CommentComp from '../../components/body/post/comment'
-import { getPostInfo } from '../../api/posts'
-import { PostsItemRes, PostsListItem, } from '../../types/index'
+import { getPostInfo } from '../../api/post'
+import { PostsItemRes, PostListItem, } from '../../types/index'
 import { parseISODate, parseISODateStr, getDateFromNow, getDateFromNowText } from '../../utils/formatter'
 import Markdown from '../../components/common/markdown'
 import Gitalk from '../../components//common/gitalk'
@@ -25,7 +25,7 @@ const Post = () => {
     const [searchParams,] = useSearchParams()
     const postIdStr = searchParams.get('id')
     const [hasData, setHasData] = useState(false)
-    const [postContent, setPostContent] = useState<PostsListItem>()
+    const [postContent, setPostContent] = useState<PostListItem>()
     const [likeCnt, setlikeCnt] = useState(0)
     const [pcRenderMode, setPcRenderMode] = useState(true)
     const [postLang, setPostLang] = useState(getLocalHtmlLang())

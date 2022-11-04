@@ -1,6 +1,6 @@
 import { Component } from 'react'
 import { Layout, Row, Col } from 'antd'
-import PostsList from '../../components/body/list'
+import PostList from '../../components/body/list'
 
 export default class Blogs extends Component {
     render() {
@@ -10,7 +10,7 @@ export default class Blogs extends Component {
                     <Col xs={0} sm={0} md={3} lg={3} xl={3}>
                     </Col>
                     <Col xs={24} sm={24} md={18} lg={18} xl={18}>
-                        <PostsList />
+                        <PostList />
                     </Col>
                     <Col xs={0} sm={0} md={3} lg={3} xl={3}>
                     </Col>

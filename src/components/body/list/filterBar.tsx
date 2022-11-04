@@ -1,6 +1,6 @@
 import { useState, useEffect, } from 'react'
 import type { CustomTagProps } from 'rc-select/lib/BaseSelect';
-import { getAllLabels } from '../../../api/labels'
+import { getAllLabels } from '../../../api/label'
 import { Layout, Select, Tag, Typography } from 'antd'
 import { PostListSearchBarProps, Label } from '../../../types/index'
 import config from '../../../config/config'
@@ -93,16 +93,16 @@ const FilterBar: React.FC<PostListSearchBarProps> = (props) => {
     }, [labels, selectedLanguage])
 
     useEffect(() => {
-        const filterLabelsList = sessionStorage.getItem(STORAGE_KEY.filterLabelsList)
-        if (filterLabelsList) {
-            setLabels(JSON.parse(filterLabelsList))
+        const filterLabelList = sessionStorage.getItem(STORAGE_KEY.filterLabelList)
+        if (filterLabelList) {
+            setLabels(JSON.parse(filterLabelList))
         }
         else {
             getAllLabels().then((res: Array<Label>) => {
                 if (res && res.length > 0) {
-                    const newfilterLabelsList = res.filter((label: Label) => !label.name.startsWith('language'))
-                    setLabels(newfilterLabelsList)
-                    sessionStorage.setItem(STORAGE_KEY.filterLabelsList, JSON.stringify(newfilterLabelsList))
+                    const newfilterLabelList = res.filter((label: Label) => !label.name.startsWith('language'))
+                    setLabels(newfilterLabelList)
+                    sessionStorage.setItem(STORAGE_KEY.filterLabelList, JSON.stringify(newfilterLabelList))
                 }
             })
         }
