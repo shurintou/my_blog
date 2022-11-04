@@ -66,5 +66,6 @@ export const STORAGE_KEY = {
     filterLabelsList: 'FILTER_LABEL_LIST',
     gitAccessToken: 'GT_ACCESS_TOKEN',
     htmlLang: 'HTML_LANG',
-    backSearchParams: 'BACK_SEARCH_PARAMS'
+    backSearchParams: 'BACK_SEARCH_PARAMS',
+    postId: 'POST_ID_',
 }

@@ -51,17 +51,27 @@ const Blog = () => {
     useEffect(() => {
         if (blogIdStr) {
             const blogId = parseInt(blogIdStr)
+            const sessionStorageBlog = sessionStorage.getItem(STORAGE_KEY.postId + blogId)
             setGitalkShouldRender(false)
-            getBlogInfo({ number: blogId }).then((res: BlogsItemRes) => {
-                setBlogContent(Object.assign(res, {
-                    created_at_local: parseISODateStr(res.created_at),
-                    updated_at_local: parseISODateStr(res.updated_at),
-                    created_from_now: getDateFromNow(parseISODate(res.created_at), selectedLanguage),
-                    updated_from_now: getDateFromNow(parseISODate(res.updated_at), selectedLanguage),
-                }))
+            if (sessionStorageBlog) {
+                setBlogContent(JSON.parse(sessionStorageBlog)) // get post data from session storage if exists.
                 setHasData(true)
                 setGitalkShouldRender(true)
-            })
+            }
+            else {
+                getBlogInfo({ number: blogId }).then((res: BlogsItemRes) => {
+                    const blogData = Object.assign(res, {
+                        created_at_local: parseISODateStr(res.created_at),
+                        updated_at_local: parseISODateStr(res.updated_at),
+                        created_from_now: getDateFromNow(parseISODate(res.created_at), selectedLanguage),
+                        updated_from_now: getDateFromNow(parseISODate(res.updated_at), selectedLanguage),
+                    })
+                    setBlogContent(blogData)
+                    setHasData(true)
+                    setGitalkShouldRender(true)
+                    sessionStorage.setItem(STORAGE_KEY.postId + blogId, JSON.stringify(blogData))
+                })
+            }
         }
 
         function windowResizeFunc() {
