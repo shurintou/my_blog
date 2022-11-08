@@ -15,6 +15,7 @@ export const ZH_LANGUAGE = {
     loading: '加载中...',
     selectLabel: '请选择感兴趣的分类或标签',
     emptyText: '暂无匹配该条件的文章',
+    searchBarEmptyText: '暂无匹配该条件的分类或标签',
 
 }
 export const JA_LANGUAGE = {
@@ -32,6 +33,7 @@ export const JA_LANGUAGE = {
     loading: '読込中...',
     selectLabel: 'ご興味のあるラベルを選択してください',
     emptyText: '該当するポストがありません',
+    searchBarEmptyText: '該当するカテゴリーやタグがありません',
 
 }
 export const EN_LANGUAGE = {
@@ -49,6 +51,7 @@ export const EN_LANGUAGE = {
     loading: 'loading...',
     selectLabel: 'Please select labels you are interested in',
     emptyText: 'No matching post found',
+    searchBarEmptyText: 'No matching category or tag found',
 
 }
 

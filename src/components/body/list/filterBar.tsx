@@ -1,4 +1,4 @@
-import { useState, useEffect, } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import type { CustomTagProps } from 'rc-select/lib/BaseSelect';
 import { getAllLabels } from '../../../api/label'
 import { Layout, Select, Tag, Typography } from 'antd'
@@ -8,12 +8,15 @@ import { lightOrDark } from '../../../utils/common'
 import { useAppSelector, useAppDispatch } from '../../../redux/hooks'
 import { changeFilterLabel } from '../../../features/filterLabel/filterLabelSlice'
 import { EN_LANGUAGE, JA_LANGUAGE, ZH_LANGUAGE, STORAGE_KEY } from '../../../config/constant'
+import { DefaultOptionType } from 'antd/lib/select';
 const { Text } = Typography
 
 const FilterBar: React.FC<PostListSearchBarProps> = (props) => {
     const [labels, setLabels] = useState<Array<Label>>([])
     const [renderLabels, setRenderLabels] = useState<Array<Label>>([])
     const [placeHolderText, setPlaceHolderText] = useState<string>()
+    const [searchKeyword, setSearchKeyword] = useState<string>()
+    const searchKeywordRef = useRef<string>(searchKeyword ?? '')
     const selectedFilterLabel = useAppSelector((state) => state.filterLabel.value)
     const selectedLanguage = useAppSelector((state) => state.language.value)
     const dispatch = useAppDispatch()
@@ -71,22 +74,25 @@ const FilterBar: React.FC<PostListSearchBarProps> = (props) => {
         props.itemClickableHandler(!flg) // to set list item unclickable when the searchBar is opening.
     }
 
+    const CATEGORY_ID = 2
+    const TAG_ID = 3
+
     useEffect(() => {
         let tempRes: Array<Label> = []
         switch (selectedLanguage) {
             case ZH_LANGUAGE.key:
-                setLabelWithType('category', ZH_LANGUAGE.tagCategoryObj.category, 1, labels, tempRes)
-                setLabelWithType('tag', ZH_LANGUAGE.tagCategoryObj.tag, 2, labels, tempRes)
+                setLabelWithType('category', ZH_LANGUAGE.tagCategoryObj.category, CATEGORY_ID, labels, tempRes)
+                setLabelWithType('tag', ZH_LANGUAGE.tagCategoryObj.tag, TAG_ID, labels, tempRes)
                 setPlaceHolderText(ZH_LANGUAGE.selectLabel)
                 break
             case JA_LANGUAGE.key:
-                setLabelWithType('category', JA_LANGUAGE.tagCategoryObj.category, 1, labels, tempRes)
-                setLabelWithType('tag', JA_LANGUAGE.tagCategoryObj.tag, 2, labels, tempRes)
+                setLabelWithType('category', JA_LANGUAGE.tagCategoryObj.category, CATEGORY_ID, labels, tempRes)
+                setLabelWithType('tag', JA_LANGUAGE.tagCategoryObj.tag, TAG_ID, labels, tempRes)
                 setPlaceHolderText(JA_LANGUAGE.selectLabel)
                 break
             default:
-                setLabelWithType('category', EN_LANGUAGE.tagCategoryObj.category, 1, labels, tempRes)
-                setLabelWithType('tag', EN_LANGUAGE.tagCategoryObj.tag, 2, labels, tempRes)
+                setLabelWithType('category', EN_LANGUAGE.tagCategoryObj.category, CATEGORY_ID, labels, tempRes)
+                setLabelWithType('tag', EN_LANGUAGE.tagCategoryObj.tag, TAG_ID, labels, tempRes)
                 setPlaceHolderText(EN_LANGUAGE.selectLabel)
         }
         setRenderLabels(tempRes)
@@ -109,6 +115,47 @@ const FilterBar: React.FC<PostListSearchBarProps> = (props) => {
         /* eslint-disable-next-line */
     }, [])
 
+    const searchInputHandler = (inputStr: string) => {
+        searchKeywordRef.current = inputStr
+        setSearchKeyword(inputStr)
+    }
+
+    const filterOptionHandler = (input: string, option: DefaultOptionType | undefined) => {
+        if (renderLabels.length > 0) {
+            const matchLabel = renderLabels.find(label => label.id === option?.value ?? '')
+            if (matchLabel) {
+                const splitMatchLabel = matchLabel.name.split(':')
+                if (splitMatchLabel.length === 2) {
+                    return splitMatchLabel[1].toLowerCase().indexOf(input.toLowerCase()) >= 0
+                }
+            }
+        }
+        return false
+    }
+
+    const RenderLabelText: React.FC<{ label: Label }> = ({ label }) => {
+        const renderLabelName = label.name.split(':')[1]
+        const renderLabelColor = lightOrDark(label.color)
+        if (!label.description.startsWith(typeIdentifiedDescription) && searchKeywordRef && searchKeywordRef.current.length > 0) {
+            const searchKeywordLowercase = searchKeywordRef.current.toLowerCase()
+            const matchingStartIndex = renderLabelName.toLowerCase().indexOf(searchKeywordLowercase)
+            const matchingEndIndex = matchingStartIndex + searchKeywordLowercase.length
+            if (matchingStartIndex >= 0) {
+                return (
+                    <>
+                        {/* to highlight the matching word */}
+                        <Text strong style={{ color: renderLabelColor }}>{renderLabelName.substring(0, matchingStartIndex)}</Text>
+                        <Text strong style={{ color: 'black', backgroundColor: 'yellow' }}>{renderLabelName.substring(matchingStartIndex, matchingEndIndex)}</Text>
+                        <Text strong style={{ color: renderLabelColor }}>{renderLabelName.substring(matchingEndIndex)}</Text>
+                    </>
+                )
+            }
+        }
+        return (
+            <Text strong style={{ color: renderLabelColor }}>{renderLabelName}</Text>
+        )
+    }
+
     return (<Layout id="searchBarArea">
         {/* labels.length > 0 is necessary otherwise the tagRender will throw error because labels may be [] or being got when labels.find run. */}
         {renderLabels.length > 0 &&
@@ -122,7 +169,16 @@ const FilterBar: React.FC<PostListSearchBarProps> = (props) => {
                 onDropdownVisibleChange={handleDropDown}
                 value={selectedFilterLabel.map(label => label.id)}
                 virtual={false} /* to solve the scroll penetration issue on mobile. */
-                showSearch={false}
+                showSearch={true}
+                onSearch={searchInputHandler}
+                notFoundContent={
+                    selectedLanguage === ZH_LANGUAGE.key ?
+                        ZH_LANGUAGE.searchBarEmptyText
+                        :
+                        selectedLanguage === JA_LANGUAGE.key ?
+                            JA_LANGUAGE.searchBarEmptyText :
+                            EN_LANGUAGE.searchBarEmptyText
+                }
                 style={{
                     width: '100%',
                     borderStyle: props.renderMode && !props.isLoading ? 'solid' : 'null',
@@ -130,25 +186,28 @@ const FilterBar: React.FC<PostListSearchBarProps> = (props) => {
                     borderRadius: props.renderMode && !props.isLoading ? '6px' : '0px',
                     marginBottom: props.isLoading ? '' : '0.5em'
                 }}
-            >
-                {renderLabels.map(label => (
-                    <Select.Option key={label.id} value={label.id} disabled={label!.description.startsWith(typeIdentifiedDescription)}>
-                        {!label!.description.startsWith(typeIdentifiedDescription) ? <Tag
-                            color={label?.name.startsWith('category') ? 'cyan' : '#' + label!.color}
-                            style={{
-                                marginRight: 3,
-                                color: lightOrDark(label!.color),
-                                borderRadius: '1em'
-                            }}
-                        >
-                            <Text strong style={{ color: lightOrDark(label!.color) }}>{label!.name.split(':')[1]}</Text>
-                        </Tag>
-                            :
-                            <Text strong>{label!.name}</Text>
-                        }
-
-                    </Select.Option>
-                ))}
+                filterOption={(input, option) => filterOptionHandler(input, option)}>
+                {
+                    renderLabels.map(label => (
+                        <Select.Option key={label.id} value={label.id} disabled={label.description.startsWith(typeIdentifiedDescription)}>
+                            {
+                                !label.description.startsWith(typeIdentifiedDescription) ?
+                                    <Tag
+                                        color={label.name.startsWith('category') ? 'cyan' : '#' + label.color}
+                                        style={{
+                                            marginRight: 3,
+                                            color: lightOrDark(label.color),
+                                            borderRadius: '1em',
+                                        }}
+                                    >
+                                        <RenderLabelText label={label} />
+                                    </Tag>
+                                    :
+                                    <Text strong>{label.name}</Text>
+                            }
+                        </Select.Option>
+                    ))
+                }
             </Select>
         }
     </Layout>)
