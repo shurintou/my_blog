@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import type { CustomTagProps } from 'rc-select/lib/BaseSelect';
+import type { CustomTagProps } from 'rc-select/lib/BaseSelect'
 import { getAllLabels } from '../../../api/label'
 import { Layout, Select, Tag, Typography } from 'antd'
 import { PostListSearchBarProps, Label } from '../../../types/index'
@@ -8,7 +8,8 @@ import { lightOrDark } from '../../../utils/common'
 import { useAppSelector, useAppDispatch } from '../../../redux/hooks'
 import { changeFilterLabel } from '../../../features/filterLabel/filterLabelSlice'
 import { EN_LANGUAGE, JA_LANGUAGE, ZH_LANGUAGE, STORAGE_KEY } from '../../../config/constant'
-import { DefaultOptionType } from 'antd/lib/select';
+import { DefaultOptionType } from 'antd/lib/select'
+import { mobileAndTabletCheck } from '../../../utils/userAgent'
 const { Text } = Typography
 
 const FilterBar: React.FC<PostListSearchBarProps> = (props) => {
@@ -34,6 +35,11 @@ const FilterBar: React.FC<PostListSearchBarProps> = (props) => {
             }
         })
         setSelectedFilterLabel(labelArray)
+        /* to hide the keyboard when any label is selected, to solve the issue that users cannot see the result of search bar filtering on mobile end.  */
+        const selectEl: HTMLElement | null = document.querySelector('#filterBarSelect')
+        if (selectEl !== null && mobileAndTabletCheck()) {
+            selectEl.blur()
+        }
     }
 
     const tagRender = (props: CustomTagProps) => {
@@ -160,6 +166,7 @@ const FilterBar: React.FC<PostListSearchBarProps> = (props) => {
         {/* labels.length > 0 is necessary otherwise the tagRender will throw error because labels may be [] or being got when labels.find run. */}
         {renderLabels.length > 0 &&
             <Select
+                id='filterBarSelect'
                 mode="multiple"
                 allowClear
                 showArrow
