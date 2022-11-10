@@ -17,6 +17,7 @@ const FilterBar: React.FC<PostListSearchBarProps> = (props) => {
     const [renderLabels, setRenderLabels] = useState<Array<Label>>([])
     const [placeHolderText, setPlaceHolderText] = useState<string>()
     const [searchKeyword, setSearchKeyword] = useState<string>()
+    const [dropdownOpen, setDropdownOpen] = useState<boolean>(false)
     const searchKeywordRef = useRef<string>(searchKeyword ?? '')
     const selectedFilterLabel = useAppSelector((state) => state.filterLabel.value)
     const selectedLanguage = useAppSelector((state) => state.language.value)
@@ -40,6 +41,7 @@ const FilterBar: React.FC<PostListSearchBarProps> = (props) => {
         if (selectEl !== null && mobileAndTabletCheck()) {
             selectEl.blur()
         }
+        setDropdownOpen(false)
         searchInputHandler('') // to clear the searchKeyword when any labels selected.
     }
 
@@ -79,6 +81,7 @@ const FilterBar: React.FC<PostListSearchBarProps> = (props) => {
 
     const handleDropDown = (flg: boolean) => {
         props.itemClickableHandler(!flg) // to set list item unclickable when the searchBar is opening.
+        setDropdownOpen(flg)
     }
 
     const CATEGORY_ID = 2
@@ -163,7 +166,7 @@ const FilterBar: React.FC<PostListSearchBarProps> = (props) => {
         )
     }
 
-    return (<Layout id="searchBarArea">
+    return (<Layout>
         {/* labels.length > 0 is necessary otherwise the tagRender will throw error because labels may be [] or being got when labels.find run. */}
         {renderLabels.length > 0 &&
             <Select
@@ -179,6 +182,7 @@ const FilterBar: React.FC<PostListSearchBarProps> = (props) => {
                 virtual={false} /* to solve the scroll penetration issue on mobile. */
                 showSearch={true}
                 onSearch={searchInputHandler}
+                open={dropdownOpen} /* to handle the drop down open/close manually to solve the display issue on mobile end. */
                 notFoundContent={
                     selectedLanguage === ZH_LANGUAGE.key ?
                         ZH_LANGUAGE.searchBarEmptyText
