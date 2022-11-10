@@ -40,6 +40,7 @@ const FilterBar: React.FC<PostListSearchBarProps> = (props) => {
         if (selectEl !== null && mobileAndTabletCheck()) {
             selectEl.blur()
         }
+        searchInputHandler('') // to clear the searchKeyword when any labels selected.
     }
 
     const tagRender = (props: CustomTagProps) => {
