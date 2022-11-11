@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useSearchParams } from "react-router-dom"
 import { List, Layout, BackTop } from 'antd'
 import PostListPagination from './pagination'
@@ -17,7 +17,7 @@ const PostList = () => {
     const [data, setData] = useState<Array<PostListItem>>([])
     const [totalPostsNum, setTotalPostsNum] = useState(0)
     const [pcRenderMode, setPcRenderMode] = useState(true)
-    const [itemClickable, setItemClickable] = useState(true)
+    const itemClickableRef = useRef(true)
     const [loading, setLoading] = useState(true)
     const selectedLanguage = useAppSelector((state) => state.language.value)
     const selectedFilterLabel = useAppSelector((state) => state.filterLabel.value)
@@ -64,7 +64,7 @@ const PostList = () => {
                         updated_at_local: '', //postListItem doesn't use this value so set it ''.
                         created_from_now: getDateFromNow(parseISODate(resItem.created_at), selectedLanguage),
                         updated_from_now: '', //postListItem doesn't use this value so set it ''.,
-                        clickable: itemClickable,
+                        clickable: itemClickableRef.current, // use Ref to avoid clickable to be set as false initially. 
                     })
                     return newData
                 })
@@ -74,10 +74,11 @@ const PostList = () => {
             .catch(() => { })
     }
 
+    itemClickableRef.current = true
     const setItemClickableRef = (flg: boolean) => {
         setTimeout(() => {
-            setItemClickable(flg)
-            const newDataList = data
+            itemClickableRef.current = flg
+            const newDataList = data.filter(() => true) //create a new Array otherwise the React will not re-render.
             newDataList.forEach(item => item.clickable = flg)
             setData(newDataList)
         }, 200) // 200 delay to avoid the click action still work even the clickable flg turn to be false.
