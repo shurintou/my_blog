@@ -7,6 +7,7 @@ import config from '../../../config/config'
 import { useAppSelector, useAppDispatch } from '../../../redux/hooks'
 import { changeFilterLabel } from '../../../features/filterLabel/filterLabelSlice'
 import { ZH_LANGUAGE, JA_LANGUAGE, EN_LANGUAGE, ROUTER_NAME } from '../../../config/constant'
+import { FunnelPlotOutlined } from '@ant-design/icons'
 
 const { Text } = Typography
 
@@ -102,12 +103,14 @@ const LabelsCompo: React.FC<LabelsCompoProps> = (props) => {
                 style={{
                     borderRadius: '1em',
                     cursor: routerAtListPage ? 'pointer' : 'default',
+                    color: isHexadecimalColor ? lightOrDark(label.color) : '#000000',
                     display: 'inline-block' // to avoid the tag display css turn to be none when closed.
                 }}
                 color={(isHexadecimalColor ? '#' : '') + label.color}
                 onClick={() => clickLabelHandler(label)}
                 closable={closableHandler(label)}
                 onClose={() => { removeSelectedFilterLabel(label) }}
+                icon={routerAtListPage && selectedFilterLabel.some(selectedLabel => selectedLabel.id === label.id) ? <FunnelPlotOutlined /> : null}
             >
                 <Text strong style={{ color: isHexadecimalColor ? lightOrDark(label.color) : '' }}>
                     {label.name.split(':')[1]}

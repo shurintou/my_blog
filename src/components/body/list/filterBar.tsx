@@ -10,6 +10,8 @@ import { changeFilterLabel } from '../../../features/filterLabel/filterLabelSlic
 import { EN_LANGUAGE, JA_LANGUAGE, ZH_LANGUAGE, STORAGE_KEY } from '../../../config/constant'
 import { DefaultOptionType } from 'antd/lib/select'
 import { mobileAndTabletCheck } from '../../../utils/userAgent'
+import { FunnelPlotOutlined } from '@ant-design/icons'
+
 const { Text } = Typography
 
 const FilterBar: React.FC<PostListSearchBarProps> = (props) => {
@@ -55,6 +57,7 @@ const FilterBar: React.FC<PostListSearchBarProps> = (props) => {
         return (
             <Tag
                 color={label?.name.startsWith('category') ? 'cyan' : '#' + label?.color}
+                icon={<FunnelPlotOutlined />}
                 onMouseDown={onPreventMouseDown}
                 closable={closable}
                 onClose={onClose}
@@ -211,6 +214,7 @@ const FilterBar: React.FC<PostListSearchBarProps> = (props) => {
                                             color: lightOrDark(label.color),
                                             borderRadius: '1em',
                                         }}
+                                        icon={selectedFilterLabel.some(selectedLabel => selectedLabel.id === label.id) ? <FunnelPlotOutlined /> : null}
                                     >
                                         <RenderLabelText label={label} />
                                     </Tag>
