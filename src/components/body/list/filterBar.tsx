@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import type { CustomTagProps } from 'rc-select/lib/BaseSelect'
+import { useSearchParams } from "react-router-dom"
 import { getAllLabels } from '../../../api/label'
 import { Layout, Select, Tag, Typography } from 'antd'
 import { PostListSearchBarProps, Label } from '../../../types/index'
@@ -7,7 +8,7 @@ import config from '../../../config/config'
 import { lightOrDark } from '../../../utils/common'
 import { useAppSelector, useAppDispatch } from '../../../redux/hooks'
 import { changeFilterLabel } from '../../../features/filterLabel/filterLabelSlice'
-import { EN_LANGUAGE, JA_LANGUAGE, ZH_LANGUAGE, STORAGE_KEY } from '../../../config/constant'
+import { EN_LANGUAGE, JA_LANGUAGE, ZH_LANGUAGE, STORAGE_KEY, ROUTER_NAME, SYMBOL } from '../../../config/constant'
 import { DefaultOptionType } from 'antd/lib/select'
 import { mobileAndTabletCheck } from '../../../utils/userAgent'
 import { FunnelPlotOutlined } from '@ant-design/icons'
@@ -15,6 +16,7 @@ import { FunnelPlotOutlined } from '@ant-design/icons'
 const { Text } = Typography
 
 const FilterBar: React.FC<PostListSearchBarProps> = (props) => {
+    const [searchParams,] = useSearchParams()
     const [labels, setLabels] = useState<Array<Label>>([])
     const [renderLabels, setRenderLabels] = useState<Array<Label>>([])
     const [placeHolderText, setPlaceHolderText] = useState<string>()
@@ -24,6 +26,24 @@ const FilterBar: React.FC<PostListSearchBarProps> = (props) => {
     const selectedFilterLabel = useAppSelector((state) => state.filterLabel.value)
     const selectedLanguage = useAppSelector((state) => state.language.value)
     const dispatch = useAppDispatch()
+
+    useEffect(() => {
+        const labelIds = searchParams.get(ROUTER_NAME.props.label)?.split(SYMBOL.labelIdSpliter)
+        // to solve the router push state twice issue, check the selectedFilterLabel and searchParams, if they have the same labels, not to setSelectedFilterLabel
+        if (
+            (labelIds === undefined && selectedFilterLabel.length !== 0)
+            ||
+            (labelIds && labelIds.length !== selectedFilterLabel.length)
+            ||
+            (labelIds && labelIds.some(labelId => !selectedFilterLabel.some(selectedLabel => selectedLabel.id === parseInt(labelId))))
+            ||
+            selectedFilterLabel.some(selectedLabel => !(labelIds && labelIds.some(labelId => selectedLabel.id === parseInt(labelId))))
+        ) {
+            const labelList = labels.filter(label => (labelIds && labelIds.some(labelId => parseInt(labelId) === label.id)))
+            setSelectedFilterLabel(labelList)
+        }
+        /* eslint-disable-next-line */
+    }, [searchParams])
 
     const setSelectedFilterLabel = (newList: Array<Label>) => {
         dispatch(changeFilterLabel(newList))

@@ -62,6 +62,7 @@ export const ROUTER_NAME = {
     about: '/about',
     props: {
         page: 'page',
+        label: 'label',
     }
 }
 
@@ -71,4 +72,8 @@ export const STORAGE_KEY = {
     htmlLang: 'HTML_LANG',
     backSearchParams: 'BACK_SEARCH_PARAMS',
     postId: 'POST_ID_',
+}
+
+export const SYMBOL = {
+    labelIdSpliter: '+',
 }

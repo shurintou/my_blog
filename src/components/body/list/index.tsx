@@ -4,13 +4,13 @@ import { List, Layout, BackTop } from 'antd'
 import PostListPagination from './pagination'
 import { searchPosts } from '../../../api/post'
 import { debounce } from '../../../utils/common'
-import { PostsItemRes, PostListItem, PostSearchResponse, PostSearchRequestParam } from '../../../types/index'
+import { PostsItemRes, PostListItem, PostSearchResponse, PostSearchRequestParam, Label } from '../../../types/index'
 import ListItem from './item'
 import FilterBar from './filterBar'
-import { parseISODate, parseISODateStr, getDateFromNow, transferLabelWithSpaceByURLEncode } from '../../../utils/formatter'
+import { parseISODate, parseISODateStr, getDateFromNow, transferSelectedFilterLabelToQueryString, transferSelectedFilterLabelId } from '../../../utils/formatter'
 import config from '../../../config/config'
 import { useAppSelector } from '../../../redux/hooks'
-import { EN_LANGUAGE, JA_LANGUAGE, ZH_LANGUAGE, ROUTER_NAME } from '../../../config/constant'
+import { EN_LANGUAGE, JA_LANGUAGE, ZH_LANGUAGE, ROUTER_NAME, SYMBOL, STORAGE_KEY } from '../../../config/constant'
 
 const PostList = () => {
     const [searchParams, setSearchParams] = useSearchParams()
@@ -49,9 +49,7 @@ const PostList = () => {
                 languageQuery = EN_LANGUAGE.upperCase
         }
         const languageQueryStr: string = 'label:language:' + languageQuery
-        let categoryQueryStr: string = ''
-        selectedFilterLabel.forEach(category => categoryQueryStr += '+label:' + transferLabelWithSpaceByURLEncode(category.name))
-        searchPosts({ page: searchPostListParams.page, per_page: postListItemCountPerPage, query: languageQueryStr + categoryQueryStr })
+        searchPosts({ page: searchPostListParams.page, per_page: postListItemCountPerPage, query: languageQueryStr + searchPostListParams.query })
             .then((res: PostSearchResponse) => {
                 const resItemList = res.items
                 const newDataListLength = resItemList.length
@@ -85,13 +83,41 @@ const PostList = () => {
     }
 
     useEffect(() => {
-        loadPostListData({ page: parseInt(searchParams.get(ROUTER_NAME.props.page) || "1") })
+        const labelIds = searchParams.get(ROUTER_NAME.props.label)?.split(SYMBOL.labelIdSpliter)
+        if (labelIds) {
+            const filterLabelList = sessionStorage.getItem(STORAGE_KEY.filterLabelList)
+            if (filterLabelList) {
+                const selectedFilterLabelList = JSON.parse(filterLabelList)
+                const labelList = selectedFilterLabelList.filter((label: Label) => labelIds.some(labelId => parseInt(labelId) === label.id))
+                loadPostListData({ page: parseInt(searchParams.get(ROUTER_NAME.props.page) || "1"), query: transferSelectedFilterLabelToQueryString(labelList) })
+
+            }
+        }
+        else {
+            loadPostListData({ page: parseInt(searchParams.get(ROUTER_NAME.props.page) || "1"), query: '' })
+        }
         /* eslint-disable-next-line */
     }, [searchParams])
 
     useEffect(() => {
-        loadPostListData({ page: 1 })
-        setSearchParams({ [ROUTER_NAME.props.page]: "1" })
+        const labelIds = searchParams.get(ROUTER_NAME.props.label)?.split(SYMBOL.labelIdSpliter)
+        // to solve the router push state twice issue, check the selectedFilterLabel and searchParams, if they have the same labels, not to setSearchParams
+        if (
+            (labelIds === undefined && selectedFilterLabel.length !== 0)
+            ||
+            (labelIds && labelIds.length !== selectedFilterLabel.length)
+            ||
+            (labelIds && labelIds.some(labelId => !selectedFilterLabel.some(selectedLabel => selectedLabel.id === parseInt(labelId))))
+            ||
+            selectedFilterLabel.some(selectedLabel => !(labelIds && labelIds.some(labelId => selectedLabel.id === parseInt(labelId))))
+        ) {
+            let routerObj = { [ROUTER_NAME.props.page]: "1" }
+            const selectedFilterLabelStr = transferSelectedFilterLabelId(selectedFilterLabel)
+            if (selectedFilterLabelStr.length > 0) {
+                routerObj[ROUTER_NAME.props.label] = selectedFilterLabelStr // if there arent' any label being selected, not show label prop in url.
+            }
+            setSearchParams(routerObj)
+        }
         /* eslint-disable-next-line */
     }, [selectedLanguage, selectedFilterLabel])
 

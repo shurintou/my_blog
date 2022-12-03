@@ -3,7 +3,8 @@ import moment from 'moment'
 import 'moment/locale/ja'
 import 'moment/locale/en-gb'
 import 'moment/locale/zh-cn'
-import { EN_LANGUAGE, ZH_LANGUAGE, JA_LANGUAGE } from '../config/constant'
+import { EN_LANGUAGE, ZH_LANGUAGE, JA_LANGUAGE, SYMBOL } from '../config/constant'
+import { Label } from '../types/index'
 
 export const parseISODate = function (date: string) {
     return parseISO(date)
@@ -46,4 +47,24 @@ export const transferLabelWithSpaceByURLEncode = (str: string) => {
         return '%22' + resStrList[0] + ':' + resStrList[1] + '%22'
     }
     return str
+}
+
+export const transferSelectedFilterLabelToQueryString = (labelList: Label[]) => {
+    let categoryQueryStr: string = ''
+    if (labelList.length > 0) {
+        labelList.forEach(category => categoryQueryStr += '+label:' + transferLabelWithSpaceByURLEncode(category.name))
+    }
+    return categoryQueryStr
+}
+
+export const transferSelectedFilterLabelId = (labelList: Label[]) => {
+    let categoryQueryStr: string = ''
+    let i = 0
+    if (labelList.length > 0) {
+        labelList.forEach(category => {
+            categoryQueryStr += (i === 0 ? '' : SYMBOL.labelIdSpliter) + (category.id)
+            i++
+        })
+    }
+    return categoryQueryStr
 }
