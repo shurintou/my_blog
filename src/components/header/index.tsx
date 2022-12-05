@@ -62,6 +62,7 @@ const BlogHeader: React.FC<{}> = () => {
 
     const postClickHandler = () => {
         navigator(firstPageUrl)
+        clearSelectedFilterLabel() // to fix the issue that when click post button at post page, the selectedFilterLabel will remain.
         if (document.location.href.indexOf(firstPageUrl) > 0) scrollToTop()
     }
 
