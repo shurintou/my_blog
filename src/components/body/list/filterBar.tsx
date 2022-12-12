@@ -132,9 +132,9 @@ const FilterBar: React.FC<PostListSearchBarProps> = (props) => {
     }, [labels, selectedLanguage])
 
     useEffect(() => {
-        const filterLabelList = sessionStorage.getItem(STORAGE_KEY.filterLabelList)
-        if (filterLabelList) {
-            setLabels(JSON.parse(filterLabelList))
+        const filterLabelListStr = sessionStorage.getItem(STORAGE_KEY.filterLabelList)
+        if (filterLabelListStr) {
+            setLabels(JSON.parse(filterLabelListStr))
         }
         else {
             getAllLabels().then((res: Array<Label>) => {

@@ -85,10 +85,10 @@ const PostList = () => {
     useEffect(() => {
         const labelIds = searchParams.get(ROUTER_NAME.props.label)?.split(SYMBOL.labelIdSpliter)
         if (labelIds) {
-            const filterLabelList = sessionStorage.getItem(STORAGE_KEY.filterLabelList)
-            if (filterLabelList) {
-                const selectedFilterLabelList = JSON.parse(filterLabelList)
-                const labelList = selectedFilterLabelList.filter((label: Label) => labelIds.some(labelId => parseInt(labelId) === label.id))
+            const filterLabelListStr = sessionStorage.getItem(STORAGE_KEY.filterLabelList)
+            if (filterLabelListStr) {
+                const filterLabelList = JSON.parse(filterLabelListStr)
+                const labelList = filterLabelList.filter((label: Label) => labelIds.some(labelId => parseInt(labelId) === label.id))
                 loadPostListData({ page: parseInt(searchParams.get(ROUTER_NAME.props.page) || "1"), query: transferSelectedFilterLabelToQueryString(labelList) })
 
             }
