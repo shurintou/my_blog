@@ -5,7 +5,7 @@ import { Pagination, Layout } from 'antd'
 import config from '../../../config/config'
 import { useAppSelector } from '../../../redux/hooks'
 import { JA_LANGUAGE, ZH_LANGUAGE, ROUTER_NAME } from '../../../config/constant'
-import { transferSelectedFilterLabelId } from '../../../utils/formatter'
+import { transferSearchParamsStr } from '../../../utils/formatter'
 
 const PostListPaginationComp: React.FC<PostListPaginationrProps> = (props) => {
     const [searchParams, setSearchParams] = useSearchParams()
@@ -13,7 +13,7 @@ const PostListPaginationComp: React.FC<PostListPaginationrProps> = (props) => {
     const selectedFilterLabel = useAppSelector((state) => state.filterLabel.value)
     const navigateToPostsPage = (page: number) => {
         let routerObj = { [ROUTER_NAME.props.page]: page.toString() }
-        const selectedFilterLabelStr = transferSelectedFilterLabelId(selectedFilterLabel)
+        const selectedFilterLabelStr = transferSearchParamsStr(selectedFilterLabel.map(label => label.id))
         if (selectedFilterLabelStr.length > 0) {
             routerObj[ROUTER_NAME.props.label] = selectedFilterLabelStr // if there arent' any label being selected, not show label prop in url.
         }

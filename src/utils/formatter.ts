@@ -57,14 +57,14 @@ export const transferSelectedFilterLabelToQueryString = (labelList: Label[]) => 
     return categoryQueryStr
 }
 
-export const transferSelectedFilterLabelId = (labelList: Label[]) => {
-    let categoryQueryStr: string = ''
+export const transferSearchParamsStr = (itemList: Array<number | string>) => {
+    let searchParamsStr: string = ''
     let i = 0
-    if (labelList.length > 0) {
-        labelList.forEach(category => {
-            categoryQueryStr += (i === 0 ? '' : SYMBOL.labelIdSpliter) + (category.id)
+    if (itemList.length > 0) {
+        itemList.forEach(item => {
+            searchParamsStr += (i === 0 ? '' : SYMBOL.searchParamsSpliter) + (item)
             i++
         })
     }
-    return categoryQueryStr
+    return searchParamsStr
 }

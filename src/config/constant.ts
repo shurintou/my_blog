@@ -75,5 +75,5 @@ export const STORAGE_KEY = {
 }
 
 export const SYMBOL = {
-    labelIdSpliter: '+',
+    searchParamsSpliter: '+',
 }
