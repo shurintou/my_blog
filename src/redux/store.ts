@@ -1,11 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit'
 import languageReducer from '../features/language/languageSlice'
 import filterLabelReducer from '../features/filterLabel/filterLabelSlice'
+import contentLanguageReducer from '../features/contentLanguage/contentLanguageSlice'
 
 const store = configureStore({
     reducer: {
         language: languageReducer,
         filterLabel: filterLabelReducer,
+        contentLanguage: contentLanguageReducer,
     },
 })
 

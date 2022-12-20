@@ -183,3 +183,7 @@ export interface PostListSearchBarProps {
     itemClickableHandler: Function,
 }
 
+export interface contentLanguageListState {
+    value: Array<string>
+}
+
