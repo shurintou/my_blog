@@ -7,7 +7,7 @@ import { debounce } from '../../../utils/common'
 import { PostsItemRes, PostListItem, PostSearchResponse, PostSearchRequestParam, Label } from '../../../types/index'
 import ListItem from './item'
 import FilterBar from './filterBar'
-import { parseISODate, parseISODateStr, getDateFromNow, transferSelectedFilterLabelToQueryString, transferSearchParamsStr } from '../../../utils/formatter'
+import { parseISODate, parseISODateStr, getDateFromNow, transferSelectedFilterLabelToQueryString, transferSearchParamsStr, transferContentLanguageToQueryString } from '../../../utils/formatter'
 import config from '../../../config/config'
 import { useAppSelector } from '../../../redux/hooks'
 import { EN_LANGUAGE, JA_LANGUAGE, ZH_LANGUAGE, ROUTER_NAME, SYMBOL, STORAGE_KEY } from '../../../config/constant'
@@ -21,6 +21,7 @@ const PostList = () => {
     const [loading, setLoading] = useState(true)
     const selectedLanguage = useAppSelector((state) => state.language.value)
     const selectedFilterLabel = useAppSelector((state) => state.filterLabel.value)
+    const checkedContentLanguage = useAppSelector((state) => state.contentLanguage.value)
 
     useEffect(() => {
         function windowResizeFunc() {
@@ -37,19 +38,7 @@ const PostList = () => {
     const { postProps: { postListItemCountPerPage } } = config
     const loadPostListData = (searchPostListParams: PostSearchRequestParam) => {
         setLoading(true)
-        let languageQuery: string
-        switch (selectedLanguage) {
-            case ZH_LANGUAGE.key:
-                languageQuery = ZH_LANGUAGE.upperCase
-                break
-            case JA_LANGUAGE.key:
-                languageQuery = JA_LANGUAGE.upperCase
-                break
-            default:
-                languageQuery = EN_LANGUAGE.upperCase
-        }
-        const languageQueryStr: string = 'label:language:' + languageQuery
-        searchPosts({ page: searchPostListParams.page, per_page: postListItemCountPerPage, query: languageQueryStr + searchPostListParams.query })
+        searchPosts({ page: searchPostListParams.page, per_page: postListItemCountPerPage, query: searchPostListParams.query })
             .then((res: PostSearchResponse) => {
                 const resItemList = res.items
                 const newDataListLength = resItemList.length
@@ -84,17 +73,22 @@ const PostList = () => {
 
     useEffect(() => {
         const labelIds = searchParams.get(ROUTER_NAME.props.label)?.split(SYMBOL.searchParamsSpliter)
+        const contentLanguageKeys = searchParams.get(ROUTER_NAME.props.language)?.split(SYMBOL.searchParamsSpliter)
+        let contentLanguageQuery = ''
+        if (contentLanguageKeys) {
+            contentLanguageQuery = transferContentLanguageToQueryString(contentLanguageKeys)
+        }
         if (labelIds) {
             const filterLabelListStr = sessionStorage.getItem(STORAGE_KEY.filterLabelList)
             if (filterLabelListStr) {
                 const filterLabelList = JSON.parse(filterLabelListStr)
                 const labelList = filterLabelList.filter((label: Label) => labelIds.some(labelId => parseInt(labelId) === label.id))
-                loadPostListData({ page: parseInt(searchParams.get(ROUTER_NAME.props.page) || "1"), query: transferSelectedFilterLabelToQueryString(labelList) })
+                loadPostListData({ page: parseInt(searchParams.get(ROUTER_NAME.props.page) || "1"), query: contentLanguageQuery + transferSelectedFilterLabelToQueryString(labelList) })
 
             }
         }
         else {
-            loadPostListData({ page: parseInt(searchParams.get(ROUTER_NAME.props.page) || "1"), query: '' })
+            loadPostListData({ page: parseInt(searchParams.get(ROUTER_NAME.props.page) || "1"), query: contentLanguageQuery })
         }
         /* eslint-disable-next-line */
     }, [searchParams])
@@ -116,10 +110,35 @@ const PostList = () => {
             if (selectedFilterLabelStr.length > 0) {
                 routerObj[ROUTER_NAME.props.label] = selectedFilterLabelStr // if there arent' any label being selected, not show label prop in url.
             }
+            const contentLanguageKeys = searchParams.get(ROUTER_NAME.props.language)?.split(SYMBOL.searchParamsSpliter)
+            if (contentLanguageKeys) {
+                const checkedContentLanguageStr = transferSearchParamsStr(contentLanguageKeys)
+                routerObj[ROUTER_NAME.props.language] = checkedContentLanguageStr
+            }
             setSearchParams(routerObj)
         }
         /* eslint-disable-next-line */
     }, [selectedLanguage, selectedFilterLabel])
+
+    useEffect(() => {
+        const checkedContentLanguageStr = transferSearchParamsStr(checkedContentLanguage)
+        const selectedFilterLabelStr = transferSearchParamsStr(selectedFilterLabel.map(label => label.id))
+        let routerObj = { [ROUTER_NAME.props.page]: "1" }
+        let shouldSetSearchParams = false
+        if (selectedFilterLabelStr.length > 0) {
+            shouldSetSearchParams = true
+            routerObj[ROUTER_NAME.props.label] = selectedFilterLabelStr // if there arent' any label being selected, not show label prop in url.
+        }
+        if (checkedContentLanguageStr.length > 0) {
+            shouldSetSearchParams = true
+            routerObj[ROUTER_NAME.props.language] = checkedContentLanguageStr // if there arent' any label being selected, not show label prop in url.
+        }
+        if (shouldSetSearchParams) {
+            setSearchParams(routerObj)
+        }
+        /* eslint-disable-next-line */
+    }, [checkedContentLanguage])
+
 
     useEffect(() => {
         window.scroll(0, 0)

@@ -2,18 +2,21 @@ import { useState, useEffect, useRef } from 'react'
 import type { CustomTagProps } from 'rc-select/lib/BaseSelect'
 import { useSearchParams } from "react-router-dom"
 import { getAllLabels } from '../../../api/label'
-import { Layout, Select, Tag, Typography } from 'antd'
+import { Layout, Select, Tag, Typography, Divider, Space, Checkbox, } from 'antd'
 import { PostListSearchBarProps, Label } from '../../../types/index'
 import config from '../../../config/config'
 import { lightOrDark } from '../../../utils/common'
 import { useAppSelector, useAppDispatch } from '../../../redux/hooks'
 import { changeFilterLabel } from '../../../features/filterLabel/filterLabelSlice'
+import { changeContentLanguage } from '../../../features/contentLanguage/contentLanguageSlice'
 import { EN_LANGUAGE, JA_LANGUAGE, ZH_LANGUAGE, STORAGE_KEY, ROUTER_NAME, SYMBOL } from '../../../config/constant'
 import { DefaultOptionType } from 'antd/lib/select'
 import { mobileAndTabletCheck } from '../../../utils/userAgent'
 import { FunnelPlotOutlined } from '@ant-design/icons'
+import type { CheckboxOptionType, CheckboxValueType } from 'antd/es/checkbox/Group'
 
 const { Text } = Typography
+const CheckboxGroup = Checkbox.Group
 
 const FilterBar: React.FC<PostListSearchBarProps> = (props) => {
     const [searchParams,] = useSearchParams()
@@ -25,10 +28,13 @@ const FilterBar: React.FC<PostListSearchBarProps> = (props) => {
     const searchKeywordRef = useRef<string>(searchKeyword ?? '')
     const selectedFilterLabel = useAppSelector((state) => state.filterLabel.value)
     const selectedLanguage = useAppSelector((state) => state.language.value)
+    const checkedContentLanguage = useAppSelector((state) => state.contentLanguage.value)
     const dispatch = useAppDispatch()
 
     useEffect(() => {
         const labelIds = searchParams.get(ROUTER_NAME.props.label)?.split(SYMBOL.searchParamsSpliter)
+        const contentLanguageKeys = searchParams.get(ROUTER_NAME.props.language)?.split(SYMBOL.searchParamsSpliter)
+
         // to solve the router push state twice issue, check the selectedFilterLabel and searchParams, if they have the same labels, not to setSelectedFilterLabel
         if (
             (labelIds === undefined && selectedFilterLabel.length !== 0)
@@ -41,6 +47,18 @@ const FilterBar: React.FC<PostListSearchBarProps> = (props) => {
         ) {
             const labelList = labels.filter(label => (labelIds && labelIds.some(labelId => parseInt(labelId) === label.id)))
             setSelectedFilterLabel(labelList)
+        }
+
+        if (
+            contentLanguageKeys && (
+                (contentLanguageKeys.length !== checkedContentLanguage.length)
+                ||
+                (contentLanguageKeys.some(key => !checkedContentLanguage.some(checkedContentLanguage => checkedContentLanguage === key)))
+                ||
+                checkedContentLanguage.some(checkedContentLanguage => !(contentLanguageKeys.some(key => checkedContentLanguage === key)))
+            )
+        ) {
+            dispatch(changeContentLanguage(contentLanguageKeys))
         }
         /* eslint-disable-next-line */
     }, [searchParams])
@@ -140,8 +158,10 @@ const FilterBar: React.FC<PostListSearchBarProps> = (props) => {
             getAllLabels().then((res: Array<Label>) => {
                 if (res && res.length > 0) {
                     const newfilterLabelList = res.filter((label: Label) => !label.name.startsWith('language'))
+                    // const newLanguageLabelList = res.filter((label: Label) => label.name.startsWith('language'))
                     setLabels(newfilterLabelList)
                     sessionStorage.setItem(STORAGE_KEY.filterLabelList, JSON.stringify(newfilterLabelList))
+                    // sessionStorage.setItem(STORAGE_KEY.languageLabelList, JSON.stringify(newLanguageLabelList))
                 }
             })
         }
@@ -189,6 +209,23 @@ const FilterBar: React.FC<PostListSearchBarProps> = (props) => {
         )
     }
 
+    const languageOptions: Array<CheckboxOptionType> = [
+        { value: EN_LANGUAGE.key, disabled: checkedContentLanguage.length === 1 && checkedContentLanguage.includes(EN_LANGUAGE.key), label: selectedLanguage === ZH_LANGUAGE.key ? ZH_LANGUAGE.checkBoxOptionObj['en'] : selectedLanguage === JA_LANGUAGE.key ? JA_LANGUAGE.checkBoxOptionObj['en'] : EN_LANGUAGE.checkBoxOptionObj['en'] },
+        { value: JA_LANGUAGE.key, disabled: checkedContentLanguage.length === 1 && checkedContentLanguage.includes(JA_LANGUAGE.key), label: selectedLanguage === ZH_LANGUAGE.key ? ZH_LANGUAGE.checkBoxOptionObj['ja'] : selectedLanguage === JA_LANGUAGE.key ? JA_LANGUAGE.checkBoxOptionObj['ja'] : EN_LANGUAGE.checkBoxOptionObj['ja'] },
+        { value: ZH_LANGUAGE.key, disabled: checkedContentLanguage.length === 1 && checkedContentLanguage.includes(ZH_LANGUAGE.key), label: selectedLanguage === ZH_LANGUAGE.key ? ZH_LANGUAGE.checkBoxOptionObj['zh'] : selectedLanguage === JA_LANGUAGE.key ? JA_LANGUAGE.checkBoxOptionObj['zh'] : EN_LANGUAGE.checkBoxOptionObj['zh'] },
+    ]
+
+    const onChange = (list: Array<CheckboxValueType>) => {
+        if (list.length === 0) { // if nothing checked, do nothing
+            return
+        }
+        if (languageOptions) {
+            const checkedLanguageLabelsList = languageOptions.filter(languageLabel => list.includes(languageLabel.value))
+            const checkedOptionList = checkedLanguageLabelsList.map(option => option.value)
+            dispatch(changeContentLanguage(checkedOptionList.map(checkedOption => checkedOption.toString())))
+        }
+    }
+
     return (<Layout>
         {/* labels.length > 0 is necessary otherwise the tagRender will throw error because labels may be [] or being got when labels.find run. */}
         {renderLabels.length > 0 &&
@@ -221,7 +258,25 @@ const FilterBar: React.FC<PostListSearchBarProps> = (props) => {
                     borderRadius: props.renderMode && !props.isLoading ? '6px' : '0px',
                     marginBottom: props.isLoading ? '' : '0.5em'
                 }}
-                filterOption={(input, option) => filterOptionHandler(input, option)}>
+                filterOption={(input, option) => filterOptionHandler(input, option)}
+                dropdownRender={(menu) => (
+                    <>
+                        {menu}
+                        <Divider style={{ margin: '8px 0' }} />
+                        <Space style={{ padding: '0 8px 4px' }}>
+                            <Text strong>{
+                                selectedLanguage === ZH_LANGUAGE.key ?
+                                    ZH_LANGUAGE.checkBoxHintText
+                                    :
+                                    selectedLanguage === JA_LANGUAGE.key ?
+                                        JA_LANGUAGE.checkBoxHintText :
+                                        EN_LANGUAGE.checkBoxHintText
+                            }</Text>
+                            <CheckboxGroup options={languageOptions} value={checkedContentLanguage} onChange={onChange} />
+                        </Space>
+                    </>
+                )}
+            >
                 {
                     renderLabels.map(label => (
                         <Select.Option key={label.id} value={label.id} disabled={label.description.startsWith(typeIdentifiedDescription)}>

@@ -11,11 +11,16 @@ const PostListPaginationComp: React.FC<PostListPaginationrProps> = (props) => {
     const [searchParams, setSearchParams] = useSearchParams()
     const [current, setCurrent] = useState(1)
     const selectedFilterLabel = useAppSelector((state) => state.filterLabel.value)
+    const checkedContentLanguage = useAppSelector((state) => state.contentLanguage.value)
     const navigateToPostsPage = (page: number) => {
         let routerObj = { [ROUTER_NAME.props.page]: page.toString() }
         const selectedFilterLabelStr = transferSearchParamsStr(selectedFilterLabel.map(label => label.id))
         if (selectedFilterLabelStr.length > 0) {
             routerObj[ROUTER_NAME.props.label] = selectedFilterLabelStr // if there arent' any label being selected, not show label prop in url.
+        }
+        const checkedContentLanguageStr = transferSearchParamsStr(checkedContentLanguage)
+        if (checkedContentLanguageStr.length > 0) {
+            routerObj[ROUTER_NAME.props.language] = checkedContentLanguageStr
         }
         setSearchParams(routerObj)
     }

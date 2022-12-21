@@ -5,6 +5,7 @@ import 'moment/locale/en-gb'
 import 'moment/locale/zh-cn'
 import { EN_LANGUAGE, ZH_LANGUAGE, JA_LANGUAGE, SYMBOL } from '../config/constant'
 import { Label } from '../types/index'
+import { getLocalHtmlLang } from './userAgent'
 
 export const parseISODate = function (date: string) {
     return parseISO(date)
@@ -67,4 +68,42 @@ export const transferSearchParamsStr = (itemList: Array<number | string>) => {
         })
     }
     return searchParamsStr
+}
+
+export const transferContentLanguageToQueryString = (contentLanguageList: Array<string>) => {
+    let contentLanguageQueryStr: string = ''
+    let languageQuery: string
+
+    if (contentLanguageList.length > 0) {
+        contentLanguageList.forEach(contentLanguage => {
+            switch (contentLanguage) {
+                case ZH_LANGUAGE.key:
+                    languageQuery = ZH_LANGUAGE.upperCase
+                    break
+                case JA_LANGUAGE.key:
+                    languageQuery = JA_LANGUAGE.upperCase
+                    break
+                default:
+                    languageQuery = EN_LANGUAGE.upperCase
+            }
+            languageQuery = 'language:' + languageQuery + ','
+            contentLanguageQueryStr += languageQuery
+        })
+        contentLanguageQueryStr = 'label:' + contentLanguageQueryStr
+    }
+    else {
+        switch (getLocalHtmlLang()) {
+            case ZH_LANGUAGE.key:
+                languageQuery = ZH_LANGUAGE.upperCase
+                break
+            case JA_LANGUAGE.key:
+                languageQuery = JA_LANGUAGE.upperCase
+                break
+            default:
+                languageQuery = EN_LANGUAGE.upperCase
+        }
+        contentLanguageQueryStr = 'label:language:' + languageQuery
+    }
+
+    return contentLanguageQueryStr
 }
