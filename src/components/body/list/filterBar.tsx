@@ -35,7 +35,7 @@ const FilterBar: React.FC<PostListSearchBarProps> = (props) => {
         const labelIds = searchParams.get(ROUTER_NAME.props.label)?.split(SYMBOL.searchParamsSpliter)
         const contentLanguageKeys = searchParams.get(ROUTER_NAME.props.language)?.split(SYMBOL.searchParamsSpliter)
 
-        // to solve the router push state twice issue, check the selectedFilterLabel and searchParams, if they have the same labels, not to setSelectedFilterLabel
+        // to solve the router push state twice issue, check the selectedFilterLabel and searchParams, if they have the same labels, not to dispatch changeFilterLabel
         if (
             (labelIds === undefined && selectedFilterLabel.length !== 0)
             ||
@@ -46,7 +46,7 @@ const FilterBar: React.FC<PostListSearchBarProps> = (props) => {
             selectedFilterLabel.some(selectedLabel => !(labelIds && labelIds.some(labelId => selectedLabel.id === parseInt(labelId))))
         ) {
             const labelList = labels.filter(label => (labelIds && labelIds.some(labelId => parseInt(labelId) === label.id)))
-            setSelectedFilterLabel(labelList)
+            dispatch(changeFilterLabel(labelList))
         }
 
         if (
@@ -63,10 +63,6 @@ const FilterBar: React.FC<PostListSearchBarProps> = (props) => {
         /* eslint-disable-next-line */
     }, [searchParams])
 
-    const setSelectedFilterLabel = (newList: Array<Label>) => {
-        dispatch(changeFilterLabel(newList))
-    }
-
     const handleChange = (value: Array<number>) => {
         let labelArray: Array<Label> = []
         value.forEach(labelId => {
@@ -75,7 +71,7 @@ const FilterBar: React.FC<PostListSearchBarProps> = (props) => {
                 labelArray.push(selectedLabel)
             }
         })
-        setSelectedFilterLabel(labelArray)
+        dispatch(changeFilterLabel(labelArray))
         /* to hide the keyboard when any label is selected, to solve the issue that users cannot see the result of search bar filtering on mobile end.  */
         const selectEl: HTMLElement | null = document.querySelector('#filterBarSelect')
         if (selectEl !== null && mobileAndTabletCheck()) {
