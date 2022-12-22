@@ -10,6 +10,7 @@ import FilterBar from './filterBar'
 import { parseISODate, parseISODateStr, getDateFromNow, transferSelectedFilterLabelToQueryString, transferSearchParamsStr, transferContentLanguageToQueryString } from '../../../utils/formatter'
 import config from '../../../config/config'
 import { useAppSelector } from '../../../redux/hooks'
+import { getLocalHtmlLang } from '../../../utils/userAgent'
 import { EN_LANGUAGE, JA_LANGUAGE, ZH_LANGUAGE, ROUTER_NAME, SYMBOL, STORAGE_KEY } from '../../../config/constant'
 
 const PostList = () => {
@@ -75,8 +76,20 @@ const PostList = () => {
         const labelIds = searchParams.get(ROUTER_NAME.props.label)?.split(SYMBOL.searchParamsSpliter)
         const contentLanguageKeys = searchParams.get(ROUTER_NAME.props.language)?.split(SYMBOL.searchParamsSpliter)
         let contentLanguageQuery = ''
-        if (contentLanguageKeys) {
+        if (contentLanguageKeys && contentLanguageKeys.length > 0) {
             contentLanguageQuery = transferContentLanguageToQueryString(contentLanguageKeys)
+        }
+        else if (checkedContentLanguage.length > 0) {
+            contentLanguageQuery = transferContentLanguageToQueryString(checkedContentLanguage)
+        }
+        else {
+            const localStorageContentLanguageListStr = localStorage.getItem(STORAGE_KEY.contentLanguageList)
+            if (localStorageContentLanguageListStr) {
+                contentLanguageQuery = transferContentLanguageToQueryString(JSON.parse(localStorageContentLanguageListStr))
+            }
+            else {
+                contentLanguageQuery = transferContentLanguageToQueryString([getLocalHtmlLang()])
+            }
         }
         if (labelIds) {
             const filterLabelListStr = sessionStorage.getItem(STORAGE_KEY.filterLabelList)

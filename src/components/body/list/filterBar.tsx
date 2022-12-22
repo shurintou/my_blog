@@ -218,7 +218,9 @@ const FilterBar: React.FC<PostListSearchBarProps> = (props) => {
         if (languageOptions) {
             const checkedLanguageLabelsList = languageOptions.filter(languageLabel => list.includes(languageLabel.value))
             const checkedOptionList = checkedLanguageLabelsList.map(option => option.value)
-            dispatch(changeContentLanguage(checkedOptionList.map(checkedOption => checkedOption.toString())))
+            const checkedValueList = checkedOptionList.map(checkedOption => checkedOption.toString())
+            localStorage.setItem(STORAGE_KEY.contentLanguageList, JSON.stringify(checkedValueList))
+            dispatch(changeContentLanguage(checkedValueList))
         }
     }
 
