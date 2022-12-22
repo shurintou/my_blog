@@ -63,7 +63,7 @@ const FilterBar: React.FC<PostListSearchBarProps> = (props) => {
         /* eslint-disable-next-line */
     }, [searchParams])
 
-    const handleChange = (value: Array<number>) => {
+    const handleSelectChange = (value: Array<number>) => {
         let labelArray: Array<Label> = []
         value.forEach(labelId => {
             const selectedLabel = renderLabels.find(label => label.id === labelId)
@@ -211,7 +211,7 @@ const FilterBar: React.FC<PostListSearchBarProps> = (props) => {
         { value: ZH_LANGUAGE.key, disabled: checkedContentLanguage.length === 1 && checkedContentLanguage.includes(ZH_LANGUAGE.key), label: selectedLanguage === ZH_LANGUAGE.key ? ZH_LANGUAGE.checkBoxOptionObj['zh'] : selectedLanguage === JA_LANGUAGE.key ? JA_LANGUAGE.checkBoxOptionObj['zh'] : EN_LANGUAGE.checkBoxOptionObj['zh'] },
     ]
 
-    const onChange = (list: Array<CheckboxValueType>) => {
+    const handleCheckBoxChange = (list: Array<CheckboxValueType>) => {
         if (list.length === 0) { // if nothing checked, do nothing
             return
         }
@@ -232,7 +232,7 @@ const FilterBar: React.FC<PostListSearchBarProps> = (props) => {
                 showArrow
                 tagRender={tagRender}
                 placeholder={placeHolderText}
-                onChange={handleChange}
+                onChange={handleSelectChange}
                 onDropdownVisibleChange={handleDropDown}
                 value={selectedFilterLabel.map(label => label.id)}
                 virtual={false} /* to solve the scroll penetration issue on mobile. */
@@ -268,7 +268,7 @@ const FilterBar: React.FC<PostListSearchBarProps> = (props) => {
                                         JA_LANGUAGE.checkBoxHintText :
                                         EN_LANGUAGE.checkBoxHintText
                             }</Text>
-                            <CheckboxGroup options={languageOptions} value={checkedContentLanguage} onChange={onChange} />
+                            <CheckboxGroup options={languageOptions} value={checkedContentLanguage} onChange={handleCheckBoxChange} />
                         </Space>
                     </>
                 )}
