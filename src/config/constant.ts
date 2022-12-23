@@ -16,7 +16,7 @@ export const ZH_LANGUAGE = {
     selectLabel: '请选择感兴趣的分类或标签',
     emptyText: '暂无匹配该条件的文章',
     searchBarEmptyText: '暂无匹配该条件的分类或标签',
-    checkBoxHintText: '请勾选想阅读的语言分类',
+    checkBoxHintText: '文章语言(多选):',
     checkBoxOptionObj: { en: '英语', ja: '日语', zh: '中文' },
 
 }
@@ -36,7 +36,7 @@ export const JA_LANGUAGE = {
     selectLabel: 'ご興味のあるラベルを選択してください',
     emptyText: '該当するポストがありません',
     searchBarEmptyText: '該当するカテゴリーやタグがありません',
-    checkBoxHintText: '文章の言語（複数選択可能）',
+    checkBoxHintText: '文章の言語（複数選択可）:',
     checkBoxOptionObj: { en: '英語', ja: '日本語', zh: '中国語' },
 
 }
@@ -56,7 +56,7 @@ export const EN_LANGUAGE = {
     selectLabel: 'Please select labels you are interested in',
     emptyText: 'No matching post found',
     searchBarEmptyText: 'No matching category or tag found',
-    checkBoxHintText: 'languages of posts you want to read',
+    checkBoxHintText: 'post language:',
     checkBoxOptionObj: { en: 'English', ja: 'Japanese', zh: 'Chinese' },
 
 }
