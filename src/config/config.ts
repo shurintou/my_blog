@@ -1,13 +1,6 @@
 import { ZH_LANGUAGE, JA_LANGUAGE, EN_LANGUAGE } from './constant'
 
 const configObj = {
-    gitProps: {
-        clientID: 'username',
-        clientSecret: 'password',
-        repo: 'shurintou.github.io',
-        owner: 'shurintou',
-        admin: ['shurintou'],
-    },
     antdProps: {
         themeColor: '#1DA57A',
         borderColor: '#d0d7de',

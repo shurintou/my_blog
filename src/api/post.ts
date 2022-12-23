@@ -1,17 +1,17 @@
 import request from '../utils/request'
 import { PostInfoRequestParam, PostSearchRequestParam } from '../types/index'
-import conf from '../config/config'
+import conf from '../config/authentication'
 
 const auth = {
-    username: conf.gitProps.clientID,
-    password: conf.gitProps.clientSecret,
+    username: conf.clientID,
+    password: conf.clientSecret,
 }
 
 const baseURL = 'https://api.github.com'
 
 export function getPostInfo(params: PostInfoRequestParam) {
     return request({
-        url: baseURL + '/repos/' + conf.gitProps.owner + '/' + conf.gitProps.repo + '/issues/' + params.number,
+        url: baseURL + '/repos/' + conf.owner + '/' + conf.repo + '/issues/' + params.number,
         method: 'get',
         auth: auth
     })

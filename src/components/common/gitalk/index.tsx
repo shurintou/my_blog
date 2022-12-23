@@ -3,6 +3,7 @@ import Gitalk from "gitalk"
 import 'gitalk/dist/gitalk.css'
 import { GitalkProps } from '../../../types/index'
 import config from '../../../config/config'
+import auth from '../../../config/authentication'
 import { useAppSelector } from '../../../redux/hooks'
 
 const GitalkCompo: React.FC<GitalkProps> = (props) => {
@@ -12,7 +13,7 @@ const GitalkCompo: React.FC<GitalkProps> = (props) => {
 
     useEffect(() => {
         function renderGitalk(postId: number) {
-            const gitalkProps = { ...config.gitProps, language: selectedLanguage, number: postId, perPage: config.postProps.commentCountPerPage }
+            const gitalkProps = { ...auth, language: selectedLanguage, number: postId, perPage: config.postProps.commentCountPerPage }
             const gitalk = new Gitalk(gitalkProps)
             const gitalkContainerEl = document.querySelector('#gitalk-container')
             if (gitalkContainerEl) { // gitalk didn't offer any api to rerender the component so do it manually.
