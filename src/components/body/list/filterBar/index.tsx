@@ -1,22 +1,21 @@
 import { useState, useEffect, useRef } from 'react'
 import type { CustomTagProps } from 'rc-select/lib/BaseSelect'
 import { useSearchParams } from "react-router-dom"
-import { getAllLabels } from '../../../api/label'
-import { Layout, Select, Tag, Typography, Divider, Space, Checkbox, } from 'antd'
-import { PostListSearchBarProps, Label } from '../../../types/index'
-import config from '../../../config/config'
-import { lightOrDark } from '../../../utils/common'
-import { useAppSelector, useAppDispatch } from '../../../redux/hooks'
-import { changeFilterLabel } from '../../../features/filterLabel/filterLabelSlice'
-import { changeContentLanguage } from '../../../features/contentLanguage/contentLanguageSlice'
-import { EN_LANGUAGE, JA_LANGUAGE, ZH_LANGUAGE, STORAGE_KEY, ROUTER_NAME, SYMBOL } from '../../../config/constant'
+import { getAllLabels } from '../../../../api/label'
+import { Layout, Select, Tag, Typography, } from 'antd'
+import { PostListSearchBarProps, Label } from '../../../../types/index'
+import config from '../../../../config/config'
+import { lightOrDark } from '../../../../utils/common'
+import { useAppSelector, useAppDispatch } from '../../../../redux/hooks'
+import { changeFilterLabel } from '../../../../features/filterLabel/filterLabelSlice'
+import { changeContentLanguage } from '../../../../features/contentLanguage/contentLanguageSlice'
+import { EN_LANGUAGE, JA_LANGUAGE, ZH_LANGUAGE, STORAGE_KEY, ROUTER_NAME, SYMBOL } from '../../../../config/constant'
 import { DefaultOptionType } from 'antd/lib/select'
-import { mobileAndTabletCheck } from '../../../utils/userAgent'
+import { mobileAndTabletCheck } from '../../../../utils/userAgent'
 import { FunnelPlotOutlined } from '@ant-design/icons'
-import type { CheckboxOptionType, CheckboxValueType } from 'antd/es/checkbox/Group'
+import LanguageCheckBoxCompo from './languageCheckBox'
 
 const { Text } = Typography
-const CheckboxGroup = Checkbox.Group
 
 const FilterBar: React.FC<PostListSearchBarProps> = (props) => {
     const [searchParams,] = useSearchParams()
@@ -205,25 +204,6 @@ const FilterBar: React.FC<PostListSearchBarProps> = (props) => {
         )
     }
 
-    const languageOptions: Array<CheckboxOptionType> = [
-        { value: EN_LANGUAGE.key, disabled: checkedContentLanguage.length === 1 && checkedContentLanguage.includes(EN_LANGUAGE.key), label: selectedLanguage === ZH_LANGUAGE.key ? ZH_LANGUAGE.checkBoxOptionObj['en'] : selectedLanguage === JA_LANGUAGE.key ? JA_LANGUAGE.checkBoxOptionObj['en'] : EN_LANGUAGE.checkBoxOptionObj['en'] },
-        { value: JA_LANGUAGE.key, disabled: checkedContentLanguage.length === 1 && checkedContentLanguage.includes(JA_LANGUAGE.key), label: selectedLanguage === ZH_LANGUAGE.key ? ZH_LANGUAGE.checkBoxOptionObj['ja'] : selectedLanguage === JA_LANGUAGE.key ? JA_LANGUAGE.checkBoxOptionObj['ja'] : EN_LANGUAGE.checkBoxOptionObj['ja'] },
-        { value: ZH_LANGUAGE.key, disabled: checkedContentLanguage.length === 1 && checkedContentLanguage.includes(ZH_LANGUAGE.key), label: selectedLanguage === ZH_LANGUAGE.key ? ZH_LANGUAGE.checkBoxOptionObj['zh'] : selectedLanguage === JA_LANGUAGE.key ? JA_LANGUAGE.checkBoxOptionObj['zh'] : EN_LANGUAGE.checkBoxOptionObj['zh'] },
-    ]
-
-    const handleCheckBoxChange = (list: Array<CheckboxValueType>) => {
-        if (list.length === 0) { // if nothing checked, do nothing
-            return
-        }
-        if (languageOptions) {
-            const checkedLanguageLabelsList = languageOptions.filter(languageLabel => list.includes(languageLabel.value))
-            const checkedOptionList = checkedLanguageLabelsList.map(option => option.value)
-            const checkedValueList = checkedOptionList.map(checkedOption => checkedOption.toString())
-            localStorage.setItem(STORAGE_KEY.contentLanguageList, JSON.stringify(checkedValueList))
-            dispatch(changeContentLanguage(checkedValueList))
-        }
-    }
-
     return (<Layout>
         {/* labels.length > 0 is necessary otherwise the tagRender will throw error because labels may be [] or being got when labels.find run. */}
         {renderLabels.length > 0 &&
@@ -241,14 +221,7 @@ const FilterBar: React.FC<PostListSearchBarProps> = (props) => {
                 showSearch={true}
                 onSearch={searchInputHandler}
                 open={dropdownOpen} /* to handle the drop down open/close manually to solve the display issue on mobile end. */
-                notFoundContent={
-                    selectedLanguage === ZH_LANGUAGE.key ?
-                        ZH_LANGUAGE.searchBarEmptyText
-                        :
-                        selectedLanguage === JA_LANGUAGE.key ?
-                            JA_LANGUAGE.searchBarEmptyText :
-                            EN_LANGUAGE.searchBarEmptyText
-                }
+                notFoundContent={selectedLanguage === ZH_LANGUAGE.key ? ZH_LANGUAGE.searchBarEmptyText : selectedLanguage === JA_LANGUAGE.key ? JA_LANGUAGE.searchBarEmptyText : EN_LANGUAGE.searchBarEmptyText}
                 style={{
                     width: '100%',
                     borderStyle: props.renderMode && !props.isLoading ? 'solid' : 'null',
@@ -257,23 +230,7 @@ const FilterBar: React.FC<PostListSearchBarProps> = (props) => {
                     marginBottom: props.isLoading ? '' : '0.5em'
                 }}
                 filterOption={(input, option) => filterOptionHandler(input, option)}
-                dropdownRender={(menu) => (
-                    <>
-                        {menu}
-                        <Divider style={{ margin: '8px 0' }} />
-                        <Space style={{ padding: '0 8px 4px' }}>
-                            <Text strong>{
-                                selectedLanguage === ZH_LANGUAGE.key ?
-                                    ZH_LANGUAGE.checkBoxHintText
-                                    :
-                                    selectedLanguage === JA_LANGUAGE.key ?
-                                        JA_LANGUAGE.checkBoxHintText :
-                                        EN_LANGUAGE.checkBoxHintText
-                            }</Text>
-                            <CheckboxGroup options={languageOptions} value={checkedContentLanguage} onChange={handleCheckBoxChange} />
-                        </Space>
-                    </>
-                )}
+                dropdownRender={(menu) => <LanguageCheckBoxCompo reactEl={menu} />}
             >
                 {
                     renderLabels.map(label => (

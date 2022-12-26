@@ -1,4 +1,3 @@
-import { StringifyOptions } from "querystring"
 import { ReactElement } from "react"
 
 export interface GitUser {
@@ -187,3 +186,6 @@ export interface contentLanguageListState {
     value: Array<string>
 }
 
+export interface LanguageCheckBoxProps {
+    reactEl: React.ReactElement
+}

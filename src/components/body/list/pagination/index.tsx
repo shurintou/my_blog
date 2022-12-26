@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import { useSearchParams } from "react-router-dom"
-import { PostListPaginationrProps } from '../../../types'
+import { PostListPaginationrProps } from '../../../../types'
 import { Pagination, Layout } from 'antd'
-import config from '../../../config/config'
-import { useAppSelector } from '../../../redux/hooks'
-import { JA_LANGUAGE, ZH_LANGUAGE, ROUTER_NAME } from '../../../config/constant'
-import { transferSearchParamsStr } from '../../../utils/formatter'
+import config from '../../../../config/config'
+import { useAppSelector } from '../../../../redux/hooks'
+import { JA_LANGUAGE, ZH_LANGUAGE, ROUTER_NAME } from '../../../../config/constant'
+import { transferSearchParamsStr } from '../../../../utils/formatter'
 
 const PostListPaginationComp: React.FC<PostListPaginationrProps> = (props) => {
     const [searchParams, setSearchParams] = useSearchParams()
