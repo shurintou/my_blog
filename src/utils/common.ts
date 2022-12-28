@@ -97,3 +97,11 @@ export function curry(func: Function) {
         }
     }
 }
+
+export function findCharIndexOfString(sourceString: string, findChar: string, sequenceNumber: number) {
+    let result = sourceString.indexOf(findChar)
+    for (let i = 0; i < sequenceNumber; i++) {
+        result = sourceString.indexOf(findChar, result + 1)
+    }
+    return result
+}

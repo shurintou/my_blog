@@ -7,7 +7,7 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { tomorrow } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import { MarkdownProps, MarkdownChild } from '../../../types/index'
 import config from '../../../config/config'
-import { doScrolling, curry } from '../../../utils/common'
+import { doScrolling, curry, findCharIndexOfString } from '../../../utils/common'
 import markdownStyle from './index.module.css'
 import { ROUTER_NAME } from '../../../config/constant'
 const { Link } = Typography
@@ -67,9 +67,17 @@ const Markdown: React.FC<MarkdownProps> = (props) => {
         return React.createElement('p', { children: children })
     }
 
+    /* to get the substring of postText by previewLine to imporve the markdown rendering performance */
+    const subStringOfPostText = (postText: string) => {
+        const lastEnterIndexOfMaxPreviewLine = findCharIndexOfString(postText, '\r\n', config.postProps.previewLine)
+        return postText.substring(0, lastEnterIndexOfMaxPreviewLine)
+    }
+
+    const isAtListPage = () => window.location.href.indexOf(ROUTER_NAME.list) >= 0
+
     return (
         <ReactMarkdown
-            children={postText ? postText : ''}
+            children={postText ? (isAtListPage() ? subStringOfPostText(postText) : postText) : ''}
             remarkPlugins={[remarkGfm, remarkBreaks]}
             className={markdownStyle.textFontSize}
             components={{
@@ -135,7 +143,7 @@ const Markdown: React.FC<MarkdownProps> = (props) => {
                 th: curringThTdRenderFunc('th'),
                 td: curringThTdRenderFunc('td'),
                 img({ src, alt, }) {
-                    if (window.location.href.indexOf(ROUTER_NAME.list) >= 0) {
+                    if (isAtListPage()) {
                         return <span></span> //not render img when at the list page.
                     }
                     return <Image alt={alt} src={src} style={{ maxWidth: '100%' }} />
