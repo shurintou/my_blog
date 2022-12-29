@@ -229,6 +229,7 @@ const FilterBar: React.FC<PostListSearchBarProps> = (props) => {
                     borderRadius: props.renderMode && !props.isLoading ? '6px' : '0px',
                     marginBottom: props.isLoading ? '' : '0.5em'
                 }}
+                listHeight={props.renderMode ? (window.innerHeight / 3) : (window.innerHeight / 3.5)}
                 filterOption={(input, option) => filterOptionHandler(input, option)}
                 dropdownRender={(menu) => <LanguageCheckBoxCompo reactEl={menu} />}
             >
