@@ -75,6 +75,7 @@ const PostList = () => {
     useEffect(() => {
         const labelIds = searchParams.get(ROUTER_NAME.props.label)?.split(SYMBOL.searchParamsSpliter)
         const contentLanguageKeys = searchParams.get(ROUTER_NAME.props.language)?.split(SYMBOL.searchParamsSpliter)
+        if (!contentLanguageKeys) return // to fix the duplicated request when redirect to the list page.
         let contentLanguageQuery = ''
         if (contentLanguageKeys && contentLanguageKeys.length > 0) {
             contentLanguageQuery = transferContentLanguageToQueryString(contentLanguageKeys)
