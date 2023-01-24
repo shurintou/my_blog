@@ -42,6 +42,22 @@ export interface PostsItemRes {
     updated_at: string,
 }
 
+export interface KeywordSearchItemRes extends PostsItemRes {
+    text_matches: Array<TextMatch>
+}
+
+export interface TextMatch {
+    object_type: string,
+    property: string,
+    fragment: string,
+    matches: Array<Match>
+}
+
+export interface Match {
+    text: string,
+    indices: [number, number]
+}
+
 export interface Reactions {
     "total_count": number,
     "+1": number,
@@ -55,6 +71,16 @@ export interface Reactions {
 }
 
 export interface PostListItem extends PostsItemRes {
+    created_at_local: string,
+    updated_at_local: string,
+    created_from_now: string,
+    updated_from_now: string,
+    index?: number,
+    listLength?: number,
+    clickable?: boolean,
+}
+
+export interface KeywordSearchListItem extends KeywordSearchItemRes {
     created_at_local: string,
     updated_at_local: string,
     created_from_now: string,
@@ -157,11 +183,17 @@ export interface PostSearchRequestParam {
     per_page?: number,
     sort?: string,
     order?: string,
+    textMatch?: boolean,
 }
 
 export interface PostSearchResponse {
     total_count: number,
     items: Array<PostsItemRes>,
+}
+
+export interface KeywordSearchResponse {
+    total_count: number,
+    items: Array<KeywordSearchItemRes>,
 }
 
 export interface LanguageState {
@@ -188,4 +220,12 @@ export interface ContentLanguageListState {
 
 export interface LanguageCheckBoxProps {
     reactEl: React.ReactElement
+}
+
+export interface SearchModalOpenState {
+    value: boolean
+}
+
+export interface SearchKeywordState {
+    value: string
 }

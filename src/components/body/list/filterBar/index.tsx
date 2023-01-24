@@ -1,18 +1,20 @@
-import { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import type { CustomTagProps } from 'rc-select/lib/BaseSelect'
 import { useSearchParams } from "react-router-dom"
 import { getAllLabels } from '../../../../api/label'
-import { Layout, Select, Tag, Typography, } from 'antd'
+import { Layout, Select, Tag, Typography, Space } from 'antd'
 import { PostListSearchBarProps, Label } from '../../../../types/index'
 import config from '../../../../config/config'
 import { lightOrDark } from '../../../../utils/common'
 import { useAppSelector, useAppDispatch } from '../../../../redux/hooks'
 import { changeFilterLabel } from '../../../../features/filterLabel/filterLabelSlice'
 import { changeContentLanguage } from '../../../../features/contentLanguage/contentLanguageSlice'
+import { changeSearchModalOpen } from '../../../../features/searchModalOpen/searchModalOpenSlice'
+import { changeSearchKeyword } from '../../../../features/searchKeyword/searchKeywordSlice'
 import { EN_LANGUAGE, JA_LANGUAGE, ZH_LANGUAGE, STORAGE_KEY, ROUTER_NAME, SYMBOL } from '../../../../config/constant'
 import { DefaultOptionType } from 'antd/lib/select'
 import { mobileAndTabletCheck } from '../../../../utils/userAgent'
-import { FunnelPlotOutlined } from '@ant-design/icons'
+import { FunnelPlotOutlined, SearchOutlined } from '@ant-design/icons'
 import LanguageCheckBoxCompo from './languageCheckBox'
 
 const { Text } = Typography
@@ -64,19 +66,25 @@ const FilterBar: React.FC<PostListSearchBarProps> = (props) => {
 
     const handleSelectChange = (value: Array<number>) => {
         let labelArray: Array<Label> = []
-        value.forEach(labelId => {
-            const selectedLabel = renderLabels.find(label => label.id === labelId)
-            if (selectedLabel) {
-                labelArray.push(selectedLabel)
-            }
-        })
-        dispatch(changeFilterLabel(labelArray))
+        if (value.some(labelId => labelId === SEARCH_ID)) { // if searchHintText is clicked, do the search operation.
+            dispatch(changeSearchModalOpen(true))
+            dispatch(changeSearchKeyword(searchKeywordRef.current))
+        }
+        else {
+            value.forEach(labelId => {
+                const selectedLabel = renderLabels.find(label => label.id === labelId)
+                if (selectedLabel) {
+                    labelArray.push(selectedLabel)
+                }
+            })
+            dispatch(changeFilterLabel(labelArray))
+        }
         /* to hide the keyboard when any label is selected, to solve the issue that users cannot see the result of search bar filtering on mobile end.  */
         const selectEl: HTMLElement | null = document.querySelector('#filterBarSelect')
         if (selectEl !== null && mobileAndTabletCheck()) {
             selectEl.blur()
         }
-        setDropdownOpen(false)
+        handleDropDown(false)
         searchInputHandler('') // to clear the searchKeyword when any labels selected.
     }
 
@@ -120,8 +128,10 @@ const FilterBar: React.FC<PostListSearchBarProps> = (props) => {
         setDropdownOpen(flg)
     }
 
+    const SEARCH_ID = 1
     const CATEGORY_ID = 2
     const TAG_ID = 3
+    const FILTER_ID = 4
 
     useEffect(() => {
         let tempRes: Array<Label> = []
@@ -166,10 +176,32 @@ const FilterBar: React.FC<PostListSearchBarProps> = (props) => {
     const searchInputHandler = (inputStr: string) => {
         searchKeywordRef.current = inputStr
         setSearchKeyword(inputStr)
+        const newList = renderLabels.filter(label => label.id !== SEARCH_ID && label.id !== FILTER_ID)
+        if (inputStr.length > 0) {
+            let searchHintText = ''
+            let filterHintText = ''
+            switch (selectedLanguage) {
+                case ZH_LANGUAGE.key:
+                    ({ searchHintText, filterHintText } = ZH_LANGUAGE)
+                    break
+                case JA_LANGUAGE.key:
+                    ({ searchHintText, filterHintText } = JA_LANGUAGE)
+                    break
+                default:
+                    ({ searchHintText, filterHintText } = EN_LANGUAGE)
+            }
+            if (renderLabels.some(label => label.id !== SEARCH_ID && label.id !== FILTER_ID && label.name.indexOf(inputStr) >= 0)) { // if any label that matches inputStr exists, add filterHintText
+                newList.unshift({ id: FILTER_ID, name: filterHintText, color: '', description: typeIdentifiedDescription })
+            }
+            /* if inputStr not null, add searchHintText */
+            newList.unshift({ id: SEARCH_ID, name: searchHintText + '[ ' + inputStr + ' ]', color: '', description: '' })
+        }
+        setRenderLabels(newList)
     }
 
     const filterOptionHandler = (input: string, option: DefaultOptionType | undefined) => {
         if (renderLabels.length > 0) {
+            if (option?.value === SEARCH_ID || option?.value === FILTER_ID) { return true } // always return true if the option is searchHintText or filterHintText.
             const matchLabel = renderLabels.find(label => label.id === option?.value ?? '')
             if (matchLabel) {
                 const splitMatchLabel = matchLabel.name.split(':')
@@ -193,7 +225,7 @@ const FilterBar: React.FC<PostListSearchBarProps> = (props) => {
                     <>
                         {/* to highlight the matching word */}
                         <Text strong style={{ color: renderLabelColor }}>{renderLabelName.substring(0, matchingStartIndex)}</Text>
-                        <Text strong style={{ color: 'black', backgroundColor: 'yellow' }}>{renderLabelName.substring(matchingStartIndex, matchingEndIndex)}</Text>
+                        <Text strong style={{ color: config.antdProps.highlightTextColor, backgroundColor: config.antdProps.highlightTextBackgroundColor }}>{renderLabelName.substring(matchingStartIndex, matchingEndIndex)}</Text>
                         <Text strong style={{ color: renderLabelColor }}>{renderLabelName.substring(matchingEndIndex)}</Text>
                     </>
                 )
@@ -220,6 +252,7 @@ const FilterBar: React.FC<PostListSearchBarProps> = (props) => {
                 virtual={false} /* to solve the scroll penetration issue on mobile. */
                 showSearch={true}
                 onSearch={searchInputHandler}
+                searchValue={searchKeyword}
                 open={dropdownOpen} /* to handle the drop down open/close manually to solve the display issue on mobile end. */
                 notFoundContent={selectedLanguage === ZH_LANGUAGE.key ? ZH_LANGUAGE.searchBarEmptyText : selectedLanguage === JA_LANGUAGE.key ? JA_LANGUAGE.searchBarEmptyText : EN_LANGUAGE.searchBarEmptyText}
                 style={{
@@ -237,20 +270,27 @@ const FilterBar: React.FC<PostListSearchBarProps> = (props) => {
                     renderLabels.map(label => (
                         <Select.Option key={label.id} value={label.id} disabled={label.description.startsWith(typeIdentifiedDescription)}>
                             {
-                                !label.description.startsWith(typeIdentifiedDescription) ?
-                                    <Tag
-                                        color={label.name.startsWith('category') ? 'cyan' : '#' + label.color}
-                                        style={{
-                                            marginRight: 3,
-                                            color: lightOrDark(label.color),
-                                            borderRadius: '1em',
-                                        }}
-                                        icon={selectedFilterLabel.some(selectedLabel => selectedLabel.id === label.id) ? <FunnelPlotOutlined /> : null}
-                                    >
-                                        <RenderLabelText label={label} />
-                                    </Tag>
-                                    :
+                                label.description.startsWith(typeIdentifiedDescription) ?
                                     <Text strong>{label.name}</Text>
+                                    :
+                                    label.id === SEARCH_ID ?
+                                        <React.Fragment>
+                                            <Space>
+                                                <SearchOutlined /><Text strong>{label.name}</Text>
+                                            </Space>
+                                        </React.Fragment>
+                                        :
+                                        <Tag
+                                            color={label.name.startsWith('category') ? 'cyan' : '#' + label.color}
+                                            style={{
+                                                marginRight: 3,
+                                                color: lightOrDark(label.color),
+                                                borderRadius: '1em',
+                                            }}
+                                            icon={selectedFilterLabel.some(selectedLabel => selectedLabel.id === label.id) ? <FunnelPlotOutlined /> : null}
+                                        >
+                                            <RenderLabelText label={label} />
+                                        </Tag>
                             }
                         </Select.Option>
                     ))

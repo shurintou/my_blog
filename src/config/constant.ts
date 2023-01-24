@@ -18,6 +18,12 @@ export const ZH_LANGUAGE = {
     searchBarEmptyText: '暂无匹配该条件的分类或标签',
     checkBoxHintText: '文章语言(多选):',
     checkBoxOptionObj: { en: '英语', ja: '日语', zh: '中文' },
+    searchHintText: '搜索关键词：',
+    filterHintText: '或查看以下分类或标签的文章',
+    searchBarPlaceHolder: '请输入想搜索的关键词',
+    searchResult: '搜索结果',
+    noMoreText: '已经到底了',
+    searching: '搜索中...',
 
 }
 export const JA_LANGUAGE = {
@@ -38,6 +44,12 @@ export const JA_LANGUAGE = {
     searchBarEmptyText: '該当するカテゴリーやタグがありません',
     checkBoxHintText: '文章の言語（複数選択可）:',
     checkBoxOptionObj: { en: '英語', ja: '日本語', zh: '中国語' },
+    searchHintText: 'キーワード検索：',
+    filterHintText: 'または下記カテゴリーやタグで絞り込み検索',
+    searchBarPlaceHolder: '検索するキーワードを入力してください',
+    searchResult: '検索結果',
+    noMoreText: 'ここはもう最後だよ',
+    searching: '検索中...',
 
 }
 export const EN_LANGUAGE = {
@@ -58,6 +70,12 @@ export const EN_LANGUAGE = {
     searchBarEmptyText: 'No matching category or tag found',
     checkBoxHintText: 'post language:',
     checkBoxOptionObj: { en: 'English', ja: 'Japanese', zh: 'Chinese' },
+    searchHintText: 'search keyword: ',
+    filterHintText: 'or filter posts by categories or tags below',
+    searchBarPlaceHolder: 'Please input keyword you want to search',
+    searchResult: 'search result',
+    noMoreText: 'It is all, nothing more.',
+    searching: 'searching...',
 
 }
 
@@ -78,7 +96,7 @@ export const STORAGE_KEY = {
     contentLanguageList: 'CONTENT_LANGUAGE_LIST',
     gitAccessToken: 'GT_ACCESS_TOKEN',
     htmlLang: 'HTML_LANG',
-    backSearchParams: 'BACK_SEARCH_PARAMS',
+    historyBackPath: 'HISTORY_BACK_PATH',
     postId: 'POST_ID_',
 }
 

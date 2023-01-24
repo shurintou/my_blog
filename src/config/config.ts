@@ -6,6 +6,11 @@ const configObj = {
         borderColor: '#d0d7de',
         titleBackgroundColor: '#d0d7de',
         paginationTextColor: '#FFFFFF',
+        modalBackgroundColor: '#f9f9f9',
+        searchResultItemBackgroundColor: '#FFFFFF',
+        shadowColor: '#d0d7de',
+        highlightTextColor: 'black',
+        highlightTextBackgroundColor: 'yellow',
     },
     postProps: {
         postListItemCountPerPage: 5,
@@ -18,6 +23,7 @@ const configObj = {
     eventProps: {
         resizeDebounceDelay: 300,
         scrollDebounceDelay: 100,
+        searchDebounceDelay: 800,
     },
     markdownProps: {
         trBackgroundColor: '#f6f8fa',

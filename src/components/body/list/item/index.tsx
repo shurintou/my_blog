@@ -20,10 +20,10 @@ const PostListItemComp: React.FC<PostListItem> = (props) => {
     const navigate = useNavigate()
     const navigateToPost = () => {
         if (props.clickable) { // if the search bar is opening, the item will not be clickable.
-            const backSearchParams = document.location.search
-            navigate(`${ROUTER_NAME.post}?id=${props.number}`, { state: { backSearchParams: backSearchParams } })
+            const historyBackPath = document.location.pathname + document.location.search
+            navigate(`${ROUTER_NAME.post}?id=${props.number}`, { state: { historyBackPath: historyBackPath } })
             /* to fix the bug that when redirected after github login, the back button in post title not work */
-            sessionStorage.setItem(STORAGE_KEY.backSearchParams, backSearchParams)
+            sessionStorage.setItem(STORAGE_KEY.historyBackPath, historyBackPath)
         }
     }
     const mouseBlurStyle = { cursor: 'pointer' }

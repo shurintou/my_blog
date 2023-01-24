@@ -2,12 +2,16 @@ import { configureStore } from '@reduxjs/toolkit'
 import languageReducer from '../features/language/languageSlice'
 import filterLabelReducer from '../features/filterLabel/filterLabelSlice'
 import contentLanguageReducer from '../features/contentLanguage/contentLanguageSlice'
+import searchModalOpenReducer from '../features/searchModalOpen/searchModalOpenSlice'
+import searchKeywordReducer from '../features/searchKeyword/searchKeywordSlice'
 
 const store = configureStore({
     reducer: {
         language: languageReducer,
         filterLabel: filterLabelReducer,
         contentLanguage: contentLanguageReducer,
+        searchModalOpen: searchModalOpenReducer,
+        searchKeyword: searchKeywordReducer,
     },
 })
 

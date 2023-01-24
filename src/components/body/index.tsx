@@ -7,6 +7,7 @@ import { GitUser } from '../../types/index'
 import { ROUTER_NAME } from '../../config/constant'
 import { useAppSelector, } from '../../redux/hooks'
 import { ZH_LANGUAGE, JA_LANGUAGE, EN_LANGUAGE, } from '../../config/constant'
+import SearchModal from '../common/searchModal/'
 const Home = lazy(() => import(/* webpackChunkName: 'Home'*/ '../../pages' + ROUTER_NAME.home))
 const List = lazy(() => import(/* webpackChunkName: 'List'*/ '../../pages' + ROUTER_NAME.list))
 const About = lazy(() => import(/* webpackChunkName: 'About'*/ '../../pages' + ROUTER_NAME.about))
@@ -68,6 +69,7 @@ const BlogBody: React.FC<{}> = () => {
                     <Route path='/*' element={<Navigate to={ROUTER_NAME.home} />}></Route>
                 </Routes>
             </Suspense>
+            <SearchModal />
         </Layout>
     )
 }

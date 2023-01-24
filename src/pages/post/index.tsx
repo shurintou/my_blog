@@ -31,12 +31,12 @@ const Post = () => {
     const [postLang, setPostLang] = useState(getLocalHtmlLang())
     const [gitalkShouldRender, setGitalkShouldRender] = useState(false)
     const backToPostList = () => {
-        const backSearchParams = window.history.state?.usr?.backSearchParams || sessionStorage.getItem(STORAGE_KEY.backSearchParams)
-        if (backSearchParams) {
-            navigate(ROUTER_NAME.list + backSearchParams)
+        const historyBackPath = window.history.state?.usr?.historyBackPath || sessionStorage.getItem(STORAGE_KEY.historyBackPath)
+        if (historyBackPath) {
+            navigate(historyBackPath)
         }
         else {
-            navigate(ROUTER_NAME.list + `?${ROUTER_NAME.props.page}=1`)
+            navigate(ROUTER_NAME.home)
         }
     }
 

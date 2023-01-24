@@ -33,7 +33,7 @@ export function searchPosts(params: PostSearchRequestParam) {
         url: baseURL + '/search/issues?q=' + comBinequery,
         method: 'get',
         headers: {
-            accept: 'application/vnd.github.v3+json',
+            accept: params.textMatch ? 'application/vnd.github.text-match+json' : 'application/vnd.github.v3+json',
         },
         auth: auth,
         params: {
