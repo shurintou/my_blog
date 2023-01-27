@@ -87,13 +87,10 @@ const PostListItemComp: React.FC<PostListItem> = (props) => {
                 >
                     <Layout
                         style={{
-                            WebkitLineClamp: config.postProps.previewLine,
-                            lineClamp: config.postProps.previewLine,
-                            display: '-webkit-box',
-                            WebkitBoxOrient: 'vertical',
+                            display: 'flex',
+                            flexDirection: 'column',
                             overflow: 'hidden',
                             lineHeight: '2em',
-                            maxHeight: 5 * (config.postProps.previewLine) + 'em',
                             wordWrap: 'break-word',
                         }}>
                         <Markdown postText={props.body}></Markdown>

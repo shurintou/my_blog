@@ -76,81 +76,86 @@ const Markdown: React.FC<MarkdownProps> = (props) => {
     const isAtListPage = () => window.location.href.indexOf(ROUTER_NAME.list) >= 0
 
     return (
-        <ReactMarkdown
-            children={postText ? (isAtListPage() ? subStringOfPostText(postText) : postText) : ''}
-            remarkPlugins={[remarkGfm, remarkBreaks]}
-            className={markdownStyle.textFontSize}
-            components={{
-                h1: hRenderFunc,
-                h2: hRenderFunc,
-                h3: hRenderFunc,
-                h4: hRenderFunc,
-                h5: hRenderFunc,
-                h6: hRenderFunc,
-                code({ node, inline, className, children, ...props }) {
-                    const match = /language-(\w+)/.exec(className || '')
-                    return !inline && match ? (
-                        <SyntaxHighlighter
-                            children={String(children).replace(/\n$/, '')}
-                            style={tomorrow ? tomorrow : undefined}
-                            customStyle={{ borderRadius: '6px' }}
-                            language={match[1]}
-                            PreTag="div"
-                        />
-                    ) : (
-                        <code
-                            style={{
-                                padding: '.2em .4em',
-                                margin: 0,
-                                backgroundColor: 'rgba(175,184,193,0.2)',
-                                borderRadius: '6px',
-                            }}
-                            className={className}
-                            {...props}>
-                            {children}
-                        </code>
-                    )
-                },
-                blockquote({ node, className, children, ...props }) {
-                    return (
-                        <blockquote
-                            {...props}
-                            /* set the margin of p tag in blockquote 0, to prevent the overflow of borderLeft.  */
-                            className={markdownStyle.pTagInsideBlockquote}
-                            style={{
-                                borderLeft: '.25em solid',
-                                borderLeftColor: config.antdProps.borderColor,
-                                padding: '0 1em',
-                            }}>
-                            {children}
-                        </blockquote>
-                    )
-                },
-                a({ children, href }) {
-                    return <Link underline onClick={(e) => scrollToAnchor(e, href)}>{children}</Link>
-                },
-                table({ children }) {
-                    return <div style={{ overflowX: 'auto' }}><table>{children}</table></div>
-                },
-                tr({ children, isHeader, index, }) {
-                    return <tr style={{
-                        borderStyle: 'solid',
-                        borderWidth: '2px',
-                        borderColor: config.markdownProps.trBorderColor,
-                        backgroundColor: (isHeader || (index && index % 2 === 1)) ? undefined : config.markdownProps.trBackgroundColor
-                    }}>{children}</tr>
-                },
-                th: curringThTdRenderFunc('th'),
-                td: curringThTdRenderFunc('td'),
-                img({ src, alt, }) {
-                    if (isAtListPage()) {
-                        return <span></span> //not render img when at the list page.
-                    }
-                    return <Image alt={alt} src={src} style={{ maxWidth: '100%' }} />
-                },
-                p: replacePTag,
-            }}
-        />
+        <div style={{ flex: 1 }}>
+            <ReactMarkdown
+                children={postText ? (isAtListPage() ? subStringOfPostText(postText) : postText) : ''}
+                remarkPlugins={[remarkGfm, remarkBreaks]}
+                className={markdownStyle.textFontSize}
+                components={{
+                    h1: hRenderFunc,
+                    h2: hRenderFunc,
+                    h3: hRenderFunc,
+                    h4: hRenderFunc,
+                    h5: hRenderFunc,
+                    h6: hRenderFunc,
+                    code({ node, inline, className, children, ...props }) {
+                        const match = /language-(\w+)/.exec(className || '')
+                        return !inline && match && !isAtListPage() ? (
+                            <SyntaxHighlighter
+                                children={String(children).replace(/\n$/, '')}
+                                style={tomorrow ? tomorrow : undefined}
+                                customStyle={{ borderRadius: '6px' }}
+                                language={match[1]}
+                                PreTag="div"
+                            />
+                        ) : (
+                            children.toString().trim().length > 0 ?
+                                <code
+                                    style={{
+                                        padding: '.2em .4em',
+                                        margin: 0,
+                                        backgroundColor: 'rgba(175,184,193,0.2)',
+                                        borderRadius: '6px',
+                                    }}
+                                    className={className}
+                                    {...props}>
+                                    {children}
+                                </code>
+                                :
+                                <span></span>
+                        )
+                    },
+                    blockquote({ node, className, children, ...props }) {
+                        return (
+                            <blockquote
+                                {...props}
+                                /* set the margin of p tag in blockquote 0, to prevent the overflow of borderLeft.  */
+                                className={markdownStyle.pTagInsideBlockquote}
+                                style={{
+                                    borderLeft: '.25em solid',
+                                    borderLeftColor: config.antdProps.borderColor,
+                                    padding: '0 1em',
+                                }}>
+                                {children}
+                            </blockquote>
+                        )
+                    },
+                    a({ children, href }) {
+                        return <Link underline onClick={(e) => scrollToAnchor(e, href)}>{children}</Link>
+                    },
+                    table({ children }) {
+                        return <div style={{ overflowX: 'auto' }}><table>{children}</table></div>
+                    },
+                    tr({ children, isHeader, index, }) {
+                        return <tr style={{
+                            borderStyle: 'solid',
+                            borderWidth: '2px',
+                            borderColor: config.markdownProps.trBorderColor,
+                            backgroundColor: (isHeader || (index && index % 2 === 1)) ? undefined : config.markdownProps.trBackgroundColor
+                        }}>{children}</tr>
+                    },
+                    th: curringThTdRenderFunc('th'),
+                    td: curringThTdRenderFunc('td'),
+                    img({ src, alt, }) {
+                        if (isAtListPage()) {
+                            return <span></span> //not render img when at the list page.
+                        }
+                        return <Image alt={alt} src={src} style={{ maxWidth: '100%' }} />
+                    },
+                    p: replacePTag,
+                }}
+            />
+        </div>
     )
 }
 

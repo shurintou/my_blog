@@ -15,7 +15,7 @@ const configObj = {
     postProps: {
         postListItemCountPerPage: 5,
         commentCountPerPage: 10,
-        previewLine: 5,
+        previewLine: 3,
     },
     aboutProps: {
         messageBoardIssueId: 10
