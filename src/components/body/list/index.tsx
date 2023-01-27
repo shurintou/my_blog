@@ -64,7 +64,7 @@ const PostList = () => {
             })
             .catch((e: AxiosError) => {
                 setShowError(true)
-                setResponseStatus(e.request.status)
+                setResponseStatus(e?.request?.status)
             })
             .finally(() => { setLoading(false) })
     }
