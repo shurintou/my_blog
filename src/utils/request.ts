@@ -1,4 +1,4 @@
-import axios, { Canceler } from 'axios'
+import axios, { Canceler, AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios'
 import { isSameRequest } from './common'
 import { message } from 'antd'
 import { PendingRequest } from '../types/index'
@@ -23,7 +23,7 @@ const request = axios.create({ //create an instance using interceptors
     headers: {}
 })
 request.interceptors.request.use(
-    config => {
+    (config: AxiosRequestConfig) => {
         config.cancelToken = new CancelToken(function executor(c) {
             cancel = c
         })
@@ -47,17 +47,17 @@ request.interceptors.request.use(
 )
 
 request.interceptors.response.use(
-    res => {
+    (res: AxiosResponse) => {
         removeResponsedRequestHandler(res)
         return res.data
     },
-    error => {
+    (error: AxiosError) => {
         const res = error.response
         if (res) {
             removeResponsedRequestHandler(res)
             const status = res.status
             if (process.env.NODE_ENV === 'production') {
-                if (status === 401 && res.config.method !== 'get' && res.config.url.indexOf('graphql') === -1) {
+                if (status === 401 && res.config.method !== 'get' && res?.config?.url?.indexOf('graphql') === -1) {
                     switch (getLocalHtmlLang()) {
                         case ZH_LANGUAGE.key:
                             message.warning(ZH_LANGUAGE.loginMessage)
@@ -71,7 +71,7 @@ request.interceptors.response.use(
                 }
             }
         }
-        console.error(error)
+        return Promise.reject(error)
     }
 )
 

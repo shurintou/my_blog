@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { List, Skeleton, Divider, Modal, Input, Typography, } from 'antd'
+import { List, Skeleton, Divider, Modal, Input, Typography, Result } from 'antd'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { SearchOutlined } from '@ant-design/icons'
 import { useAppSelector, useAppDispatch } from '../../../redux/hooks'
@@ -12,6 +12,7 @@ import config from '../../../config/config'
 import { parseISODateStr } from '../../../utils/formatter'
 import { useNavigate } from "react-router-dom"
 import { KeywordSearchItemRes, KeywordSearchListItem, KeywordSearchResponse, PostSearchRequestParam, TextMatch } from '../../../types/index'
+import { AxiosError } from 'axios'
 
 const { Text } = Typography
 
@@ -36,6 +37,8 @@ const SearchModal = () => {
         setPage(newPage)
         searchKeywordFunc([searchKeyword, newPage])
     }
+    const [showError, setShowError] = useState(false)
+    const [responseStatus, setResponseStatus] = useState(200)
 
     const navigateToPost = (item: KeywordSearchListItem) => {
         const historyBackPath = document.location.pathname + document.location.search
@@ -69,8 +72,12 @@ const SearchModal = () => {
                 setHasmore(newDataListLength >= postListItemCountPerPage)
                 setData([...data, ...newDataList])
                 setTotalCount(res.total_count)
+                setShowError(false)
             })
-            .catch(() => { })
+            .catch((e: AxiosError) => {
+                setShowError(true)
+                setResponseStatus(e.request.status)
+            })
             .finally(() => {
                 setLoading(false)
                 if (firstTimeRender) setFirstTimeRender(false)
@@ -141,71 +148,84 @@ const SearchModal = () => {
                         EN_LANGUAGE.searchResult + (totalCount > 0 ? ', total' + totalCount + 'records' : '')
             }
             </Divider>
-            <InfiniteScroll
-                dataLength={data.length}
-                next={loadMoreData}
-                hasMore={hasmore}
-                loader={<Skeleton paragraph={{ rows: 3 }} active />}
-                endMessage={data.length > postListItemCountPerPage &&
-                    <Divider plain>{
-                        selectedLanguage === ZH_LANGUAGE.key ?
-                            ZH_LANGUAGE.noMoreText
-                            :
-                            selectedLanguage === JA_LANGUAGE.key ?
-                                JA_LANGUAGE.noMoreText :
-                                EN_LANGUAGE.noMoreText}
-                    </Divider>
-                }
-                height={'65vh'}
-            >
-                <List
-                    itemLayout="vertical"
-                    size="large"
-                    dataSource={data}
-                    style={{ display: firstTimeRender ? 'none' : 'block' }}
-                    renderItem={(item: KeywordSearchListItem) => (
-                        <List.Item key={item.id} style={{
-                            backgroundColor: config.antdProps.searchResultItemBackgroundColor,
-                            margin: '0em 1em 1.5em',
-                            borderRadius: '4px',
-                            boxShadow: '5px 5px 5px' + config.antdProps.shadowColor,
-                            cursor: 'pointer'
-                        }}
-                            onClick={() => navigateToPost(item)}
-                        >
-                            <Typography.Title level={5} style={{ margin: 0, color: config.antdProps.themeColor }}>{item.title}</Typography.Title>
-                            <Text type="secondary">{item.created_at.substring(0, 10)}</Text>
-                            <Divider style={{ margin: '2px' }} />
-                            {item.text_matches.some(textMatch => textMatch.property === 'body') ?
-                                item.text_matches.map((textMatch, index) =>
-                                    textMatch.property === 'body' &&
-                                    <React.Fragment key={item.id + 'textMatch' + index}><RenderHighlightText textMatch={textMatch} /></React.Fragment>
-                                ) : item.body.substring(0, 200)}
+            {
+                showError ? <Result
+                    status="error"
+                    title={responseStatus}
+                    subTitle={selectedLanguage === ZH_LANGUAGE.key ?
+                        ZH_LANGUAGE.errorMessage
+                        :
+                        selectedLanguage === JA_LANGUAGE.key ?
+                            JA_LANGUAGE.errorMessage :
+                            EN_LANGUAGE.errorMessage}
+                /> :
 
-                        </List.Item>
-                    )}
-                    locale={{
-                        emptyText: selectedLanguage === ZH_LANGUAGE.key ?
-                            ZH_LANGUAGE.emptyText
-                            :
-                            selectedLanguage === JA_LANGUAGE.key ?
-                                JA_LANGUAGE.emptyText :
-                                EN_LANGUAGE.emptyText
-                    }}
-                    loading={{
-                        spinning: loading,
-                        size: 'large',
-                        tip:
-                            selectedLanguage === ZH_LANGUAGE.key ?
-                                ZH_LANGUAGE.searching
-                                :
-                                selectedLanguage === JA_LANGUAGE.key ?
-                                    JA_LANGUAGE.searching :
-                                    EN_LANGUAGE.searching
-                    }}
-                >
-                </List>
-            </InfiniteScroll>
+                    <InfiniteScroll
+                        dataLength={data.length}
+                        next={loadMoreData}
+                        hasMore={hasmore}
+                        loader={<Skeleton paragraph={{ rows: 3 }} active />}
+                        endMessage={data.length > postListItemCountPerPage &&
+                            <Divider plain>{
+                                selectedLanguage === ZH_LANGUAGE.key ?
+                                    ZH_LANGUAGE.noMoreText
+                                    :
+                                    selectedLanguage === JA_LANGUAGE.key ?
+                                        JA_LANGUAGE.noMoreText :
+                                        EN_LANGUAGE.noMoreText}
+                            </Divider>
+                        }
+                        height={'65vh'}
+                    >
+                        <List
+                            itemLayout="vertical"
+                            size="large"
+                            dataSource={data}
+                            style={{ display: firstTimeRender ? 'none' : 'block' }}
+                            renderItem={(item: KeywordSearchListItem) => (
+                                <List.Item key={item.id} style={{
+                                    backgroundColor: config.antdProps.searchResultItemBackgroundColor,
+                                    margin: '0em 1em 1.5em',
+                                    borderRadius: '4px',
+                                    boxShadow: '5px 5px 5px' + config.antdProps.shadowColor,
+                                    cursor: 'pointer'
+                                }}
+                                    onClick={() => navigateToPost(item)}
+                                >
+                                    <Typography.Title level={5} style={{ margin: 0, color: config.antdProps.themeColor }}>{item.title}</Typography.Title>
+                                    <Text type="secondary">{item.created_at.substring(0, 10)}</Text>
+                                    <Divider style={{ margin: '2px' }} />
+                                    {item.text_matches.some(textMatch => textMatch.property === 'body') ?
+                                        item.text_matches.map((textMatch, index) =>
+                                            textMatch.property === 'body' &&
+                                            <React.Fragment key={item.id + 'textMatch' + index}><RenderHighlightText textMatch={textMatch} /></React.Fragment>
+                                        ) : item.body.substring(0, 200)}
+
+                                </List.Item>
+                            )}
+                            locale={{
+                                emptyText: selectedLanguage === ZH_LANGUAGE.key ?
+                                    ZH_LANGUAGE.emptyText
+                                    :
+                                    selectedLanguage === JA_LANGUAGE.key ?
+                                        JA_LANGUAGE.emptyText :
+                                        EN_LANGUAGE.emptyText
+                            }}
+                            loading={{
+                                spinning: loading,
+                                size: 'large',
+                                tip:
+                                    selectedLanguage === ZH_LANGUAGE.key ?
+                                        ZH_LANGUAGE.searching
+                                        :
+                                        selectedLanguage === JA_LANGUAGE.key ?
+                                            JA_LANGUAGE.searching :
+                                            EN_LANGUAGE.searching
+                            }}
+                        >
+                        </List>
+                    </InfiniteScroll>
+            }
         </Modal>
     )
 }

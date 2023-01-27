@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { useSearchParams } from "react-router-dom"
-import { List, Layout, BackTop } from 'antd'
+import { List, Layout, BackTop, Result } from 'antd'
 import PostListPagination from './pagination/'
 import { searchPosts } from '../../../api/post'
 import { debounce } from '../../../utils/common'
@@ -12,6 +12,7 @@ import config from '../../../config/config'
 import { useAppSelector } from '../../../redux/hooks'
 import { getLocalHtmlLang } from '../../../utils/userAgent'
 import { EN_LANGUAGE, JA_LANGUAGE, ZH_LANGUAGE, ROUTER_NAME, SYMBOL, STORAGE_KEY } from '../../../config/constant'
+import { AxiosError } from 'axios'
 
 const PostList = () => {
     const [searchParams, setSearchParams] = useSearchParams()
@@ -23,6 +24,8 @@ const PostList = () => {
     const selectedLanguage = useAppSelector((state) => state.language.value)
     const selectedFilterLabel = useAppSelector((state) => state.filterLabel.value)
     const checkedContentLanguage = useAppSelector((state) => state.contentLanguage.value)
+    const [showError, setShowError] = useState(false)
+    const [responseStatus, setResponseStatus] = useState(200)
 
     useEffect(() => {
         function windowResizeFunc() {
@@ -57,9 +60,13 @@ const PostList = () => {
                     return newData
                 })
                 setData(newDataList)
-                setLoading(false)
+                setShowError(false)
             })
-            .catch(() => { })
+            .catch((e: AxiosError) => {
+                setShowError(true)
+                setResponseStatus(e.request.status)
+            })
+            .finally(() => { setLoading(false) })
     }
 
     itemClickableRef.current = true
@@ -161,43 +168,54 @@ const PostList = () => {
     return (
         <Layout>
             <FilterBar isLoading={loading} renderMode={pcRenderMode} itemClickableHandler={setItemClickableRef}></FilterBar>
-            <List
-                itemLayout="vertical"
-                size="large"
-                dataSource={data}
-                style={{
-                    borderWidth: pcRenderMode && !loading ? '2px' : 'null',
-                    borderStyle: pcRenderMode && !loading ? 'solid' : 'null',
-                    borderColor: config.antdProps.borderColor,
-                    borderRadius: pcRenderMode && !loading ? '6px' : '0px',
-                    height: loading ? '100%' : '',
-                    paddingTop: loading && !loading ? '3em' : '',
-                    minHeight: '60vh',/* to solve the issue that select bar's drop down cannot be pulled up by clicking somewhere on mobile end*/
-                }}
-                renderItem={(item: PostListItem) => (
-                    <ListItem key={item.id} {...item}></ListItem>
-                )}
-                loading={{
-                    spinning: loading,
-                    size: 'large',
-                    tip:
-                        selectedLanguage === ZH_LANGUAGE.key ?
-                            ZH_LANGUAGE.loading
+            {showError ? <Result
+                status="error"
+                title={responseStatus}
+                subTitle={selectedLanguage === ZH_LANGUAGE.key ?
+                    ZH_LANGUAGE.errorMessage
+                    :
+                    selectedLanguage === JA_LANGUAGE.key ?
+                        JA_LANGUAGE.errorMessage :
+                        EN_LANGUAGE.errorMessage}
+            /> :
+                <List
+                    itemLayout="vertical"
+                    size="large"
+                    dataSource={data}
+                    style={{
+                        borderWidth: pcRenderMode && !loading ? '2px' : 'null',
+                        borderStyle: pcRenderMode && !loading ? 'solid' : 'null',
+                        borderColor: config.antdProps.borderColor,
+                        borderRadius: pcRenderMode && !loading ? '6px' : '0px',
+                        height: loading ? '100%' : '',
+                        paddingTop: loading && !loading ? '3em' : '',
+                        minHeight: '60vh',/* to solve the issue that select bar's drop down cannot be pulled up by clicking somewhere on mobile end*/
+                    }}
+                    renderItem={(item: PostListItem) => (
+                        <ListItem key={item.id} {...item}></ListItem>
+                    )}
+                    loading={{
+                        spinning: loading,
+                        size: 'large',
+                        tip:
+                            selectedLanguage === ZH_LANGUAGE.key ?
+                                ZH_LANGUAGE.loading
+                                :
+                                selectedLanguage === JA_LANGUAGE.key ?
+                                    JA_LANGUAGE.loading :
+                                    EN_LANGUAGE.loading
+                    }}
+                    locale={{
+                        emptyText: selectedLanguage === ZH_LANGUAGE.key ?
+                            ZH_LANGUAGE.emptyText
                             :
                             selectedLanguage === JA_LANGUAGE.key ?
-                                JA_LANGUAGE.loading :
-                                EN_LANGUAGE.loading
-                }}
-                locale={{
-                    emptyText: selectedLanguage === ZH_LANGUAGE.key ?
-                        ZH_LANGUAGE.emptyText
-                        :
-                        selectedLanguage === JA_LANGUAGE.key ?
-                            JA_LANGUAGE.emptyText :
-                            EN_LANGUAGE.emptyText
-                }}
-            >
-            </List>
+                                JA_LANGUAGE.emptyText :
+                                EN_LANGUAGE.emptyText
+                    }}
+                >
+                </List>
+            }
             <Layout style={{
                 marginTop: '1em',
                 position: 'sticky',

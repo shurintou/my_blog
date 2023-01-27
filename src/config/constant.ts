@@ -24,6 +24,7 @@ export const ZH_LANGUAGE = {
     searchResult: '搜索结果',
     noMoreText: '已经到底了',
     searching: '搜索中...',
+    errorMessage: '抱歉出错了，请稍后重试。',
 
 }
 export const JA_LANGUAGE = {
@@ -50,6 +51,7 @@ export const JA_LANGUAGE = {
     searchResult: '検索結果',
     noMoreText: 'ここはもう最後だよ',
     searching: '検索中...',
+    errorMessage: '申し訳ございません、エラーになりました。しばらくお待ちになってからやり直してください。',
 
 }
 export const EN_LANGUAGE = {
@@ -76,6 +78,7 @@ export const EN_LANGUAGE = {
     searchResult: 'search result',
     noMoreText: 'It is all, nothing more.',
     searching: 'searching...',
+    errorMessage: 'Sorry, something went wrong, Please try again later.',
 
 }
 
