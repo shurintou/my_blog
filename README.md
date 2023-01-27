@@ -21,8 +21,8 @@ The UI parts of the blog can be displayed in three languages(`English`, `Simplif
 ### SPA with browserHistory
 Though the project is developed as a single page application(`SPA`), the browserHistory can totally work at each operation you have made, and copying an URL can get the exact same result as the copied one. 
 
-### filter contents 
-Contents can be filtered by `categories`(memo, technic, etc.), `tags`(Java, Javascript, ...), or `languages`, just choose what you want to read and filter it!
+### filter/search posts 
+Posts can be filtered by `categories`(memo, technic, ...), `tags`(Java, Javascript, ...), and `languages`(English, Japanese, Chinese), or searched by any keyword you are interested.
 
 ## :key:How does it work ?
 
