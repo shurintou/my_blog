@@ -142,20 +142,24 @@ const PostList = () => {
     }, [selectedLanguage, selectedFilterLabel])
 
     useEffect(() => {
-        const checkedContentLanguageStr = transferSearchParamsStr(checkedContentLanguage)
-        const selectedFilterLabelStr = transferSearchParamsStr(selectedFilterLabel.map(label => label.id))
-        let routerObj = { [ROUTER_NAME.props.page]: "1" }
-        let shouldSetSearchParams = false
-        if (selectedFilterLabelStr.length > 0) {
-            shouldSetSearchParams = true
-            routerObj[ROUTER_NAME.props.label] = selectedFilterLabelStr // if there arent' any label being selected, not show label prop in url.
-        }
-        if (checkedContentLanguageStr.length > 0) {
-            shouldSetSearchParams = true
-            routerObj[ROUTER_NAME.props.language] = checkedContentLanguageStr // if there arent' any label being selected, not show label prop in url.
-        }
-        if (shouldSetSearchParams) {
-            setSearchParams(routerObj)
+        const languages = searchParams.get(ROUTER_NAME.props.language)?.split(SYMBOL.searchParamsSpliter)
+        /* to fix the bug that backToPostList() always move to page 1 even the historyBackPath save the page data. */
+        if (languages?.length !== checkedContentLanguage.length || languages.filter(language => !checkedContentLanguage.includes(language)).length > 0) {
+            const checkedContentLanguageStr = transferSearchParamsStr(checkedContentLanguage)
+            const selectedFilterLabelStr = transferSearchParamsStr(selectedFilterLabel.map(label => label.id))
+            let routerObj = { [ROUTER_NAME.props.page]: "1" }
+            let shouldSetSearchParams = false
+            if (selectedFilterLabelStr.length > 0) {
+                shouldSetSearchParams = true
+                routerObj[ROUTER_NAME.props.label] = selectedFilterLabelStr // if there arent' any label being selected, not show label prop in url.
+            }
+            if (checkedContentLanguageStr.length > 0) {
+                shouldSetSearchParams = true
+                routerObj[ROUTER_NAME.props.language] = checkedContentLanguageStr // if there arent' any label being selected, not show label prop in url.
+            }
+            if (shouldSetSearchParams) {
+                setSearchParams(routerObj)
+            }
         }
         /* eslint-disable-next-line */
     }, [checkedContentLanguage])
