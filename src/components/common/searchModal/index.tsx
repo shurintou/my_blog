@@ -10,6 +10,7 @@ import { searchPosts } from '../../../api/post'
 import { debounce } from '../../../utils/common'
 import config from '../../../config/config'
 import { parseISODateStr } from '../../../utils/formatter'
+import { mobileAndTabletCheck } from '../../../utils/userAgent'
 import { useNavigate } from "react-router-dom"
 import { KeywordSearchItemRes, KeywordSearchListItem, KeywordSearchResponse, PostSearchRequestParam, TextMatch } from '../../../types/index'
 import { AxiosError } from 'axios'
@@ -175,7 +176,7 @@ const SearchModal = () => {
                                         EN_LANGUAGE.noMoreText}
                             </Divider>
                         }
-                        height={'65vh'}
+                        height={mobileAndTabletCheck() ? '55vh' : '65vh'}
                     >
                         <List
                             itemLayout="vertical"
