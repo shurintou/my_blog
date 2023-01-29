@@ -93,6 +93,10 @@ const SearchModal = () => {
                 page: searchKeywordArgs[1],
                 query: encodeURIComponent(searchKeywordArgs[0] + ' ') + 'in:title,body',
             })
+            if (searchKeywordArgs[1] === 1) { // to scroll to top of the scrollBar when a new keyword be searched.
+                const scrollTargetDiv = document.getElementsByClassName('infinite-scroll-component ')[0]
+                scrollTargetDiv.scrollTo({ top: 0 })
+            }
         }
     }
     /* eslint-disable-next-line */
