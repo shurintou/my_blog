@@ -27,12 +27,9 @@ const PostListItemComp: React.FC<PostListItem> = (props) => {
         }
     }
     const mouseBlurStyle = { cursor: 'pointer' }
-    const [isLastItem, setIsLastItem] = useState(false)
     const [postLang, setPostLang] = useState(getLocalHtmlLang())
 
-    useEffect(() => {
-        setIsLastItem((props.index || 0) >= (props.listLength || 0)) //divider of which is the last item would not be shown.
-    }, [props.index, props.listLength])
+
 
     const selectedLanguage = useAppSelector((state) => state.language.value)
     const [createText, setCreateText] = useState(getDateFromNowText(selectedLanguage, true))
@@ -70,16 +67,17 @@ const PostListItemComp: React.FC<PostListItem> = (props) => {
     const [likeText, setLikeText] = useState(getLikeCommentText(selectedLanguage)[0])
     const [commentText, setCommentText] = useState(getLikeCommentText(selectedLanguage)[1])
 
+    const listItemBackgroundCssObj = { backgroundColor: config.antdProps.listItemBackgroundColor }
     return (
-        <li lang={postLang}>
-            <Title level={3} onClick={navigateToPost} style={{ padding: '16px 24px 0px 24px', }}><Text style={mouseBlurStyle} >{props.title}</Text></Title>
-            <Layout style={{ padding: '0px 24px 16px 24px' }} >
+        <li lang={postLang} style={{ ...listItemBackgroundCssObj, ...props.layoutStyle }}>
+            <Title level={3} onClick={navigateToPost} style={{ padding: '16px 24px 0px 24px' }}><Text style={{ ...mouseBlurStyle, color: config.antdProps.themeColor }} >{props.title}</Text></Title>
+            <Layout style={{ padding: '0px 24px 16px 24px', ...listItemBackgroundCssObj }} >
                 <DateComp
                     dateFromNow={props.created_from_now}
                     dateLocal={props.created_at_local}
                     text={createText}
                 />
-                <LabelsComp labelList={props.labels} setPostLanguage={setPostLang}></LabelsComp>
+                <LabelsComp labelList={props.labels} setPostLanguage={setPostLang} layoutStyle={{ ...listItemBackgroundCssObj }}></LabelsComp>
                 <Divider style={{ marginTop: '0' }} />
                 <div
                     onClick={navigateToPost}
@@ -93,10 +91,10 @@ const PostListItemComp: React.FC<PostListItem> = (props) => {
                             lineHeight: '2em',
                             wordWrap: 'break-word',
                         }}>
-                        <Markdown postText={props.body}></Markdown>
+                        <Markdown postText={props.body} layoutStyle={listItemBackgroundCssObj}></Markdown>
                     </Layout>
                 </div>
-                <Layout style={{ marginBottom: '1em' }} >
+                <Layout style={{ marginBottom: '1em', ...listItemBackgroundCssObj }} >
                     <Text
                         onClick={navigateToPost}
                         style={{
@@ -112,6 +110,7 @@ const PostListItemComp: React.FC<PostListItem> = (props) => {
                     </Text>
                     <Space split={<Divider type="vertical" style={{ borderLeftColor: 'rgba(0,0,0,0.6)' }} />}>
                         <CommentComp
+                            layoutStyle={listItemBackgroundCssObj}
                             title={likeText}
                             slot={<HeartOutlined onClick={navigateToPost} />}
                             text={<Text>{
@@ -122,6 +121,7 @@ const PostListItemComp: React.FC<PostListItem> = (props) => {
                                 + props.reactions.heart}
                             </Text>} />
                         <CommentComp
+                            layoutStyle={listItemBackgroundCssObj}
                             title={commentText}
                             slot={<CommentOutlined onClick={navigateToPost} />}
                             text={<Text>{props.comments
@@ -130,7 +130,6 @@ const PostListItemComp: React.FC<PostListItem> = (props) => {
                     </Space>
                 </Layout>
             </Layout>
-            {!isLastItem && <Divider style={{ borderTopColor: 'rgba(0,0,0,0.2)', margin: 0 }} />}
         </li>
     )
 }

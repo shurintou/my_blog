@@ -11,6 +11,7 @@ const configObj = {
         shadowColor: '#d0d7de',
         highlightTextColor: 'black',
         highlightTextBackgroundColor: 'yellow',
+        listItemBackgroundColor: '#FFFFFF',
     },
     postProps: {
         postListItemCountPerPage: 5,

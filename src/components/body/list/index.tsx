@@ -187,16 +187,21 @@ const PostList = () => {
                     size="large"
                     dataSource={data}
                     style={{
-                        borderWidth: pcRenderMode && !loading ? '2px' : 'null',
-                        borderStyle: pcRenderMode && !loading ? 'solid' : 'null',
-                        borderColor: config.antdProps.borderColor,
-                        borderRadius: pcRenderMode && !loading ? '6px' : '0px',
                         height: loading ? '100%' : '',
                         paddingTop: loading && !loading ? '3em' : '',
                         minHeight: '60vh',/* to solve the issue that select bar's drop down cannot be pulled up by clicking somewhere on mobile end*/
                     }}
                     renderItem={(item: PostListItem) => (
-                        <ListItem key={item.id} {...item}></ListItem>
+                        <ListItem key={item.id} {...item} layoutStyle={{
+                            borderWidth: pcRenderMode && !loading ? '2px' : '1px',
+                            borderLeftStyle: pcRenderMode && !loading ? 'solid' : 'none',
+                            borderRightStyle: pcRenderMode && !loading ? 'solid' : 'none',
+                            borderTopStyle: !loading ? 'solid' : 'none',
+                            borderBottomStyle: !loading ? 'solid' : 'none',
+                            borderColor: config.antdProps.borderColor,
+                            borderRadius: pcRenderMode && !loading ? '6px' : '0px',
+                            marginBottom: item.index === item.listLength ? '0em' : '1.2em',
+                        }}></ListItem>
                     )}
                     loading={{
                         spinning: loading,

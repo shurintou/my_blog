@@ -1,4 +1,4 @@
-import { ReactElement } from "react"
+import { CSSProperties, ReactElement } from "react"
 
 export interface GitUser {
     id: number,
@@ -78,6 +78,7 @@ export interface PostListItem extends PostsItemRes {
     index?: number,
     listLength?: number,
     clickable?: boolean,
+    layoutStyle?: CSSProperties | undefined,
 }
 
 export interface KeywordSearchListItem extends KeywordSearchItemRes {
@@ -99,7 +100,8 @@ export interface Label {
 
 
 export interface MarkdownProps {
-    postText: string | undefined
+    postText: string | undefined,
+    layoutStyle?: CSSProperties | undefined,
 }
 
 export interface GitalkProps {
@@ -117,6 +119,7 @@ export interface CommentCompProps {
     text: ReactElement,
     slot: ReactElement,
     title: string,
+    layoutStyle?: CSSProperties | undefined,
 }
 
 type Dispatch<A> = (value: A) => void
@@ -170,6 +173,7 @@ export interface PostLikeReactionResByGraphQl {
 export interface LabelsCompoProps {
     labelList: Array<Label>,
     setPostLanguage: Dispatch<SetStateAction<string>>,
+    layoutStyle?: CSSProperties | undefined
 }
 
 export interface PostListPaginationrProps {

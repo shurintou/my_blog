@@ -135,7 +135,7 @@ const LabelsCompo: React.FC<LabelsCompoProps> = (props) => {
     }
 
     return (
-        <Layout>
+        <Layout style={{ ...props.layoutStyle }}>
             <div style={{ marginBottom: '1em' }}>
                 <Text style={{ marginRight: '0.5em' }}><span lang={selectedLanguage}>{categoryText}</span></Text>
                 <RenderTooltipWithTag tag={category} />

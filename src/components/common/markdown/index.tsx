@@ -76,7 +76,7 @@ const Markdown: React.FC<MarkdownProps> = (props) => {
     const isAtListPage = () => window.location.href.indexOf(ROUTER_NAME.list) >= 0
 
     return (
-        <div style={{ flex: 1 }}>
+        <div style={{ ...props.layoutStyle, flex: 1 }}>
             <ReactMarkdown
                 children={postText ? (isAtListPage() ? subStringOfPostText(postText) : postText) : ''}
                 remarkPlugins={[remarkGfm, remarkBreaks]}

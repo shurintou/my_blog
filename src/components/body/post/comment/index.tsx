@@ -7,7 +7,7 @@ const { Text } = Typography
 
 const commentComp: React.FC<CommentCompProps> = (props) => {
     return (
-        <span>
+        <span style={{ ...props.layoutStyle }}>
             <Tooltip title={props.title} color={config.antdProps.themeColor}>
                 <span>
                     {props.slot}
