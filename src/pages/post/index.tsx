@@ -109,6 +109,7 @@ const Post = () => {
     const [likeText, setLikeText] = useState(getLikeCommentText(selectedLanguage)![0])
     const [commentText, setCommentText] = useState(getLikeCommentText(selectedLanguage)![1])
 
+    const postBackgroundCssObj = { backgroundColor: config.antdProps.postBackgroundColor }
 
     return (
         <Layout lang={postLang}>
@@ -119,34 +120,39 @@ const Post = () => {
                     {hasData
                         ?
                         <Layout>
-                            <Layout>
+                            <Layout >
                                 <Title
                                     level={3}
                                     style={{
-                                        backgroundColor: config.antdProps.titleBackgroundColor,
+                                        backgroundColor: pcRenderMode ? config.antdProps.titleBackgroundColor : config.antdProps.postBackgroundColor,
                                         border: '2px solid',
-                                        borderColor: config.antdProps.borderColor,
+                                        borderColor: pcRenderMode ? config.antdProps.borderColor : config.antdProps.postBackgroundColor,
                                         borderRadius: pcRenderMode ? '6px 6px 0px 0px' : '0px',
                                         marginBottom: '0em',
-                                        paddingLeft: '0.5em',
+                                        paddingLeft: pcRenderMode ? '0.5em' : '0em',
                                     }}
                                 >
                                     <Button
                                         style={{
-                                            backgroundColor: config.antdProps.borderColor,
-                                            verticalAlign: '0px'
+                                            backgroundColor: pcRenderMode ? config.antdProps.borderColor : config.antdProps.postBackgroundColor,
+                                            verticalAlign: '0px',
+                                            borderColor: pcRenderMode ? config.antdProps.borderColor : config.antdProps.postBackgroundColor,
                                         }}
                                         icon={<LeftOutlined />}
                                         onClick={backToPostList}
                                     ></Button>
-                                    {postContent?.title}</Title>
+                                    <Text style={{ color: config.antdProps.themeColor }}>
+                                        {postContent?.title}
+                                    </Text>
+                                </Title>
                             </Layout>
                             <Layout
                                 style={{
                                     padding: '1em 1em',
-                                    border: '2px solid',
+                                    border: pcRenderMode ? '2px solid' : 'none',
                                     borderColor: config.antdProps.borderColor,
                                     borderRadius: pcRenderMode ? '0px 0px 6px 6px' : '0px',
+                                    ...postBackgroundCssObj,
                                 }}
                             >
                                 <Row>
@@ -160,7 +166,7 @@ const Post = () => {
                                     <Col span={1} offset={7}>
                                     </Col>
                                 </Row>
-                                {postContent && <LabelsComp labelList={postContent?.labels} setPostLanguage={setPostLang}></LabelsComp>}
+                                {postContent && <LabelsComp layoutStyle={{ ...postBackgroundCssObj }} labelList={postContent?.labels} setPostLanguage={setPostLang}></LabelsComp>}
                                 <Divider style={{ margin: '0em 0em 1em 0em' }} />
                                 <Markdown postText={postContent?.body} />
                                 {
