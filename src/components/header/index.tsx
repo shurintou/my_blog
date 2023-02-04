@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect, useRef } from 'react'
 import { Layout, Row, Col, Button, Dropdown, Menu } from 'antd'
-import { HomeOutlined, ReadOutlined, UserOutlined, GlobalOutlined, } from '@ant-design/icons'
+import { HomeOutlined, ReadOutlined, UserOutlined, GlobalOutlined, SearchOutlined } from '@ant-design/icons'
 import { useNavigate } from "react-router-dom"
 import config from '../../config/config'
 import { setLocalHtmlLang } from '../../utils/userAgent'
@@ -10,6 +10,7 @@ import headerStyle from './index.module.css'
 import { useAppSelector, useAppDispatch } from '../../redux/hooks'
 import { changeLocalLanguage } from '../../features/language/languageSlice'
 import { changeFilterLabel } from '../../features/filterLabel/filterLabelSlice'
+import { changeSearchModalOpen } from '../../features/searchModalOpen/searchModalOpenSlice'
 import { ZH_LANGUAGE, JA_LANGUAGE, EN_LANGUAGE, ROUTER_NAME } from '../../config/constant'
 
 const { Header } = Layout
@@ -66,6 +67,10 @@ const BlogHeader: React.FC<{}> = () => {
         if (document.location.href.indexOf(firstPageUrl) > 0) scrollToTop()
     }
 
+    const searchClickHandler = () => {
+        dispatch(changeSearchModalOpen(true))
+    }
+
     const scrollToTop = () => window.scroll(0, 0)
 
 
@@ -101,6 +106,13 @@ const BlogHeader: React.FC<{}> = () => {
         'lg': { span: 3 },
         'xl': { span: 2 },
     }
+    const postPropObj: AntdColPropObj = {
+        'xs': { span: selectedLanguage === ZH_LANGUAGE.key ? 6 : 5 },
+        'sm': { span: 5 },
+        'md': { span: 4 },
+        'lg': { span: 3 },
+        'xl': { span: 2 },
+    }
     const offsetPropObj: AntdColPropObj = {
         'xs': { offset: 0 },
         'sm': { offset: 1 },
@@ -109,6 +121,13 @@ const BlogHeader: React.FC<{}> = () => {
         'xl': { offset: 4 },
     }
     const languageSpanPropObj: AntdColPropObj = {
+        'xs': { span: 3 },
+        'sm': { span: 2 },
+        'md': { span: 2 },
+        'lg': { span: 1 },
+        'xl': { span: 1 },
+    }
+    const globalSpanPropObj: AntdColPropObj = {
         'xs': { span: 2 },
         'sm': { span: 2 },
         'md': { span: 2 },
@@ -116,11 +135,11 @@ const BlogHeader: React.FC<{}> = () => {
         'xl': { span: 1 },
     }
     const languageOffsetPropObj: AntdColPropObj = {
-        'xs': { offset: 4 },
-        'sm': { offset: 6 },
-        'md': { offset: 8 },
-        'lg': { offset: 11 },
-        'xl': { offset: 13 },
+        'xs': { offset: selectedLanguage === ZH_LANGUAGE.key ? 1 : 2 },
+        'sm': { offset: 4 },
+        'md': { offset: 6 },
+        'lg': { offset: 10 },
+        'xl': { offset: 12 },
     }
     const menu =
         <Menu selectedKeys={[selectedLanguage]}
@@ -162,13 +181,13 @@ const BlogHeader: React.FC<{}> = () => {
                     )
                     }
                 >
-                    <Button type="primary" icon={<HomeOutlined />} onClick={homeClickHandler}>{menuTabNames && menuTabNames[0]}</Button>
+                    <Button type="primary" style={{ padding: '0px' }} icon={<HomeOutlined />} onClick={homeClickHandler}>{menuTabNames && menuTabNames[0]}</Button>
+                </Col>
+                <Col {...postPropObj}>
+                    <Button type="primary" style={{ padding: '0px' }} icon={<ReadOutlined />} onClick={postClickHandler}>{menuTabNames && menuTabNames[1]}</Button>
                 </Col>
                 <Col {...spanPropObj}>
-                    <Button type="primary" icon={<ReadOutlined />} onClick={postClickHandler}>{menuTabNames && menuTabNames[1]}</Button>
-                </Col>
-                <Col {...spanPropObj}>
-                    <Button type="primary" icon={<UserOutlined />} onClick={aboutClickHandler}>{menuTabNames && menuTabNames[2]}</Button>
+                    <Button type="primary" style={{ padding: '0px' }} icon={<UserOutlined />} onClick={aboutClickHandler}>{menuTabNames && menuTabNames[2]}</Button>
                 </Col>
                 <Col
                     {
@@ -186,6 +205,9 @@ const BlogHeader: React.FC<{}> = () => {
                     )
                     }
                 >
+                    <Button type="primary" icon={<SearchOutlined />} onClick={searchClickHandler}></Button>
+                </Col>
+                <Col {...globalSpanPropObj}>
                     <Dropdown overlay={menu} placement="bottomRight">
                         <Button type="primary" icon={<GlobalOutlined />}></Button>
                     </Dropdown>
