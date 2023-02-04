@@ -49,7 +49,7 @@ export const JA_LANGUAGE = {
     filterHintText: 'または下記カテゴリーやタグで絞り込み検索',
     searchBarPlaceHolder: '検索するキーワードを入力してください',
     searchResult: '検索結果',
-    noMoreText: 'ここはもう最後だよ',
+    noMoreText: 'もう最後だよ',
     searching: '検索中...',
     errorMessage: '申し訳ございません、エラーになりました。しばらくお待ちになってからやり直してください。',
 

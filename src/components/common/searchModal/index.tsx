@@ -70,7 +70,7 @@ const SearchModal = () => {
                     })
                     return newData
                 })
-                setHasmore(newDataListLength >= postListItemCountPerPage)
+                setHasmore(data.length + newDataList.length < res.total_count)
                 setData([...data, ...newDataList])
                 setTotalCount(res.total_count)
                 setShowError(false)
@@ -94,6 +94,7 @@ const SearchModal = () => {
                 query: encodeURIComponent(searchKeywordArgs[0] + ' ') + 'in:title,body',
             })
             if (searchKeywordArgs[1] === 1) { // to scroll to top of the scrollBar when a new keyword be searched.
+                setData([])
                 const scrollTargetDiv = document.getElementsByClassName('infinite-scroll-component ')[0]
                 scrollTargetDiv.scrollTo({ top: 0 })
             }
@@ -103,6 +104,7 @@ const SearchModal = () => {
     const memoedSearchKeywordFunc = useCallback(debounce(searchKeywordFunc, config.eventProps.searchDebounceDelay), [])
 
     useEffect(() => {
+        setPage(1) // to fix the issue that when searchKeyword is changed, the search page is not set to be default 1. 
         memoedSearchKeywordFunc(searchKeyword, 1)
         /* eslint-disable-next-line */
     }, [searchKeyword])
@@ -150,7 +152,7 @@ const SearchModal = () => {
                     ZH_LANGUAGE.searchResult + (totalCount > 0 ? '，共' + totalCount + '条' : '') :
                     selectedLanguage === JA_LANGUAGE.key ?
                         JA_LANGUAGE.searchResult + (totalCount > 0 ? '、全' + totalCount + '件' : '') :
-                        EN_LANGUAGE.searchResult + (totalCount > 0 ? ', total' + totalCount + 'records' : '')
+                        EN_LANGUAGE.searchResult + (totalCount > 0 ? ', total ' + totalCount + ' records' : '')
             }
             </Divider>
             {
@@ -169,8 +171,8 @@ const SearchModal = () => {
                         dataLength={data.length}
                         next={loadMoreData}
                         hasMore={hasmore}
-                        loader={<Skeleton paragraph={{ rows: 3 }} active />}
-                        endMessage={data.length > postListItemCountPerPage &&
+                        loader={searchKeyword.length > 0 ? <Skeleton paragraph={{ rows: 3 }} active /> : <span></span>}
+                        endMessage={(data.length > 0 && data.length >= totalCount) &&
                             <Divider plain>{
                                 selectedLanguage === ZH_LANGUAGE.key ?
                                     ZH_LANGUAGE.noMoreText
