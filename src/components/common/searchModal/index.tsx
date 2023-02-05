@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react'
+import { useSearchParams } from "react-router-dom"
 import { List, Skeleton, Divider, Modal, Input, Typography, Result } from 'antd'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { SearchOutlined } from '@ant-design/icons'
 import { useAppSelector, useAppDispatch } from '../../../redux/hooks'
 import { changeSearchModalOpen } from '../../../features/searchModalOpen/searchModalOpenSlice'
 import { changeSearchKeyword } from '../../../features/searchKeyword/searchKeywordSlice'
-import { EN_LANGUAGE, JA_LANGUAGE, ZH_LANGUAGE, ROUTER_NAME, STORAGE_KEY } from '../../../config/constant'
+import { EN_LANGUAGE, JA_LANGUAGE, ZH_LANGUAGE, ROUTER_NAME, } from '../../../config/constant'
 import { searchPosts } from '../../../api/post'
 import { debounce } from '../../../utils/common'
 import config from '../../../config/config'
@@ -32,6 +33,7 @@ const SearchModal = () => {
     const searchKeywordChangeHandler = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         dispatch(changeSearchKeyword(e.target.value))
     }
+    const [, setSearchParams] = useSearchParams()
     const navigate = useNavigate()
     const loadMoreData = () => {
         const newPage = page + 1
@@ -43,9 +45,13 @@ const SearchModal = () => {
 
     const navigateToPost = (item: KeywordSearchListItem) => {
         const historyBackPath = document.location.pathname + document.location.search
-        navigate(`${ROUTER_NAME.post}?id=${item.number}`, { state: { historyBackPath: historyBackPath } })
-        /* to fix the bug that when redirected after github login, the back button in post title not work */
-        sessionStorage.setItem(STORAGE_KEY.historyBackPath, historyBackPath)
+        if (window.location.href.indexOf(ROUTER_NAME.post) >= 0) {
+            window.scroll(0, 0)
+            setSearchParams({ [ROUTER_NAME.props.id]: item.number.toString() })
+        }
+        else {
+            navigate(`${ROUTER_NAME.post}?id=${item.number}`, { state: { historyBackPath: historyBackPath } })
+        }
         dispatch(changeSearchModalOpen(false))
     }
 

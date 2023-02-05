@@ -16,29 +16,22 @@ import Like from '../../components/body/post/like'
 import { getLocalHtmlLang } from '../../utils/userAgent'
 import { getLocalUser } from '../../utils/authentication'
 import { useAppSelector } from '../../redux/hooks'
-import { EN_LANGUAGE, JA_LANGUAGE, ZH_LANGUAGE, ROUTER_NAME, STORAGE_KEY } from '../../config/constant'
+import { EN_LANGUAGE, JA_LANGUAGE, ZH_LANGUAGE, STORAGE_KEY } from '../../config/constant'
 
 const { Title, Text } = Typography
 
 const Post = () => {
     const navigate = useNavigate()
     const [searchParams,] = useSearchParams()
-    const postIdStr = searchParams.get('id')
+    const [postIdStr, setPostIdStr] = useState(searchParams.get('id'))
     const [hasData, setHasData] = useState(false)
+    const [postReloading, setPostReloading] = useState(true)
     const [postContent, setPostContent] = useState<PostListItem>()
     const [likeCnt, setlikeCnt] = useState(0)
     const [pcRenderMode, setPcRenderMode] = useState(true)
     const [postLang, setPostLang] = useState(getLocalHtmlLang())
     const [gitalkShouldRender, setGitalkShouldRender] = useState(false)
-    const backToPostList = () => {
-        const historyBackPath = window.history.state?.usr?.historyBackPath || sessionStorage.getItem(STORAGE_KEY.historyBackPath)
-        if (historyBackPath) {
-            navigate(historyBackPath)
-        }
-        else {
-            navigate(ROUTER_NAME.home)
-        }
-    }
+    const backToFormerHistory = () => { navigate(-1) }
 
     const scrollToGitalk = () => {
         const gitalkEl: Element | null = document.getElementById('gitalk-container')
@@ -47,16 +40,41 @@ const Post = () => {
         }
     }
 
+    useEffect(() => {
+        const newPostId = searchParams.get('id')
+        setPostIdStr(newPostId)
+        loadPostInfoData(newPostId)
+        /* eslint-disable-next-line */
+    }, [searchParams])
+
     const selectedLanguage = useAppSelector((state) => state.language.value)
     useEffect(() => {
+        loadPostInfoData(postIdStr)
+        function windowResizeFunc() {
+            setPcRenderMode(window.innerWidth >= 768)
+        }
+        const windowResizeDebounceFunc = debounce(windowResizeFunc, config.eventProps.resizeDebounceDelay)
+        windowResizeFunc()
+        window.addEventListener('resize', windowResizeDebounceFunc)
+        return () => {
+            window.removeEventListener('resize', windowResizeDebounceFunc)
+        }
+        /* eslint-disable-next-line */
+    }, [selectedLanguage])
+
+    const loadPostInfoData = (postIdStr: string | null) => {
         if (postIdStr) {
             const postId = parseInt(postIdStr)
             const sessionStoragePost = sessionStorage.getItem(STORAGE_KEY.postId + postId)
             setGitalkShouldRender(false)
+            setPostReloading(true)
             if (sessionStoragePost) {
-                setPostContent(JSON.parse(sessionStoragePost)) // get post data from session storage if exists.
-                setHasData(true)
-                setGitalkShouldRender(true)
+                setTimeout(() => {// make it seems to request from server.
+                    setPostContent(JSON.parse(sessionStoragePost)) // get post data from session storage if exists.
+                    setHasData(true)
+                    setGitalkShouldRender(true)
+                    setPostReloading(false)
+                }, 500)
             }
             else {
                 getPostInfo({ number: postId }).then((res: PostsItemRes) => {
@@ -70,21 +88,10 @@ const Post = () => {
                     setHasData(true)
                     setGitalkShouldRender(true)
                     sessionStorage.setItem(STORAGE_KEY.postId + postId, JSON.stringify(postData))
-                })
+                }).finally(() => setPostReloading(false))
             }
         }
-
-        function windowResizeFunc() {
-            setPcRenderMode(window.innerWidth >= 768)
-        }
-        const windowResizeDebounceFunc = debounce(windowResizeFunc, config.eventProps.resizeDebounceDelay)
-        windowResizeFunc()
-        window.addEventListener('resize', windowResizeDebounceFunc)
-        return () => {
-            window.removeEventListener('resize', windowResizeDebounceFunc)
-        }
-        /* eslint-disable-next-line */
-    }, [selectedLanguage])
+    }
 
     const [createText, setCreateText] = useState(getDateFromNowText(selectedLanguage, true))
     const [updateText, setUpdateText] = useState(getDateFromNowText(selectedLanguage, false))
@@ -112,122 +119,124 @@ const Post = () => {
     const postBackgroundCssObj = { backgroundColor: config.antdProps.postBackgroundColor }
 
     return (
-        <Layout lang={postLang}>
-            <Row>
-                <Col xs={0} sm={0} md={3} lg={3} xl={3}>
-                </Col>
-                <Col xs={24} sm={24} md={18} lg={18} xl={18}>
-                    {hasData
-                        ?
-                        <Layout>
-                            <Layout >
-                                <Title
-                                    level={3}
+        <Spin
+            spinning={postReloading}
+            size={'large'}
+            tip={
+                selectedLanguage === ZH_LANGUAGE.key ?
+                    ZH_LANGUAGE.loading
+                    :
+                    selectedLanguage === JA_LANGUAGE.key ?
+                        JA_LANGUAGE.loading :
+                        EN_LANGUAGE.loading
+            }>
+            <Layout lang={postLang}>
+                <Row>
+                    <Col xs={0} sm={0} md={3} lg={3} xl={3}>
+                    </Col>
+                    <Col xs={24} sm={24} md={18} lg={18} xl={18}>
+                        {hasData
+                            ?
+                            <Layout>
+                                <Layout >
+                                    <Title
+                                        level={3}
+                                        style={{
+                                            backgroundColor: pcRenderMode ? config.antdProps.titleBackgroundColor : config.antdProps.postBackgroundColor,
+                                            border: '2px solid',
+                                            borderColor: pcRenderMode ? config.antdProps.borderColor : config.antdProps.postBackgroundColor,
+                                            borderRadius: pcRenderMode ? '6px 6px 0px 0px' : '0px',
+                                            marginBottom: '0em',
+                                            paddingLeft: pcRenderMode ? '0.5em' : '0em',
+                                        }}
+                                    >
+                                        <Button
+                                            style={{
+                                                backgroundColor: pcRenderMode ? config.antdProps.borderColor : config.antdProps.postBackgroundColor,
+                                                verticalAlign: '0px',
+                                                borderColor: pcRenderMode ? config.antdProps.borderColor : config.antdProps.postBackgroundColor,
+                                            }}
+                                            icon={<LeftOutlined />}
+                                            onClick={backToFormerHistory}
+                                        ></Button>
+                                        <Text style={{ color: config.antdProps.themeColor }}>
+                                            {postContent?.title}
+                                        </Text>
+                                    </Title>
+                                </Layout>
+                                <Layout
                                     style={{
-                                        backgroundColor: pcRenderMode ? config.antdProps.titleBackgroundColor : config.antdProps.postBackgroundColor,
-                                        border: '2px solid',
-                                        borderColor: pcRenderMode ? config.antdProps.borderColor : config.antdProps.postBackgroundColor,
-                                        borderRadius: pcRenderMode ? '6px 6px 0px 0px' : '0px',
-                                        marginBottom: '0em',
-                                        paddingLeft: pcRenderMode ? '0.5em' : '0em',
+                                        padding: '1em 1em',
+                                        border: pcRenderMode ? '2px solid' : 'none',
+                                        borderColor: config.antdProps.borderColor,
+                                        borderRadius: pcRenderMode ? '0px 0px 6px 6px' : '0px',
+                                        ...postBackgroundCssObj,
                                     }}
                                 >
-                                    <Button
-                                        style={{
-                                            backgroundColor: pcRenderMode ? config.antdProps.borderColor : config.antdProps.postBackgroundColor,
-                                            verticalAlign: '0px',
-                                            borderColor: pcRenderMode ? config.antdProps.borderColor : config.antdProps.postBackgroundColor,
-                                        }}
-                                        icon={<LeftOutlined />}
-                                        onClick={backToPostList}
-                                    ></Button>
-                                    <Text style={{ color: config.antdProps.themeColor }}>
-                                        {postContent?.title}
-                                    </Text>
-                                </Title>
-                            </Layout>
-                            <Layout
-                                style={{
-                                    padding: '1em 1em',
-                                    border: pcRenderMode ? '2px solid' : 'none',
-                                    borderColor: config.antdProps.borderColor,
-                                    borderRadius: pcRenderMode ? '0px 0px 6px 6px' : '0px',
-                                    ...postBackgroundCssObj,
-                                }}
-                            >
-                                <Row>
-                                    <Col span={16}>
+                                    <Row>
+                                        <Col span={16}>
+                                            <DateComp
+                                                dateFromNow={postContent ? postContent.created_from_now : ''}
+                                                dateLocal={postContent ? postContent.created_at_local : ''}
+                                                text={createText}
+                                            />
+                                        </Col>
+                                        <Col span={1} offset={7}>
+                                        </Col>
+                                    </Row>
+                                    {postContent && <LabelsComp layoutStyle={{ ...postBackgroundCssObj }} labelList={postContent?.labels} setPostLanguage={setPostLang}></LabelsComp>}
+                                    <Divider style={{ margin: '0em 0em 1em 0em' }} />
+                                    <Markdown postText={postContent?.body} />
+                                    {
+                                        postContent?.updated_at !== postContent?.created_at &&
                                         <DateComp
-                                            dateFromNow={postContent ? postContent.created_from_now : ''}
-                                            dateLocal={postContent ? postContent.created_at_local : ''}
-                                            text={createText}
+                                            dateFromNow={postContent ? postContent.updated_from_now : ''}
+                                            dateLocal={postContent ? postContent.updated_at_local : ''}
+                                            text={updateText}
                                         />
-                                    </Col>
-                                    <Col span={1} offset={7}>
-                                    </Col>
-                                </Row>
-                                {postContent && <LabelsComp layoutStyle={{ ...postBackgroundCssObj }} labelList={postContent?.labels} setPostLanguage={setPostLang}></LabelsComp>}
-                                <Divider style={{ margin: '0em 0em 1em 0em' }} />
-                                <Markdown postText={postContent?.body} />
-                                {
-                                    postContent?.updated_at !== postContent?.created_at &&
-                                    <DateComp
-                                        dateFromNow={postContent ? postContent.updated_from_now : ''}
-                                        dateLocal={postContent ? postContent.updated_at_local : ''}
-                                        text={updateText}
-                                    />
-                                }
-                                <Space size="small" split={<Divider type="vertical" style={{ borderLeftColor: 'rgba(0,0,0,0.6)' }} />}>
-                                    <CommentComp
-                                        title={likeText}
-                                        slot={
-                                            <Like number={postContent ? postContent?.number : 0} likeHandler={setlikeCnt}></Like>
-                                        }
-                                        text={
-                                            !postContent ? <Spin /> :
-                                                <Text>
-                                                    {
-                                                        postContent.reactions['+1']
-                                                        + postContent.reactions.hooray
-                                                        + postContent.reactions.laugh
-                                                        + postContent.reactions.rocket
-                                                        + (getLocalUser()?.id === 0 ? postContent.reactions.heart : likeCnt)
-                                                    }
-                                                </Text>
-                                        }
-                                    />
-                                    <CommentComp
-                                        title={commentText}
-                                        slot={<CommentOutlined onClick={scrollToGitalk} />}
-                                        text={!postContent ? <Spin /> : <Text>{postContent.comments}</Text>}
-                                    />
-                                </Space>
+                                    }
+                                    <Space size="small" split={<Divider type="vertical" style={{ borderLeftColor: 'rgba(0,0,0,0.6)' }} />}>
+                                        <CommentComp
+                                            title={likeText}
+                                            slot={
+                                                <Like number={postContent ? postContent?.number : 0} likeHandler={setlikeCnt}></Like>
+                                            }
+                                            text={
+                                                !postContent ? <Spin /> :
+                                                    <Text>
+                                                        {
+                                                            postContent.reactions['+1']
+                                                            + postContent.reactions.hooray
+                                                            + postContent.reactions.laugh
+                                                            + postContent.reactions.rocket
+                                                            + (getLocalUser()?.id === 0 ? postContent.reactions.heart : likeCnt)
+                                                        }
+                                                    </Text>
+                                            }
+                                        />
+                                        <CommentComp
+                                            title={commentText}
+                                            slot={<CommentOutlined onClick={scrollToGitalk} />}
+                                            text={!postContent ? <Spin /> : <Text>{postContent.comments}</Text>}
+                                        />
+                                    </Space>
+                                </Layout>
                             </Layout>
+                            :
+                            <Layout style={{ marginTop: '5em' }}>
+                                {/* a space to render Spin */}
+                            </Layout>
+                        }
+                        <Layout style={{ padding: pcRenderMode ? '0em' : '0.5em' }}>
+                            {postIdStr && <Gitalk postId={parseInt(postIdStr)} shouldRender={gitalkShouldRender} />}
                         </Layout>
-                        :
-                        <Layout style={{ marginTop: '5em' }}>
-                            <Spin
-                                size='large'
-                                tip={
-                                    selectedLanguage === ZH_LANGUAGE.key ?
-                                        ZH_LANGUAGE.loading
-                                        :
-                                        selectedLanguage === JA_LANGUAGE.key ?
-                                            JA_LANGUAGE.loading :
-                                            EN_LANGUAGE.loading
-                                }
-                            />
-                        </Layout>
-                    }
-                    <Layout style={{ padding: pcRenderMode ? '0em' : '0.5em' }}>
-                        {postIdStr && <Gitalk postId={parseInt(postIdStr)} shouldRender={gitalkShouldRender} />}
-                    </Layout>
-                </Col>
-                <Col xs={0} sm={0} md={3} lg={3} xl={3}>
-                </Col>
-            </Row>
-            <BackTop target={() => document} />{/* default target value '()=> window' is not work. */}
-        </Layout>
+                    </Col>
+                    <Col xs={0} sm={0} md={3} lg={3} xl={3}>
+                    </Col>
+                </Row>
+                <BackTop target={() => document} />{/* default target value '()=> window' is not work. */}
+            </Layout>
+        </Spin>
     )
 }
 

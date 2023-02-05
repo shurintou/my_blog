@@ -91,6 +91,7 @@ export const ROUTER_NAME = {
         page: 'page',
         label: 'label',
         language: 'language',
+        id: 'id',
     }
 }
 

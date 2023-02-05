@@ -11,7 +11,7 @@ import { getLocalHtmlLang } from '../../../../utils/userAgent'
 import config from '../../../../config/config'
 import { getDateFromNowText } from '../../../../utils/formatter'
 import { useAppSelector } from '../../../../redux/hooks'
-import { EN_LANGUAGE, JA_LANGUAGE, ZH_LANGUAGE, ROUTER_NAME, STORAGE_KEY } from '../../../../config/constant'
+import { EN_LANGUAGE, JA_LANGUAGE, ZH_LANGUAGE, ROUTER_NAME, } from '../../../../config/constant'
 
 
 const { Title, Text } = Typography
@@ -22,8 +22,6 @@ const PostListItemComp: React.FC<PostListItem> = (props) => {
         if (props.clickable) { // if the search bar is opening, the item will not be clickable.
             const historyBackPath = document.location.pathname + document.location.search
             navigate(`${ROUTER_NAME.post}?id=${props.number}`, { state: { historyBackPath: historyBackPath } })
-            /* to fix the bug that when redirected after github login, the back button in post title not work */
-            sessionStorage.setItem(STORAGE_KEY.historyBackPath, historyBackPath)
         }
     }
     const mouseBlurStyle = { cursor: 'pointer' }
