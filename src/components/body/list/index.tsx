@@ -4,14 +4,14 @@ import { List, Layout, BackTop, Result } from 'antd'
 import PostListPagination from './pagination/'
 import { searchPosts } from '../../../api/post'
 import { debounce } from '../../../utils/common'
-import { PostsItemRes, PostListItem, PostSearchResponse, PostSearchRequestParam, Label } from '../../../types/index'
+import { PostsItemRes, PostListItem, PostSearchResponse, PostSearchRequestParam, Label, I18NObjectKey } from '../../../types/index'
 import ListItem from './item/'
 import FilterBar from './filterBar/'
 import { parseISODate, parseISODateStr, getDateFromNow, transferSelectedFilterLabelToQueryString, transferSearchParamsStr, transferContentLanguageToQueryString } from '../../../utils/formatter'
 import config from '../../../config/config'
 import { useAppSelector } from '../../../redux/hooks'
 import { getLocalHtmlLang } from '../../../utils/userAgent'
-import { EN_LANGUAGE, JA_LANGUAGE, ZH_LANGUAGE, ROUTER_NAME, SYMBOL, STORAGE_KEY } from '../../../config/constant'
+import { ROUTER_NAME, SYMBOL, STORAGE_KEY, I18N } from '../../../config/constant'
 import { AxiosError } from 'axios'
 
 const PostList = () => {
@@ -175,12 +175,7 @@ const PostList = () => {
             {showError ? <Result
                 status="error"
                 title={responseStatus}
-                subTitle={selectedLanguage === ZH_LANGUAGE.key ?
-                    ZH_LANGUAGE.errorMessage
-                    :
-                    selectedLanguage === JA_LANGUAGE.key ?
-                        JA_LANGUAGE.errorMessage :
-                        EN_LANGUAGE.errorMessage}
+                subTitle={I18N[selectedLanguage as I18NObjectKey].errorMessage}
             /> :
                 <List
                     itemLayout="vertical"
@@ -206,22 +201,9 @@ const PostList = () => {
                     loading={{
                         spinning: loading,
                         size: 'large',
-                        tip:
-                            selectedLanguage === ZH_LANGUAGE.key ?
-                                ZH_LANGUAGE.loading
-                                :
-                                selectedLanguage === JA_LANGUAGE.key ?
-                                    JA_LANGUAGE.loading :
-                                    EN_LANGUAGE.loading
+                        tip: I18N[selectedLanguage as I18NObjectKey].loading
                     }}
-                    locale={{
-                        emptyText: selectedLanguage === ZH_LANGUAGE.key ?
-                            ZH_LANGUAGE.emptyText
-                            :
-                            selectedLanguage === JA_LANGUAGE.key ?
-                                JA_LANGUAGE.emptyText :
-                                EN_LANGUAGE.emptyText
-                    }}
+                    locale={{ emptyText: I18N[selectedLanguage as I18NObjectKey].emptyText }}
                 >
                 </List>
             }

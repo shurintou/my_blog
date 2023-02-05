@@ -6,14 +6,14 @@ import { SearchOutlined } from '@ant-design/icons'
 import { useAppSelector, useAppDispatch } from '../../../redux/hooks'
 import { changeSearchModalOpen } from '../../../features/searchModalOpen/searchModalOpenSlice'
 import { changeSearchKeyword } from '../../../features/searchKeyword/searchKeywordSlice'
-import { EN_LANGUAGE, JA_LANGUAGE, ZH_LANGUAGE, ROUTER_NAME, } from '../../../config/constant'
+import { ROUTER_NAME, I18N } from '../../../config/constant'
 import { searchPosts } from '../../../api/post'
 import { debounce } from '../../../utils/common'
 import config from '../../../config/config'
 import { parseISODateStr } from '../../../utils/formatter'
 import { mobileAndTabletCheck } from '../../../utils/userAgent'
 import { useNavigate } from "react-router-dom"
-import { KeywordSearchItemRes, KeywordSearchListItem, KeywordSearchResponse, PostSearchRequestParam, TextMatch } from '../../../types/index'
+import { I18NObjectKey, KeywordSearchItemRes, KeywordSearchListItem, KeywordSearchResponse, PostSearchRequestParam, TextMatch } from '../../../types/index'
 import { AxiosError } from 'axios'
 
 const { Text } = Typography
@@ -145,7 +145,7 @@ const SearchModal = () => {
             closable={false}
         >
             <Input
-                placeholder={selectedLanguage === ZH_LANGUAGE.key ? ZH_LANGUAGE.searchBarPlaceHolder : selectedLanguage === JA_LANGUAGE.key ? JA_LANGUAGE.searchBarPlaceHolder : EN_LANGUAGE.searchBarPlaceHolder}
+                placeholder={I18N[selectedLanguage as I18NObjectKey].searchBarPlaceHolder}
                 value={searchKeyword}
                 allowClear
                 showCount
@@ -153,24 +153,13 @@ const SearchModal = () => {
                 prefix={<SearchOutlined className="site-form-item-icon" />}
                 onChange={searchKeywordChangeHandler}
             />
-            <Divider>{
-                selectedLanguage === ZH_LANGUAGE.key ?
-                    ZH_LANGUAGE.searchResult + (totalCount > 0 ? '，共' + totalCount + '条' : '') :
-                    selectedLanguage === JA_LANGUAGE.key ?
-                        JA_LANGUAGE.searchResult + (totalCount > 0 ? '、全' + totalCount + '件' : '') :
-                        EN_LANGUAGE.searchResult + (totalCount > 0 ? ', total ' + totalCount + ' records' : '')
-            }
+            <Divider>{I18N[selectedLanguage as I18NObjectKey].searchResult + I18N[selectedLanguage as I18NObjectKey].searchResultCount(totalCount)}
             </Divider>
             {
                 showError ? <Result
                     status="error"
                     title={responseStatus}
-                    subTitle={selectedLanguage === ZH_LANGUAGE.key ?
-                        ZH_LANGUAGE.errorMessage
-                        :
-                        selectedLanguage === JA_LANGUAGE.key ?
-                            JA_LANGUAGE.errorMessage :
-                            EN_LANGUAGE.errorMessage}
+                    subTitle={I18N[selectedLanguage as I18NObjectKey].errorMessage}
                 /> :
 
                     <InfiniteScroll
@@ -179,13 +168,7 @@ const SearchModal = () => {
                         hasMore={hasmore}
                         loader={searchKeyword.length > 0 ? <Skeleton paragraph={{ rows: 3 }} active /> : <span></span>}
                         endMessage={(data.length > 0 && data.length >= totalCount) &&
-                            <Divider plain>{
-                                selectedLanguage === ZH_LANGUAGE.key ?
-                                    ZH_LANGUAGE.noMoreText
-                                    :
-                                    selectedLanguage === JA_LANGUAGE.key ?
-                                        JA_LANGUAGE.noMoreText :
-                                        EN_LANGUAGE.noMoreText}
+                            <Divider plain>{I18N[selectedLanguage as I18NObjectKey].noMoreText}
                             </Divider>
                         }
                         height={mobileAndTabletCheck() ? '55vh' : '65vh'}
@@ -216,24 +199,11 @@ const SearchModal = () => {
 
                                 </List.Item>
                             )}
-                            locale={{
-                                emptyText: selectedLanguage === ZH_LANGUAGE.key ?
-                                    ZH_LANGUAGE.emptyText
-                                    :
-                                    selectedLanguage === JA_LANGUAGE.key ?
-                                        JA_LANGUAGE.emptyText :
-                                        EN_LANGUAGE.emptyText
-                            }}
+                            locale={{ emptyText: I18N[selectedLanguage as I18NObjectKey].emptyText }}
                             loading={{
                                 spinning: loading,
                                 size: 'large',
-                                tip:
-                                    selectedLanguage === ZH_LANGUAGE.key ?
-                                        ZH_LANGUAGE.searching
-                                        :
-                                        selectedLanguage === JA_LANGUAGE.key ?
-                                            JA_LANGUAGE.searching :
-                                            EN_LANGUAGE.searching
+                                tip: I18N[selectedLanguage as I18NObjectKey].searching
                             }}
                         >
                         </List>

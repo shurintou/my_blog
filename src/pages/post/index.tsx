@@ -4,7 +4,7 @@ import { Layout, Typography, Row, Col, BackTop, Space, Divider, Spin, Button } f
 import { CommentOutlined, LeftOutlined } from '@ant-design/icons'
 import CommentComp from '../../components/body/post/comment'
 import { getPostInfo } from '../../api/post'
-import { PostsItemRes, PostListItem, } from '../../types/index'
+import { PostsItemRes, PostListItem, I18NObjectKey, } from '../../types/index'
 import { parseISODate, parseISODateStr, getDateFromNow, getDateFromNowText } from '../../utils/formatter'
 import Markdown from '../../components/common/markdown'
 import Gitalk from '../../components//common/gitalk'
@@ -16,7 +16,7 @@ import Like from '../../components/body/post/like'
 import { getLocalHtmlLang } from '../../utils/userAgent'
 import { getLocalUser } from '../../utils/authentication'
 import { useAppSelector } from '../../redux/hooks'
-import { EN_LANGUAGE, JA_LANGUAGE, ZH_LANGUAGE, STORAGE_KEY } from '../../config/constant'
+import { STORAGE_KEY, I18N } from '../../config/constant'
 
 const { Title, Text } = Typography
 
@@ -104,14 +104,8 @@ const Post = () => {
     }, [selectedLanguage])
 
     const getLikeCommentText = (lang: string) => {
-        switch (lang) {
-            case ZH_LANGUAGE.key:
-                return [ZH_LANGUAGE.likeText, ZH_LANGUAGE.commentText]
-            case JA_LANGUAGE.key:
-                return [JA_LANGUAGE.likeText, JA_LANGUAGE.commentText]
-            default:
-                return [EN_LANGUAGE.likeText, EN_LANGUAGE.commentText]
-        }
+        const languageObj = I18N[lang as I18NObjectKey]
+        return [languageObj.likeText, languageObj.commentText]
     }
     const [likeText, setLikeText] = useState(getLikeCommentText(selectedLanguage)![0])
     const [commentText, setCommentText] = useState(getLikeCommentText(selectedLanguage)![1])
@@ -122,14 +116,7 @@ const Post = () => {
         <Spin
             spinning={postReloading}
             size={'large'}
-            tip={
-                selectedLanguage === ZH_LANGUAGE.key ?
-                    ZH_LANGUAGE.loading
-                    :
-                    selectedLanguage === JA_LANGUAGE.key ?
-                        JA_LANGUAGE.loading :
-                        EN_LANGUAGE.loading
-            }>
+            tip={I18N[selectedLanguage as I18NObjectKey].loading}>
             <Layout lang={postLang}>
                 <Row>
                     <Col xs={0} sm={0} md={3} lg={3} xl={3}>

@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react'
 import { Layout, Typography, Tag, Tooltip } from 'antd'
 import { lightOrDark } from '../../../utils/common'
 import { mobileAndTabletCheck } from '../../../utils/userAgent'
-import { LabelsCompoProps, Label } from '../../../types/index'
+import { LabelsCompoProps, Label, I18NObjectKey } from '../../../types/index'
 import config from '../../../config/config'
 import { useAppSelector, useAppDispatch } from '../../../redux/hooks'
 import { changeFilterLabel } from '../../../features/filterLabel/filterLabelSlice'
-import { ZH_LANGUAGE, JA_LANGUAGE, EN_LANGUAGE, ROUTER_NAME } from '../../../config/constant'
+import { ROUTER_NAME, I18N } from '../../../config/constant'
 import { FunnelPlotOutlined } from '@ant-design/icons'
 
 const { Text } = Typography
@@ -22,14 +22,7 @@ const LabelsCompo: React.FC<LabelsCompoProps> = (props) => {
 
     function getText(lang: string, type: string) {
         if (type === 'tag' || type === 'category') {
-            switch (lang) {
-                case ZH_LANGUAGE.key:
-                    return ZH_LANGUAGE.tagCategoryObj[type]
-                case JA_LANGUAGE.key:
-                    return JA_LANGUAGE.tagCategoryObj[type]
-                default:
-                    return EN_LANGUAGE.tagCategoryObj[type]
-            }
+            return I18N[lang as I18NObjectKey].tagCategoryObj[type]
         }
     }
 
@@ -74,14 +67,14 @@ const LabelsCompo: React.FC<LabelsCompoProps> = (props) => {
                     const language = splitedLabelName[1]
                     let htmlLang = ''
                     switch (language.toLowerCase()) {
-                        case ZH_LANGUAGE.lowerCase:
-                            htmlLang = ZH_LANGUAGE.key
+                        case I18N['zh'].lowerCase:
+                            htmlLang = I18N['zh'].key
                             break
-                        case JA_LANGUAGE.lowerCase:
-                            htmlLang = JA_LANGUAGE.key
+                        case I18N['ja'].lowerCase:
+                            htmlLang = I18N['ja'].key
                             break
                         default:
-                            htmlLang = EN_LANGUAGE.key
+                            htmlLang = I18N['en'].key
                     }
                     props.setPostLanguage(htmlLang)
                 }

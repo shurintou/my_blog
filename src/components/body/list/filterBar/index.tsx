@@ -3,7 +3,7 @@ import type { CustomTagProps } from 'rc-select/lib/BaseSelect'
 import { useSearchParams } from "react-router-dom"
 import { getAllLabels } from '../../../../api/label'
 import { Layout, Select, Tag, Typography, Space } from 'antd'
-import { PostListSearchBarProps, Label } from '../../../../types/index'
+import { PostListSearchBarProps, Label, I18NObjectKey } from '../../../../types/index'
 import config from '../../../../config/config'
 import { lightOrDark } from '../../../../utils/common'
 import { useAppSelector, useAppDispatch } from '../../../../redux/hooks'
@@ -11,7 +11,7 @@ import { changeFilterLabel } from '../../../../features/filterLabel/filterLabelS
 import { changeContentLanguage } from '../../../../features/contentLanguage/contentLanguageSlice'
 import { changeSearchModalOpen } from '../../../../features/searchModalOpen/searchModalOpenSlice'
 import { changeSearchKeyword } from '../../../../features/searchKeyword/searchKeywordSlice'
-import { EN_LANGUAGE, JA_LANGUAGE, ZH_LANGUAGE, STORAGE_KEY, ROUTER_NAME, SYMBOL } from '../../../../config/constant'
+import { STORAGE_KEY, ROUTER_NAME, SYMBOL, I18N } from '../../../../config/constant'
 import { DefaultOptionType } from 'antd/lib/select'
 import { mobileAndTabletCheck } from '../../../../utils/userAgent'
 import { FunnelPlotOutlined, SearchOutlined } from '@ant-design/icons'
@@ -135,22 +135,9 @@ const FilterBar: React.FC<PostListSearchBarProps> = (props) => {
 
     useEffect(() => {
         let tempRes: Array<Label> = []
-        switch (selectedLanguage) {
-            case ZH_LANGUAGE.key:
-                setLabelWithType('category', ZH_LANGUAGE.tagCategoryObj.category, CATEGORY_ID, labels, tempRes)
-                setLabelWithType('tag', ZH_LANGUAGE.tagCategoryObj.tag, TAG_ID, labels, tempRes)
-                setPlaceHolderText(ZH_LANGUAGE.selectLabel)
-                break
-            case JA_LANGUAGE.key:
-                setLabelWithType('category', JA_LANGUAGE.tagCategoryObj.category, CATEGORY_ID, labels, tempRes)
-                setLabelWithType('tag', JA_LANGUAGE.tagCategoryObj.tag, TAG_ID, labels, tempRes)
-                setPlaceHolderText(JA_LANGUAGE.selectLabel)
-                break
-            default:
-                setLabelWithType('category', EN_LANGUAGE.tagCategoryObj.category, CATEGORY_ID, labels, tempRes)
-                setLabelWithType('tag', EN_LANGUAGE.tagCategoryObj.tag, TAG_ID, labels, tempRes)
-                setPlaceHolderText(EN_LANGUAGE.selectLabel)
-        }
+        setLabelWithType('category', I18N[selectedLanguage as I18NObjectKey].tagCategoryObj.category, CATEGORY_ID, labels, tempRes)
+        setLabelWithType('tag', I18N[selectedLanguage as I18NObjectKey].tagCategoryObj.tag, TAG_ID, labels, tempRes)
+        setPlaceHolderText(I18N[selectedLanguage as I18NObjectKey].selectLabel)
         setRenderLabels(tempRes)
     }, [labels, selectedLanguage])
 
@@ -178,18 +165,7 @@ const FilterBar: React.FC<PostListSearchBarProps> = (props) => {
         setSearchKeyword(inputStr)
         const newList = renderLabels.filter(label => label.id !== SEARCH_ID && label.id !== FILTER_ID)
         if (inputStr.length > 0) {
-            let searchHintText = ''
-            let filterHintText = ''
-            switch (selectedLanguage) {
-                case ZH_LANGUAGE.key:
-                    ({ searchHintText, filterHintText } = ZH_LANGUAGE)
-                    break
-                case JA_LANGUAGE.key:
-                    ({ searchHintText, filterHintText } = JA_LANGUAGE)
-                    break
-                default:
-                    ({ searchHintText, filterHintText } = EN_LANGUAGE)
-            }
+            const { searchHintText, filterHintText } = I18N[selectedLanguage as I18NObjectKey]
             if (renderLabels.some(label => label.id !== SEARCH_ID && label.id !== FILTER_ID && label.name.indexOf(inputStr) >= 0)) { // if any label that matches inputStr exists, add filterHintText
                 newList.unshift({ id: FILTER_ID, name: filterHintText, color: '', description: typeIdentifiedDescription })
             }
@@ -254,7 +230,7 @@ const FilterBar: React.FC<PostListSearchBarProps> = (props) => {
                 onSearch={searchInputHandler}
                 searchValue={searchKeyword}
                 open={dropdownOpen} /* to handle the drop down open/close manually to solve the display issue on mobile end. */
-                notFoundContent={selectedLanguage === ZH_LANGUAGE.key ? ZH_LANGUAGE.searchBarEmptyText : selectedLanguage === JA_LANGUAGE.key ? JA_LANGUAGE.searchBarEmptyText : EN_LANGUAGE.searchBarEmptyText}
+                notFoundContent={I18N[selectedLanguage as I18NObjectKey].searchBarEmptyText}
                 style={{
                     width: '100%',
                     borderStyle: props.renderMode && !props.isLoading ? 'solid' : 'null',

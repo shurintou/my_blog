@@ -3,10 +3,10 @@ import { Layout, message, Skeleton } from 'antd'
 import { Routes, Route, Navigate } from "react-router-dom"
 import { getGitUserInfo } from '../../api/user'
 import { setLocalUser } from '../../utils/authentication'
-import { GitUser } from '../../types/index'
+import { GitUser, I18NObjectKey } from '../../types/index'
 import { ROUTER_NAME } from '../../config/constant'
 import { useAppSelector, } from '../../redux/hooks'
-import { ZH_LANGUAGE, JA_LANGUAGE, EN_LANGUAGE, } from '../../config/constant'
+import { I18N } from '../../config/constant'
 import SearchModal from '../common/searchModal/'
 const Home = lazy(() => import(/* webpackChunkName: 'Home'*/ '../../pages' + ROUTER_NAME.home))
 const List = lazy(() => import(/* webpackChunkName: 'List'*/ '../../pages' + ROUTER_NAME.list))
@@ -19,16 +19,7 @@ const BlogBody: React.FC<{}> = () => {
     const unhandledrejectionFunc = function (event: PromiseRejectionEvent | null) {
         const res = event?.reason?.response
         if (res?.status === 401) {
-            switch (selectedLanguage) {
-                case ZH_LANGUAGE.key:
-                    message.warning(ZH_LANGUAGE.loginMessage)
-                    break
-                case JA_LANGUAGE.key:
-                    message.warning(JA_LANGUAGE.loginMessage)
-                    break
-                default:
-                    message.warning(EN_LANGUAGE.loginMessage)
-            }
+            message.warning(I18N[selectedLanguage as I18NObjectKey].loginMessage)
         }
     }
 

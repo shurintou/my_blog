@@ -1,4 +1,5 @@
 import { CSSProperties, ReactElement } from "react"
+import { I18N } from '../config/constant'
 
 export interface GitUser {
     id: number,
@@ -233,3 +234,5 @@ export interface SearchModalOpenState {
 export interface SearchKeywordState {
     value: string
 }
+
+export type I18NObjectKey = keyof typeof I18N

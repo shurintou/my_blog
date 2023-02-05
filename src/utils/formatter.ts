@@ -3,8 +3,8 @@ import moment from 'moment'
 import 'moment/locale/ja'
 import 'moment/locale/en-gb'
 import 'moment/locale/zh-cn'
-import { EN_LANGUAGE, ZH_LANGUAGE, JA_LANGUAGE, SYMBOL } from '../config/constant'
-import { Label } from '../types/index'
+import { SYMBOL, I18N } from '../config/constant'
+import { I18NObjectKey, Label } from '../types/index'
 import { getLocalHtmlLang } from './userAgent'
 
 export const parseISODate = function (date: string) {
@@ -18,14 +18,7 @@ export const parseISODateStr = function (date: string) {
 
 
 const getLocale = function (lang: string) {
-    switch (lang) {
-        case ZH_LANGUAGE.key:
-            return ZH_LANGUAGE.momentTextObj
-        case JA_LANGUAGE.key:
-            return JA_LANGUAGE.momentTextObj
-        default:
-            return EN_LANGUAGE.momentTextObj
-    }
+    return I18N[lang as I18NObjectKey].momentTextObj
 }
 
 export const getDateFromNow = function (date: Date, lang: string) {
@@ -76,32 +69,14 @@ export const transferContentLanguageToQueryString = (contentLanguageList: Array<
 
     if (contentLanguageList.length > 0) {
         contentLanguageList.forEach(contentLanguage => {
-            switch (contentLanguage) {
-                case ZH_LANGUAGE.key:
-                    languageQuery = ZH_LANGUAGE.upperCase
-                    break
-                case JA_LANGUAGE.key:
-                    languageQuery = JA_LANGUAGE.upperCase
-                    break
-                default:
-                    languageQuery = EN_LANGUAGE.upperCase
-            }
+            languageQuery = I18N[contentLanguage as I18NObjectKey].upperCase
             languageQuery = 'language:' + languageQuery + ','
             contentLanguageQueryStr += languageQuery
         })
         contentLanguageQueryStr = 'label:' + contentLanguageQueryStr
     }
     else {
-        switch (getLocalHtmlLang()) {
-            case ZH_LANGUAGE.key:
-                languageQuery = ZH_LANGUAGE.upperCase
-                break
-            case JA_LANGUAGE.key:
-                languageQuery = JA_LANGUAGE.upperCase
-                break
-            default:
-                languageQuery = EN_LANGUAGE.upperCase
-        }
+        languageQuery = I18N[getLocalHtmlLang() as I18NObjectKey].upperCase
         contentLanguageQueryStr = 'label:language:' + languageQuery
     }
 

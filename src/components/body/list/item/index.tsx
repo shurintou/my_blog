@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Divider, Typography, Layout, Space } from 'antd'
 import { HeartOutlined, CommentOutlined } from '@ant-design/icons'
-import { PostListItem } from '../../../../types/index'
+import { I18NObjectKey, PostListItem } from '../../../../types/index'
 import { useNavigate } from "react-router-dom"
 import DateComp from '../../post/date/'
 import CommentComp from '../../post/comment/'
@@ -11,7 +11,7 @@ import { getLocalHtmlLang } from '../../../../utils/userAgent'
 import config from '../../../../config/config'
 import { getDateFromNowText } from '../../../../utils/formatter'
 import { useAppSelector } from '../../../../redux/hooks'
-import { EN_LANGUAGE, JA_LANGUAGE, ZH_LANGUAGE, ROUTER_NAME, } from '../../../../config/constant'
+import { ROUTER_NAME, I18N } from '../../../../config/constant'
 
 
 const { Title, Text } = Typography
@@ -39,29 +39,11 @@ const PostListItemComp: React.FC<PostListItem> = (props) => {
         /* eslint-disable-next-line */
     }, [selectedLanguage])
 
-    const getReadmoreText = (lang: string) => {
-        switch (lang) {
-            case ZH_LANGUAGE.key:
-                return ZH_LANGUAGE.readmoreText
-            case JA_LANGUAGE.key:
-                return JA_LANGUAGE.readmoreText
-            default:
-                return EN_LANGUAGE.readmoreText
-        }
-    }
+    const getReadmoreText = (lang: string) => { return I18N[lang as I18NObjectKey].readmoreText }
     const [readmoreText, setReadmoreText] = useState(getReadmoreText(selectedLanguage))
 
 
-    const getLikeCommentText = (lang: string) => {
-        switch (lang) {
-            case ZH_LANGUAGE.key:
-                return [ZH_LANGUAGE.likeText, ZH_LANGUAGE.commentText]
-            case JA_LANGUAGE.key:
-                return [JA_LANGUAGE.likeText, JA_LANGUAGE.commentText]
-            default:
-                return [EN_LANGUAGE.likeText, EN_LANGUAGE.commentText]
-        }
-    }
+    const getLikeCommentText = (lang: string) => { return I18N[lang as I18NObjectKey].commentText }
     const [likeText, setLikeText] = useState(getLikeCommentText(selectedLanguage)[0])
     const [commentText, setCommentText] = useState(getLikeCommentText(selectedLanguage)[1])
 

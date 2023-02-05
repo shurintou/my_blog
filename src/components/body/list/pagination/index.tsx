@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import { useSearchParams } from "react-router-dom"
-import { PostListPaginationrProps } from '../../../../types'
+import { I18NObjectKey, PostListPaginationrProps } from '../../../../types'
 import { Pagination, Layout } from 'antd'
 import config from '../../../../config/config'
 import { useAppSelector } from '../../../../redux/hooks'
-import { JA_LANGUAGE, ZH_LANGUAGE, ROUTER_NAME } from '../../../../config/constant'
+import { ROUTER_NAME, I18N } from '../../../../config/constant'
 import { transferSearchParamsStr } from '../../../../utils/formatter'
 
 const PostListPaginationComp: React.FC<PostListPaginationrProps> = (props) => {
@@ -47,14 +47,7 @@ const PostListPaginationComp: React.FC<PostListPaginationrProps> = (props) => {
             else {
                 description = min.toString() + '~' + max.toString()
             }
-            switch (selectedLanguage) {
-                case ZH_LANGUAGE.key:
-                    return '第' + description + '条, 共' + totalCount.toString() + '条'
-                case JA_LANGUAGE.key:
-                    return description + '件目, 全' + totalCount.toString() + '件'
-                default:
-                    return description + ' of total ' + totalCount.toString()
-            }
+            return I18N[selectedLanguage as I18NObjectKey].pagination(description, totalCount)
         }
         return ''
     }, [current, props.total, selectedLanguage])

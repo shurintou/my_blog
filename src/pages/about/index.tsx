@@ -5,7 +5,7 @@ import config from '../../config/config'
 import { debounce, doScrolling } from '../../utils/common'
 import aboutStyle from './index.module.css'
 import { useAppSelector } from '../../redux/hooks'
-import { JA_LANGUAGE, ZH_LANGUAGE } from '../../config/constant'
+import { I18N } from '../../config/constant'
 
 const { Text, Title, Link } = Typography
 
@@ -93,7 +93,7 @@ const AboutCompo: React.FC<{}> = () => {
                     <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 24 }} lg={{ span: 12, pull: 12 }} xl={{ span: 12, pull: 12 }} style={{ height: textContent1Height }}>
                         <Layout style={{ padding: content1Padding }} lang={selectedLanguage}>
                             {
-                                selectedLanguage === ZH_LANGUAGE.key ?
+                                selectedLanguage === I18N['zh'].key ?
                                     <React.Fragment>
                                         <Title level={1}>关于本站</Title>
                                         <p className={aboutStyle.aboutText}>
@@ -103,7 +103,7 @@ const AboutCompo: React.FC<{}> = () => {
                                             文章内容主要涉足<Text keyboard>Web编程</Text>的各个领域，使用的语言主要是 Java, Javascript 等。
                                         </p>
                                     </React.Fragment>
-                                    : selectedLanguage === JA_LANGUAGE.key ?
+                                    : selectedLanguage === I18N['ja'].key ?
                                         <React.Fragment>
                                             <Title level={1}>サイトについて</Title>
                                             <p className={aboutStyle.aboutText}>
@@ -136,7 +136,7 @@ const AboutCompo: React.FC<{}> = () => {
                     <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 24 }} lg={{ span: 14 }} xl={{ span: 14 }} style={{ height: textContent2Height }}>
                         <Layout style={{ padding: content2Padding }} lang={selectedLanguage}>
                             {
-                                selectedLanguage === ZH_LANGUAGE.key ?
+                                selectedLanguage === I18N['zh'].key ?
                                     <React.Fragment>
                                         <Title level={1}>关于本人</Title>
                                         <p className={aboutStyle.aboutText}>
@@ -146,7 +146,7 @@ const AboutCompo: React.FC<{}> = () => {
                                             现就职于<Text keyboard>东京</Text>的一家IT公司负责Web开发，工作{new Date().getFullYear() - 2019}年期间参与并成功上线了多个大型项目。
                                         </p>
                                     </React.Fragment>
-                                    : selectedLanguage === JA_LANGUAGE.key ?
+                                    : selectedLanguage === I18N['ja'].key ?
                                         <React.Fragment>
                                             <Title level={1}>私について</Title>
                                             <p className={aboutStyle.aboutText}>
@@ -180,7 +180,7 @@ const AboutCompo: React.FC<{}> = () => {
                     <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 24 }} lg={{ span: 14, pull: 10 }} xl={{ span: 14, pull: 10 }} style={{ height: textContent2Height }}>
                         <Layout style={{ padding: content1Padding }} lang={selectedLanguage}>
                             {
-                                selectedLanguage === ZH_LANGUAGE.key ?
+                                selectedLanguage === I18N['zh'].key ?
                                     <React.Fragment>
                                         <Title level={1}>关于编程</Title>
                                         <p className={aboutStyle.aboutText}>
@@ -190,7 +190,7 @@ const AboutCompo: React.FC<{}> = () => {
                                             而且在日新月异的计算机世界里，<Text keyboard>学无止境</Text>是基本准则，学习一项新技术、语言或者框架都可以让我保持新鲜感和求知欲。
                                         </p>
                                     </React.Fragment>
-                                    : selectedLanguage === JA_LANGUAGE.key ?
+                                    : selectedLanguage === I18N['ja'].key ?
                                         <React.Fragment>
                                             <Title level={1}>なぜプログラマーに？</Title>
                                             <p className={aboutStyle.aboutText}>
@@ -224,7 +224,7 @@ const AboutCompo: React.FC<{}> = () => {
                     <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 24 }} lg={{ span: 14 }} xl={{ span: 14 }} style={{ height: textContent2Height }}>
                         <Layout style={{ padding: content2Padding }} lang={selectedLanguage}>
                             {
-                                selectedLanguage === ZH_LANGUAGE.key ?
+                                selectedLanguage === I18N['zh'].key ?
                                     <React.Fragment>
                                         <Title level={1}>联系本人</Title>
                                         <div className={aboutStyle.aboutText} style={{ marginBottom: '1em' }}>
@@ -235,7 +235,7 @@ const AboutCompo: React.FC<{}> = () => {
                                             如果您觉得本站的内容不错对您起到了帮助，麻烦您给本站的 <Text underline><Link href="https://github.com/shurintou/my_blog" target="_blank">Github 仓库</Link></Text> 点星，谢谢。
                                         </p>
                                     </React.Fragment>
-                                    : selectedLanguage === JA_LANGUAGE.key ?
+                                    : selectedLanguage === I18N['ja'].key ?
                                         <React.Fragment>
                                             <Title level={1}>お問い合わせ</Title>
                                             <div className={aboutStyle.aboutText} style={{ marginBottom: '1em' }}>

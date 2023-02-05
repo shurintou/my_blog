@@ -1,4 +1,5 @@
-import { ZH_LANGUAGE, JA_LANGUAGE, EN_LANGUAGE } from './constant'
+import { I18NObjectKey } from '../types'
+import { I18N } from './constant'
 
 const configObj = {
     antdProps: {
@@ -33,20 +34,10 @@ const configObj = {
         hLeftBorderColor: '#1DA57A',
         hBottomBorderColor: '#d0d7de',
     },
-    languageProps: [
-        {
-            label: EN_LANGUAGE.label,
-            key: EN_LANGUAGE.key,
-        },
-        {
-            label: ZH_LANGUAGE.label,
-            key: ZH_LANGUAGE.key,
-        },
-        {
-            label: JA_LANGUAGE.label,
-            key: JA_LANGUAGE.key,
-        },
-    ]
+    languageProps: Object.keys(I18N).map(language => ({
+        'label': I18N[language as I18NObjectKey].label,
+        'key': I18N[language as I18NObjectKey].key,
+    }))
 }
 
 export default configObj

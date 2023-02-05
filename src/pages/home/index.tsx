@@ -3,7 +3,7 @@ import { Layout, Row, Col, Typography } from 'antd'
 import BlogAvatar from '../../components/body/home/avatar'
 import homeStyle from './index.module.css'
 import { useAppSelector } from '../../redux/hooks'
-import { JA_LANGUAGE, ZH_LANGUAGE } from '../../config/constant'
+import { I18N } from '../../config/constant'
 const { Title, Paragraph, Text, Link } = Typography
 
 const HomeCompo: React.FC<{}> = () => {
@@ -24,7 +24,7 @@ const HomeCompo: React.FC<{}> = () => {
                     xl={{ offset: 4 }}
                 >
                     <BlogAvatar></BlogAvatar>
-                    {selectedLanguage === ZH_LANGUAGE.key ?
+                    {selectedLanguage === I18N['zh'].key ?
                         <Typography>
                             <Title style={{ marginTop: '0.5em' }}>Hi.</Title>
                             <Title level={3} style={{ marginTop: '0.5em', marginBottom: '0.7em' }}>我是 Zhulintao.</Title>
@@ -43,7 +43,7 @@ const HomeCompo: React.FC<{}> = () => {
                                 <p className={homeStyle.homeText}>作为闲暇时的业余爱好，我喜欢唱歌、钻研各种美食和打羽毛球。</p>
                             </Paragraph>
                         </Typography>
-                        : selectedLanguage === JA_LANGUAGE.key ?
+                        : selectedLanguage === I18N['ja'].key ?
                             <Typography>
                                 <Title style={{ marginTop: '0.5em' }}>こんにちは</Title>
                                 <Title level={3} style={{ marginTop: '0.5em', marginBottom: '0.7em' }}>しゅ りんとうと申します。</Title>

@@ -5,13 +5,13 @@ import { HomeOutlined, ReadOutlined, UserOutlined, GlobalOutlined, SearchOutline
 import { useNavigate } from "react-router-dom"
 import config from '../../config/config'
 import { setLocalHtmlLang } from '../../utils/userAgent'
-import { AntdColPropObj } from '../../types/index'
+import { AntdColPropObj, I18NObjectKey } from '../../types/index'
 import headerStyle from './index.module.css'
 import { useAppSelector, useAppDispatch } from '../../redux/hooks'
 import { changeLocalLanguage } from '../../features/language/languageSlice'
 import { changeFilterLabel } from '../../features/filterLabel/filterLabelSlice'
 import { changeSearchModalOpen } from '../../features/searchModalOpen/searchModalOpenSlice'
-import { ZH_LANGUAGE, JA_LANGUAGE, EN_LANGUAGE, ROUTER_NAME } from '../../config/constant'
+import { ROUTER_NAME, I18N } from '../../config/constant'
 
 const { Header } = Layout
 
@@ -74,16 +74,8 @@ const BlogHeader: React.FC<{}> = () => {
     const scrollToTop = () => window.scroll(0, 0)
 
 
-    const getMenuTextList = (lang: string) => {
-        switch (lang) {
-            case ZH_LANGUAGE.key:
-                return ZH_LANGUAGE.menuTextList
-            case JA_LANGUAGE.key:
-                return JA_LANGUAGE.menuTextList
-            default:
-                return EN_LANGUAGE.menuTextList
-        }
-    }
+    const getMenuTextList = (lang: string) => I18N[lang as I18NObjectKey].menuTextList
+
 
     const [menuTabNames, setMenuTabNames] = useState(getMenuTextList(selectedLanguage))
     useEffect(() => {
@@ -107,7 +99,7 @@ const BlogHeader: React.FC<{}> = () => {
         'xl': { span: 2 },
     }
     const postPropObj: AntdColPropObj = {
-        'xs': { span: selectedLanguage === ZH_LANGUAGE.key ? 6 : 5 },
+        'xs': { span: selectedLanguage === I18N['zh'].key ? 6 : 5 },
         'sm': { span: 5 },
         'md': { span: 4 },
         'lg': { span: 3 },
@@ -135,7 +127,7 @@ const BlogHeader: React.FC<{}> = () => {
         'xl': { span: 1 },
     }
     const languageOffsetPropObj: AntdColPropObj = {
-        'xs': { offset: selectedLanguage === ZH_LANGUAGE.key ? 1 : 2 },
+        'xs': { offset: selectedLanguage === I18N['zh'].key ? 1 : 2 },
         'sm': { offset: 4 },
         'md': { offset: 6 },
         'lg': { offset: 10 },
