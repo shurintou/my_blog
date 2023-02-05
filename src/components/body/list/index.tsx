@@ -183,7 +183,7 @@ const PostList = () => {
                     dataSource={data}
                     style={{
                         height: loading ? '100%' : '',
-                        paddingTop: loading && !loading ? '3em' : '',
+                        paddingTop: loading ? (pcRenderMode ? '3em' : '6em') : '',
                         minHeight: '60vh',/* to solve the issue that select bar's drop down cannot be pulled up by clicking somewhere on mobile end*/
                     }}
                     renderItem={(item: PostListItem) => (
