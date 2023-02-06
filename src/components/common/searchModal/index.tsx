@@ -1,22 +1,20 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { useSearchParams } from "react-router-dom"
-import { List, Skeleton, Divider, Modal, Input, Typography, Result } from 'antd'
+import { List, Skeleton, Divider, Modal, Input, Result } from 'antd'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { SearchOutlined } from '@ant-design/icons'
 import { useAppSelector, useAppDispatch } from '../../../redux/hooks'
 import { changeSearchModalOpen } from '../../../features/searchModalOpen/searchModalOpenSlice'
 import { changeSearchKeyword } from '../../../features/searchKeyword/searchKeywordSlice'
-import { ROUTER_NAME, I18N } from '../../../config/constant'
+import { I18N } from '../../../config/constant'
 import { searchPosts } from '../../../api/post'
 import { debounce } from '../../../utils/common'
 import config from '../../../config/config'
 import { parseISODateStr } from '../../../utils/formatter'
 import { mobileAndTabletCheck } from '../../../utils/userAgent'
-import { useNavigate } from "react-router-dom"
-import { I18NObjectKey, KeywordSearchItemRes, KeywordSearchListItem, KeywordSearchResponse, PostSearchRequestParam, TextMatch } from '../../../types/index'
+import { I18NObjectKey, KeywordSearchItemRes, KeywordSearchListItem, KeywordSearchResponse, PostSearchRequestParam, } from '../../../types/index'
 import { AxiosError } from 'axios'
+import ResultItem from './resultItem/'
 
-const { Text } = Typography
 
 const SearchModal = () => {
     const [data, setData] = useState<Array<KeywordSearchListItem>>([])
@@ -33,8 +31,6 @@ const SearchModal = () => {
     const searchKeywordChangeHandler = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         dispatch(changeSearchKeyword(e.target.value))
     }
-    const [, setSearchParams] = useSearchParams()
-    const navigate = useNavigate()
     const loadMoreData = () => {
         const newPage = page + 1
         setPage(newPage)
@@ -42,19 +38,6 @@ const SearchModal = () => {
     }
     const [showError, setShowError] = useState(false)
     const [responseStatus, setResponseStatus] = useState(200)
-
-    const navigateToPost = (item: KeywordSearchListItem) => {
-        const historyBackPath = document.location.pathname + document.location.search
-        if (window.location.href.indexOf(ROUTER_NAME.post) >= 0) {
-            window.scroll(0, 0)
-            setSearchParams({ [ROUTER_NAME.props.id]: item.number.toString() })
-        }
-        else {
-            navigate(`${ROUTER_NAME.post}?id=${item.number}`, { state: { historyBackPath: historyBackPath } })
-        }
-        dispatch(changeSearchModalOpen(false))
-    }
-
 
     const loadPostListData = (searchPostListParams: PostSearchRequestParam) => {
         if (loading) {
@@ -115,22 +98,6 @@ const SearchModal = () => {
         /* eslint-disable-next-line */
     }, [searchKeyword])
 
-    const RenderHighlightText: React.FC<{ textMatch: TextMatch }> = ({ textMatch }) => {
-        const matches = textMatch.matches
-        return (
-            <React.Fragment>{
-                matches.map((match, index) => (
-                    <React.Fragment key={match.indices[0]}>
-                        {index === 0 && <Text>{textMatch.fragment.substring(0, matches[index].indices[0])}</Text>}
-                        <Text strong style={{ color: config.antdProps.highlightTextColor, backgroundColor: config.antdProps.highlightTextBackgroundColor }}>{textMatch.fragment.substring(matches[index].indices[0], matches[index].indices[1])}</Text>
-                        {(index < matches.length - 1) ? <Text>{textMatch.fragment.substring(matches[index].indices[1], matches[index + 1].indices[0])}</Text> : <Text>{textMatch.fragment.substring(matches[index].indices[1])}</Text>}
-                    </React.Fragment>
-                ))
-            }
-            </React.Fragment>
-        )
-    }
-
     return (
         <Modal
             centered
@@ -178,27 +145,7 @@ const SearchModal = () => {
                             size="large"
                             dataSource={data}
                             style={{ display: firstTimeRender ? 'none' : 'block' }}
-                            renderItem={(item: KeywordSearchListItem) => (
-                                <List.Item key={item.id} style={{
-                                    backgroundColor: config.antdProps.searchResultItemBackgroundColor,
-                                    margin: '0em 1em 1.5em',
-                                    borderRadius: '4px',
-                                    boxShadow: '5px 5px 5px' + config.antdProps.shadowColor,
-                                    cursor: 'pointer'
-                                }}
-                                    onClick={() => navigateToPost(item)}
-                                >
-                                    <Typography.Title level={5} style={{ margin: 0, color: config.antdProps.themeColor }}>{item.title}</Typography.Title>
-                                    <Text type="secondary">{item.created_at.substring(0, 10)}</Text>
-                                    <Divider style={{ margin: '2px' }} />
-                                    {item.text_matches.some(textMatch => textMatch.property === 'body') ?
-                                        item.text_matches.map((textMatch, index) =>
-                                            textMatch.property === 'body' &&
-                                            <React.Fragment key={item.id + 'textMatch' + index}><RenderHighlightText textMatch={textMatch} /></React.Fragment>
-                                        ) : item.body.substring(0, 200)}
-
-                                </List.Item>
-                            )}
+                            renderItem={ResultItem}
                             locale={{ emptyText: I18N[selectedLanguage as I18NObjectKey].emptyText }}
                             loading={{
                                 spinning: loading,
