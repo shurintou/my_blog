@@ -37,6 +37,7 @@ const SearchHistory: React.FC = () => {
                     closable
                     onClose={() => removeSearchHistory(keyword)}
                     onClick={() => clickSearchHistory(keyword)}
+                    color={'green'}
                 >
                     <Text style={{ fontSize: '1.5em' }}>{keyword}</Text>
                 </Tag>
