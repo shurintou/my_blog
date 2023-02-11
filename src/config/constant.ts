@@ -25,6 +25,7 @@ const I18NConfig = {
         searchResult: 'search result',
         noMoreText: 'It is all, nothing more.',
         searching: 'searching...',
+        searchHistory: 'search history',
         errorMessage: 'Sorry, something went wrong, Please try again later.',
         pagination: (description: string, totalCount: number) => description + ' of total ' + totalCount.toString(),
         searchResultCount: (totalCount: number) => totalCount > 0 ? ', total ' + totalCount + ' records' : '',
@@ -54,6 +55,7 @@ const I18NConfig = {
         searchResult: '搜索结果',
         noMoreText: '已经到底了',
         searching: '搜索中...',
+        searchHistory: '搜索历史',
         errorMessage: '抱歉出错了，请稍后重试。',
         pagination: (description: string, totalCount: number) => '第' + description + '条, 共' + totalCount.toString() + '条',
         searchResultCount: (totalCount: number) => totalCount > 0 ? '，共' + totalCount + '条' : '',
@@ -83,6 +85,7 @@ const I18NConfig = {
         searchResult: '検索結果',
         noMoreText: 'もう最後だよ',
         searching: '検索中...',
+        searchHistory: '検索履歴',
         errorMessage: '申し訳ございません、エラーになりました。しばらくお待ちになってからやり直してください。',
         pagination: (description: string, totalCount: number) => description + '件目, 全' + totalCount.toString() + '件',
         searchResultCount: (totalCount: number) => totalCount > 0 ? '、全' + totalCount + '件' : '',
@@ -118,6 +121,7 @@ export const STORAGE_KEY = {
     htmlLang: 'HTML_LANG',
     historyBackPath: 'HISTORY_BACK_PATH',
     postId: 'POST_ID_',
+    searchHistory: 'SEARCH_HISTORY',
 }
 
 export const SYMBOL = {

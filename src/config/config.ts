@@ -37,7 +37,8 @@ const configObj = {
     languageProps: Object.keys(I18N).map(language => ({
         'label': I18N[language as I18NObjectKey].label,
         'key': I18N[language as I18NObjectKey].key,
-    }))
+    })),
+    searchHistoryCount: 10,
 }
 
 export default configObj
