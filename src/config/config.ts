@@ -29,7 +29,8 @@ const configObj = {
         searchDebounceDelay: 800,
     },
     markdownProps: {
-        trBackgroundColor: '#f6f8fa',
+        trBackgroundColorDark: '#f6f8fa',
+        trBackgroundColorLight: '#ffffff',
         trBorderColor: '#d0d7de',
         hLeftBorderColor: '#1DA57A',
         hBottomBorderColor: '#d0d7de',

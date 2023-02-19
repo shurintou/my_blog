@@ -81,6 +81,7 @@ const Markdown: React.FC<MarkdownProps> = (props) => {
                 children={postText ? (isAtListPage() ? subStringOfPostText(postText) : postText) : ''}
                 remarkPlugins={[remarkGfm, remarkBreaks]}
                 className={markdownStyle.textFontSize}
+                includeElementIndex={true}/* This line will cause a Warning like "React does not recognize the `siblingCount` prop on a DOM element...", but it is necessary for getting index so I kept it. */
                 components={{
                     h1: hRenderFunc,
                     h2: hRenderFunc,
@@ -137,12 +138,14 @@ const Markdown: React.FC<MarkdownProps> = (props) => {
                         return <div style={{ overflowX: 'auto' }}><table>{children}</table></div>
                     },
                     tr({ children, isHeader, index, }) {
-                        return <tr style={{
-                            borderStyle: 'solid',
-                            borderWidth: '2px',
-                            borderColor: config.markdownProps.trBorderColor,
-                            backgroundColor: (isHeader || (index && index % 2 === 1)) ? undefined : config.markdownProps.trBackgroundColor
-                        }}>{children}</tr>
+                        return <tr
+                            className={markdownStyle.tableTr}
+                            style={{
+                                borderStyle: 'solid',
+                                borderWidth: '2px',
+                                borderColor: config.markdownProps.trBorderColor,
+                                backgroundColor: (isHeader || (index && index % 2 === 1)) ? config.markdownProps.trBackgroundColorDark : config.markdownProps.trBackgroundColorLight
+                            }}>{children}</tr>
                     },
                     th: curringThTdRenderFunc('th'),
                     td: curringThTdRenderFunc('td'),

@@ -5,3 +5,7 @@
 .textFontSize {
     font-size: 1.2em;
 }
+
+tbody tr.tableTr:hover {
+    background-color: #eef9f6 !important;
+}
