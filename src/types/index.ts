@@ -1,5 +1,6 @@
 import { CSSProperties, ReactElement } from "react"
 import { I18N } from '../config/constant'
+import Config from '../config/config'
 
 export interface GitUser {
     id: number,
@@ -103,6 +104,7 @@ export interface Label {
 export interface MarkdownProps {
     postText: string | undefined,
     layoutStyle?: CSSProperties | undefined,
+    isInAlertBlock?: boolean,
 }
 
 export interface GitalkProps {
@@ -236,3 +238,7 @@ export interface SearchKeywordState {
 }
 
 export type I18NObjectKey = keyof typeof I18N
+
+export type CodeBlockType = 'success' | 'info' | 'warning' | 'error' | string
+
+export type ConfigObjectKey = keyof typeof Config.alertProps

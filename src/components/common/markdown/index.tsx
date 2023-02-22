@@ -1,11 +1,11 @@
 import React from 'react'
 import ReactMarkdown from 'react-markdown'
-import { Typography, Image } from 'antd'
+import { Typography, Image, Layout, Space } from 'antd'
 import remarkGfm from 'remark-gfm'
 import remarkBreaks from 'remark-breaks'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { tomorrow } from 'react-syntax-highlighter/dist/esm/styles/prism'
-import { MarkdownProps, MarkdownChild } from '../../../types/index'
+import { MarkdownProps, MarkdownChild, CodeBlockType, ConfigObjectKey } from '../../../types/index'
 import config from '../../../config/config'
 import { doScrolling, curry, findCharIndexOfString } from '../../../utils/common'
 import markdownStyle from './index.module.css'
@@ -91,14 +91,25 @@ const Markdown: React.FC<MarkdownProps> = (props) => {
                     h6: hRenderFunc,
                     code({ node, inline, className, children, ...props }) {
                         const match = /language-(\w+)/.exec(className || '')
+                        const codeBlockType = match?.at(1) as CodeBlockType
+                        const isAlertType = ['success', 'info', 'warning', 'error'].includes(codeBlockType)
+                        const AlertIcon = config.alertProps[codeBlockType as ConfigObjectKey]?.icon
                         return !inline && match && !isAtListPage() ? (
-                            <SyntaxHighlighter
-                                children={String(children).replace(/\n$/, '')}
-                                style={tomorrow ? tomorrow : undefined}
-                                customStyle={{ borderRadius: '6px' }}
-                                language={match[1]}
-                                PreTag="div"
-                            />
+                            isAlertType ?
+                                <Layout style={config.alertProps[codeBlockType as ConfigObjectKey].style}>
+                                    <AlertIcon style={config.alertProps[codeBlockType as ConfigObjectKey].iconStyle} />
+                                    <Space wrap size={16}>
+                                        <MarkdownModule postText={children.toString()} isInAlertBlock={true}></MarkdownModule>
+                                    </Space>
+                                </Layout>
+                                :
+                                <SyntaxHighlighter
+                                    children={String(children).replace(/\n$/, '')}
+                                    style={tomorrow ? tomorrow : undefined}
+                                    customStyle={{ borderRadius: '6px' }}
+                                    language={match[1]}
+                                    PreTag="div"
+                                />
                         ) : (
                             children.toString().trim().length > 0 ?
                                 <code
@@ -158,7 +169,7 @@ const Markdown: React.FC<MarkdownProps> = (props) => {
                     p: replacePTag,
                 }}
             />
-        </div>
+        </div >
     )
 }
 
