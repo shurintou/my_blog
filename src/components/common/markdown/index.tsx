@@ -64,7 +64,7 @@ const Markdown: React.FC<MarkdownProps> = (props) => {
         if (children.some((child: MarkdownChild) => child?.type?.name === 'img')) {
             return React.createElement('div', { children: children }) // to fix the warning that "validateDOMnesting(...): <div> cannot appear as a descendant of <p>"
         }
-        return React.createElement('p', { children: children })
+        return <p style={{ fontSize: props.isInAlertBlock ? '0.8em' : '1em' }}>{children}</p>
     }
 
     /* to get the substring of postText by previewLine to imporve the markdown rendering performance */
