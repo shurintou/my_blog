@@ -166,9 +166,12 @@ const Markdown: React.FC<MarkdownProps> = (props) => {
                         if (isAtListPage()) {
                             return <span></span> //not render img when at the list page.
                         }
-                        return <Image alt={alt} src={src} style={{ maxWidth: '100%' }} />
+                        return <Image alt={alt} src={src} style={{ maxWidth: '100%', marginBottom: '1em' }} />
                     },
                     p: replacePTag,
+                    li({ children }) {
+                        return <li style={{ marginBottom: '1em', lineHeight: props.isInAlertBlock ? 1 : '2em' }}>{children}</li>
+                    },
                 }}
             />
         </div >
