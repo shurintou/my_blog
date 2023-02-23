@@ -7,6 +7,7 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { tomorrow } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import { MarkdownProps, MarkdownChild, CodeBlockType, ConfigObjectKey } from '../../../types/index'
 import config from '../../../config/config'
+import { I18N } from '../../../config/constant'
 import { doScrolling, curry, findCharIndexOfString } from '../../../utils/common'
 import markdownStyle from './index.module.css'
 import { ROUTER_NAME } from '../../../config/constant'
@@ -14,13 +15,14 @@ const { Link } = Typography
 
 const Markdown: React.FC<MarkdownProps> = (props) => {
     const { postText } = props
+    const { postLang } = props
     const anchorStr = '#anchor'
     const hRenderFunc = ({ level, children, }: { [key: string]: any }) => {
         const fontSize = (7 - level) * 0.15 + 0.8
         const reg = new RegExp(anchorStr + '\\d', 'i')
         const match = String(children).match(reg)
         children = String(children).replace(reg, '')
-        let hProps: { [key: string]: any } = { style: { fontSize: fontSize + 'em', marginBottom: level <= 3 ? '' : '0em', fontWeight: 700 }, children: children }
+        let hProps: { [key: string]: any } = { style: { fontSize: fontSize + 'em', marginTop: (0.1 * (5 - level) + 1) + 'em', fontWeight: 700 }, children: children }
         if (match) {
             hProps['id'] = match[0].split('#')[1]
         }
@@ -64,7 +66,7 @@ const Markdown: React.FC<MarkdownProps> = (props) => {
         if (children.some((child: MarkdownChild) => child?.type?.name === 'img')) {
             return React.createElement('div', { children: children }) // to fix the warning that "validateDOMnesting(...): <div> cannot appear as a descendant of <p>"
         }
-        return <p style={{ fontSize: props.isInAlertBlock ? '0.8em' : '1em' }}>{children}</p>
+        return <p style={{ fontSize: props.isInAlertBlock ? '0.8em' : '1em', lineHeight: props.isInAlertBlock ? 1 : (postLang === I18N.en.key ? '2em' : '2.5em') }}>{children}</p>
     }
 
     /* to get the substring of postText by previewLine to imporve the markdown rendering performance */
@@ -99,7 +101,7 @@ const Markdown: React.FC<MarkdownProps> = (props) => {
                                 <Layout style={config.alertProps[codeBlockType as ConfigObjectKey].style}>
                                     <AlertIcon style={config.alertProps[codeBlockType as ConfigObjectKey].iconStyle} />
                                     <Space wrap size={16}>
-                                        <MarkdownModule postText={children.toString()} isInAlertBlock={true}></MarkdownModule>
+                                        <MarkdownModule postText={children.toString()} isInAlertBlock={true} postLang={postLang}></MarkdownModule>
                                     </Space>
                                 </Layout>
                                 :

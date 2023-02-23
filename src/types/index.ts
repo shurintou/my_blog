@@ -105,6 +105,7 @@ export interface MarkdownProps {
     postText: string | undefined,
     layoutStyle?: CSSProperties | undefined,
     isInAlertBlock?: boolean,
+    postLang?: string,
 }
 
 export interface GitalkProps {

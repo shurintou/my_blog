@@ -173,7 +173,7 @@ const Post = () => {
                                     </Row>
                                     {postContent && <LabelsComp layoutStyle={{ ...postBackgroundCssObj }} labelList={postContent?.labels} setPostLanguage={setPostLang}></LabelsComp>}
                                     <Divider style={{ margin: '0em 0em 1em 0em' }} />
-                                    <Markdown postText={postContent?.body} />
+                                    <Markdown postText={postContent?.body} postLang={postLang} />
                                     {
                                         postContent?.updated_at !== postContent?.created_at &&
                                         <DateComp
