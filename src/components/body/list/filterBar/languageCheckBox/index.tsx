@@ -31,6 +31,7 @@ const LanguageCheckbox: (props: LanguageCheckBoxProps) => React.ReactElement = (
             const checkedValueList = checkedOptionList.map(checkedOption => checkedOption.toString())
             localStorage.setItem(STORAGE_KEY.contentLanguageList, JSON.stringify(checkedValueList))
             dispatch(changeContentLanguage(checkedValueList))
+            props.dropDownHandler(false) // to fix the issue that after changing selectedLanguage the filterBar is opoening while the list item become clickable.
         }
     }
 

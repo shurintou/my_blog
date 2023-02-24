@@ -227,7 +227,8 @@ export interface ContentLanguageListState {
 }
 
 export interface LanguageCheckBoxProps {
-    reactEl: React.ReactElement
+    reactEl: React.ReactElement,
+    dropDownHandler: Function,
 }
 
 export interface SearchModalOpenState {
