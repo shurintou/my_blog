@@ -51,7 +51,7 @@ const PostListItemComp: React.FC<PostListItem> = (props) => {
     return (
         <li lang={postLang} style={{ ...listItemBackgroundCssObj, ...props.layoutStyle }}>
             <Title level={3} onClick={navigateToPost} style={{ padding: '16px 24px 0px 24px' }}><Text style={{ ...mouseBlurStyle, color: config.antdProps.themeColor }} >{props.title}</Text></Title>
-            <Layout style={{ padding: '0px 24px 16px 24px', ...listItemBackgroundCssObj }} >
+            <Layout style={{ padding: '0px 24px 16px 24px', borderBottomLeftRadius: '6px', borderBottomRightRadius: '6px', ...listItemBackgroundCssObj }} >
                 <DateComp
                     dateFromNow={props.created_from_now}
                     dateLocal={props.created_at_local}
