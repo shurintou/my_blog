@@ -4,7 +4,7 @@ import { HeartOutlined, HeartTwoTone } from '@ant-design/icons'
 import { getReactionsByGraphQl, postLike, deleteLike } from '../../../../api/like'
 import { getLocalUser } from '../../../../utils/authentication'
 
-function LikeCompo<T>(props: LikeCompProps<T>) {
+function LikeCompo(props: LikeCompProps) {
     const [userLikeId, setUserLikeId] = useState(0)
     const reactionType = 'heart'
     const getReactionsReq = {

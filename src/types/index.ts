@@ -130,7 +130,7 @@ type Dispatch<A> = (value: A) => void
 
 type SetStateAction<S> = S | ((prevState: S) => S)
 
-export interface LikeCompProps<S> {
+export interface LikeCompProps {
     number: number,
     likeHandler: Dispatch<SetStateAction<number>>,
 }
