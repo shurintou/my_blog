@@ -15,6 +15,7 @@ import { I18NObjectKey, KeywordSearchItemRes, KeywordSearchListItem, KeywordSear
 import { AxiosError } from 'axios'
 import ResultItem from './resultItem/'
 import SearchHistory from './searchHistory'
+import "./index.css"
 
 const { Text } = Typography
 
@@ -124,9 +125,11 @@ const SearchModal = () => {
             bodyStyle={{
                 padding: '24px 12px',
                 backgroundColor: config.antdProps.modalBackgroundColor,
+                borderRadius: '8px' // to set the border of ant-modal-body, the value is the as same ant-modal-content 
             }}
             footer={null}
             closable={false}
+            className="modalStyle" // to override the css of ant-modal-content 
         >
             <Input
                 placeholder={I18N[selectedLanguage as I18NObjectKey].searchBarPlaceHolder}

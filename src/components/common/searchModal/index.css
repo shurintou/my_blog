@@ -1,0 +1,4 @@
+/* to override the css of ant-modal-content */
+.modalStyle .ant-modal-content {
+    border-radius: 8px;
+}
