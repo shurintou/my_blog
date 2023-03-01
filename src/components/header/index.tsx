@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Layout, Row, Col, Button, Dropdown, Menu } from 'antd'
 import { HomeOutlined, ReadOutlined, UserOutlined, GlobalOutlined, SearchOutlined } from '@ant-design/icons'
 import { useNavigate } from "react-router-dom"
@@ -15,7 +15,7 @@ import { ROUTER_NAME, I18N } from '../../config/constant'
 
 const { Header } = Layout
 
-const BlogHeader: React.FC<{}> = () => {
+const BlogHeader = () => {
     const hideHeaderOverScrollTop = 100
     const toggleHeaderMinScrollTop = 30
     const firstPageUrl = ROUTER_NAME.list + `?${ROUTER_NAME.props.page}=1`

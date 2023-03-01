@@ -9,7 +9,7 @@ import { I18N } from '../../config/constant'
 
 const { Text, Title, Link } = Typography
 
-const AboutCompo: React.FC<{}> = () => {
+const AboutCompo = () => {
     const [pcRenderMode, setPcRenderMode] = useState(window.innerWidth >= 992 || document.documentElement.clientWidth >= 992)
     const [loadImg, setLoadImg] = useState([false, false, false, false])
     const [showImgDistance, setShowImgDistance] = useState(-100)

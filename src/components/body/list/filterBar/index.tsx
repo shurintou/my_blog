@@ -19,7 +19,7 @@ import LanguageCheckBoxCompo from './languageCheckBox'
 
 const { Text } = Typography
 
-const FilterBar: React.FC<PostListSearchBarProps> = (props) => {
+const FilterBar = (props: PostListSearchBarProps) => {
     const [searchParams,] = useSearchParams()
     const [labels, setLabels] = useState<Array<Label>>([])
     const [renderLabels, setRenderLabels] = useState<Array<Label>>([])
@@ -189,7 +189,7 @@ const FilterBar: React.FC<PostListSearchBarProps> = (props) => {
         return false
     }
 
-    const RenderLabelText: React.FC<{ label: Label }> = ({ label }) => {
+    const RenderLabelText = ({ label }: { label: Label }) => {
         const renderLabelName = label.name.split(':')[1]
         const renderLabelColor = lightOrDark(label.color)
         if (!label.description.startsWith(typeIdentifiedDescription) && searchKeywordRef && searchKeywordRef.current.length > 0) {

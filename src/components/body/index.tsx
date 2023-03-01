@@ -1,4 +1,4 @@
-import React, { Suspense, lazy, useEffect } from 'react'
+import { Suspense, lazy, useEffect } from 'react'
 import { Layout, message, Skeleton } from 'antd'
 import { Routes, Route, Navigate } from "react-router-dom"
 import { getGitUserInfo } from '../../api/user'
@@ -13,7 +13,7 @@ const List = lazy(() => import(/* webpackChunkName: 'List'*/ '../../pages' + ROU
 const About = lazy(() => import(/* webpackChunkName: 'About'*/ '../../pages' + ROUTER_NAME.about))
 const Post = lazy(() => import(/* webpackChunkName: 'Post'*/ '../../pages' + ROUTER_NAME.post))
 
-const BlogBody: React.FC<{}> = () => {
+const BlogBody = () => {
     const selectedLanguage = useAppSelector((state) => state.language.value)
 
     const unhandledrejectionFunc = function (event: PromiseRejectionEvent | null) {

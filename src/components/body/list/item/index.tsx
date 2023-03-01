@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { Divider, Typography, Layout, Space } from 'antd'
 import { HeartOutlined, CommentOutlined } from '@ant-design/icons'
 import { I18NObjectKey, PostListItem } from '../../../../types/index'
@@ -16,7 +16,7 @@ import { ROUTER_NAME, I18N } from '../../../../config/constant'
 
 const { Title, Text } = Typography
 
-const PostListItemComp: React.FC<PostListItem> = (props) => {
+const PostListItemComp = (props: PostListItem) => {
     const navigate = useNavigate()
     const navigateToPost = () => {
         if (props.clickable) { // if the search bar is opening, the item will not be clickable.

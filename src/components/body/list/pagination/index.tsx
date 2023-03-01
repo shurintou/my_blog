@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { useSearchParams } from "react-router-dom"
 import { I18NObjectKey, PostListPaginationrProps } from '../../../../types'
 import { Pagination, Layout } from 'antd'
@@ -7,7 +7,7 @@ import { useAppSelector } from '../../../../redux/hooks'
 import { ROUTER_NAME, I18N } from '../../../../config/constant'
 import { transferSearchParamsStr } from '../../../../utils/formatter'
 
-const PostListPaginationComp: React.FC<PostListPaginationrProps> = (props) => {
+const PostListPaginationComp = (props: PostListPaginationrProps) => {
     const [searchParams, setSearchParams] = useSearchParams()
     const [current, setCurrent] = useState(1)
     const selectedFilterLabel = useAppSelector((state) => state.filterLabel.value)

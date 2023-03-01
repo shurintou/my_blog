@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { useAppDispatch } from '../../../../redux/hooks'
 import { Space, Tag, Typography } from 'antd'
 import { changeSearchKeyword } from '../../../../features/searchKeyword/searchKeywordSlice'
@@ -6,7 +6,7 @@ import { STORAGE_KEY } from '../../../../config/constant'
 
 const { Text } = Typography
 
-const SearchHistory: React.FC = () => {
+const SearchHistory = () => {
     const dispatch = useAppDispatch()
     const [searchHistory, setSearchHistory] = useState<Array<string>>()
 
@@ -46,5 +46,5 @@ const SearchHistory: React.FC = () => {
     )
 }
 
-const SearchHistoryCompo = () => SearchHistory({})
+const SearchHistoryCompo = () => SearchHistory()
 export default SearchHistoryCompo

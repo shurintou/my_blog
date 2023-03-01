@@ -1,4 +1,3 @@
-import React from 'react'
 import { DateCompProps } from '../../../../types'
 import { Typography, Tooltip, } from 'antd'
 import config from '../../../../config/config'
@@ -7,7 +6,7 @@ import { I18N } from '../../../../config/constant'
 
 const { Text } = Typography
 
-const DateComp: React.FC<DateCompProps> = (props) => {
+const DateComp = (props: DateCompProps) => {
 
 
     const selectedLanguage = useAppSelector((state) => state.language.value)

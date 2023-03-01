@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import Gitalk from "gitalk"
 import 'gitalk/dist/gitalk.css'
 import { GitalkProps } from '../../../types/index'
@@ -6,7 +6,7 @@ import config from '../../../config/config'
 import auth from '../../../config/authentication'
 import { useAppSelector } from '../../../redux/hooks'
 
-const GitalkCompo: React.FC<GitalkProps> = (props) => {
+const GitalkCompo = (props: GitalkProps) => {
     const selectedLanguage = useAppSelector((state) => state.language.value)
 
     const { postId } = props

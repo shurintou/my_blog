@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { Layout, Typography, Tag, Tooltip } from 'antd'
 import { lightOrDark } from '../../../utils/common'
 import { mobileAndTabletCheck } from '../../../utils/userAgent'
@@ -11,7 +11,7 @@ import { FunnelPlotOutlined } from '@ant-design/icons'
 
 const { Text } = Typography
 
-const LabelsCompo: React.FC<LabelsCompoProps> = (props) => {
+const LabelsCompo = (props: LabelsCompoProps) => {
     const [category, setCategory] = useState<Label>({ id: 0, name: 'undefined', description: '', color: 'cyan' })
     const [tags, setTags] = useState<Array<Label>>([])
     const selectedLanguage = useAppSelector((state) => state.language.value)
@@ -89,7 +89,7 @@ const LabelsCompo: React.FC<LabelsCompoProps> = (props) => {
     }, [])
 
 
-    const RenderTag: React.FC<{ label: Label }> = ({ label }) => {
+    const RenderTag = ({ label }: { label: Label }) => {
         const isHexadecimalColor = /^[A-F0-9]+$/i.test(label.color)
         return (
             <Tag
@@ -112,7 +112,7 @@ const LabelsCompo: React.FC<LabelsCompoProps> = (props) => {
         )
     }
 
-    const RenderTooltipWithTag: React.FC<{ tag: Label }> = ({ tag }) => {
+    const RenderTooltipWithTag = ({ tag }: { tag: Label }) => {
         return (
             routerAtListPage && mobileAndTabletCheck() ?
                 <RenderTag label={tag} />

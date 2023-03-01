@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { Layout, Row, Col, Typography } from 'antd'
 import BlogAvatar from '../../components/body/home/avatar'
 import homeStyle from './index.module.css'
@@ -6,7 +6,7 @@ import { useAppSelector } from '../../redux/hooks'
 import { I18N } from '../../config/constant'
 const { Title, Paragraph, Text, Link } = Typography
 
-const HomeCompo: React.FC<{}> = () => {
+const HomeCompo = () => {
     const selectedLanguage = useAppSelector((state) => state.language.value)
 
     useEffect(() => {

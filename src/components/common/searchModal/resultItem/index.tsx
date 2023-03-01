@@ -9,7 +9,7 @@ import { changeSearchModalOpen } from '../../../../features/searchModalOpen/sear
 
 const { Text } = Typography
 
-const ResultItem: React.FC<KeywordSearchListItem> = (props) => {
+const ResultItem = (props: KeywordSearchListItem) => {
     const dispatch = useAppDispatch()
     const [, setSearchParams] = useSearchParams()
     const navigate = useNavigate()
@@ -26,7 +26,7 @@ const ResultItem: React.FC<KeywordSearchListItem> = (props) => {
         dispatch(changeSearchModalOpen(false))
     }
 
-    const RenderHighlightText: React.FC<{ textMatch: TextMatch }> = ({ textMatch }) => {
+    const RenderHighlightText = ({ textMatch }: { textMatch: TextMatch }) => {
         const matches = textMatch.matches
         return (
             <React.Fragment>{

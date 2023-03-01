@@ -13,7 +13,7 @@ import markdownStyle from './index.module.css'
 import { ROUTER_NAME } from '../../../config/constant'
 const { Link } = Typography
 
-const Markdown: React.FC<MarkdownProps> = (props) => {
+const Markdown = (props: MarkdownProps) => {
     const { postText } = props
     const { postLang } = props
     const anchorStr = '#anchor'
@@ -78,7 +78,7 @@ const Markdown: React.FC<MarkdownProps> = (props) => {
     const isAtListPage = () => window.location.href.indexOf(ROUTER_NAME.list) >= 0
 
     return (
-        <div style={{ ...props.layoutStyle, flex: 1 }}>
+        (<div style={{ ...props.layoutStyle, flex: 1 }}>
             <ReactMarkdown
                 children={postText ? (isAtListPage() ? subStringOfPostText(postText) : postText) : ''}
                 remarkPlugins={[remarkGfm, remarkBreaks]}
@@ -127,7 +127,7 @@ const Markdown: React.FC<MarkdownProps> = (props) => {
                                 </code>
                                 :
                                 <span></span>
-                        )
+                        );
                     },
                     blockquote({ node, className, children, ...props }) {
                         return (
@@ -174,8 +174,8 @@ const Markdown: React.FC<MarkdownProps> = (props) => {
                     },
                 }}
             />
-        </div >
-    )
+        </div >)
+    );
 }
 
 const MarkdownModule = (props: MarkdownProps) => <Markdown {...props}></Markdown>
