@@ -130,7 +130,8 @@ const Post = () => {
                                         level={3}
                                         style={{
                                             backgroundColor: pcRenderMode ? config.antdProps.titleBackgroundColor : config.antdProps.postBackgroundColor,
-                                            border: '2px solid',
+                                            borderWidth: '2px',
+                                            borderStyle: 'solid',
                                             borderColor: pcRenderMode ? config.antdProps.borderColor : config.antdProps.postBackgroundColor,
                                             borderRadius: pcRenderMode ? '6px 6px 0px 0px' : '0px',
                                             marginBottom: '0em',
@@ -154,7 +155,8 @@ const Post = () => {
                                 <Layout
                                     style={{
                                         padding: '1em 1em',
-                                        border: pcRenderMode ? '2px solid' : 'none',
+                                        borderWidth: pcRenderMode ? '2px' : '',
+                                        borderStyle: pcRenderMode ? 'solid' : 'none',
                                         borderColor: config.antdProps.borderColor,
                                         borderRadius: pcRenderMode ? '0px 0px 6px 6px' : '0px',
                                         ...postBackgroundCssObj,
