@@ -23,6 +23,7 @@ export function searchPosts(params: PostSearchRequestParam) {
         repo: 'shurintou/shurintou.github.io',
         is: 'open',
     }
+    if (process.env.NODE_ENV === 'development') { delete baseSearchQuery.is } // get all posts at development mode.
     let comBinequery: string = ''
     Object.getOwnPropertyNames(baseSearchQuery).forEach((key: string) => {
         comBinequery += key + ':' + baseSearchQuery[key] + '+'
