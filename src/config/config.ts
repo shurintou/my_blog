@@ -33,6 +33,7 @@ const configObj = {
         highlightTextBackgroundColor: 'yellow',
         listItemBackgroundColor: '#FFFFFF',
         postBackgroundColor: '#FFFFFF',
+        inactiveTabFontColor: '#d0d7de'
     },
     postProps: {
         postListItemCountPerPage: 5,

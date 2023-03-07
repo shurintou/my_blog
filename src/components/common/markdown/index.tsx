@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useState } from 'react'
 import ReactMarkdown from 'react-markdown'
-import { Typography, Image, Layout, Space } from 'antd'
+import { Typography, Image, Layout, Space, Tabs } from 'antd'
 import remarkGfm from 'remark-gfm'
 import remarkBreaks from 'remark-breaks'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
@@ -11,6 +11,8 @@ import { I18N } from '../../../config/constant'
 import { doScrolling, curry, findCharIndexOfString } from '../../../utils/common'
 import markdownStyle from './index.module.css'
 import { ROUTER_NAME } from '../../../config/constant'
+import "./index.css"
+import { SyntaxHighlighterProps } from 'react-syntax-highlighter'
 const { Link } = Typography
 
 const Markdown = (props: MarkdownProps) => {
@@ -76,7 +78,11 @@ const Markdown = (props: MarkdownProps) => {
     }
 
     const isAtListPage = () => window.location.href.indexOf(ROUTER_NAME.list) >= 0
-
+    const TabPane = Tabs.TabPane
+    const [tabKey, setTabKey] = useState('0')
+    const codeBorderRadius = { borderRadius: '6px' }
+    const codeFontSize = { fontSize: '1.2em' }
+    const codeFontWeight = { fontWeight: 'bold' }
     return (
         (<div style={{ ...props.layoutStyle, flex: 1 }}>
             <ReactMarkdown
@@ -95,7 +101,27 @@ const Markdown = (props: MarkdownProps) => {
                         const match = /language-(\w+)/.exec(className || '')
                         const codeBlockType = match?.at(1) as CodeBlockType
                         const isAlertType = ['success', 'info', 'warning', 'error'].includes(codeBlockType)
+                        const isMultiType = 'multi' === codeBlockType
                         const AlertIcon = config.alertProps[codeBlockType as ConfigObjectKey]?.icon
+                        let tabStr: Array<string> = []
+                        let maxTabLine = 0
+                        let tabList: Array<SyntaxHighlighterProps> = []
+                        if (isMultiType) {
+                            tabStr = String(children).replace(/\n$/, '').split('```').filter((_, index) => index > 0)
+                            tabStr.forEach(codeTab => {
+                                const codeTabSplitByLinebreak = codeTab.split('\r\n')
+                                while (codeTabSplitByLinebreak[codeTabSplitByLinebreak.length - 1] === "") {
+                                    codeTabSplitByLinebreak.pop()
+                                }
+                                if (codeTabSplitByLinebreak.length > maxTabLine) {
+                                    maxTabLine = codeTabSplitByLinebreak.length
+                                }
+                                tabList.push({
+                                    language: codeTabSplitByLinebreak[0].split(' ')[0],
+                                    children: [codeTabSplitByLinebreak.filter((_, index) => index > 0).join('\r\n'), codeTabSplitByLinebreak[0].split(' ')[1]],
+                                })
+                            })
+                        }
                         return !inline && match && !isAtListPage() ? (
                             isAlertType ?
                                 <Layout style={config.alertProps[codeBlockType as ConfigObjectKey].style}>
@@ -105,13 +131,50 @@ const Markdown = (props: MarkdownProps) => {
                                     </Space>
                                 </Layout>
                                 :
-                                <SyntaxHighlighter
-                                    children={String(children).replace(/\n$/, '')}
-                                    style={tomorrow ? tomorrow : undefined}
-                                    customStyle={{ borderRadius: '6px' }}
-                                    language={match[1]}
-                                    PreTag="div"
-                                />
+                                (
+                                    isMultiType ?
+                                        <Tabs
+                                            defaultActiveKey="0"
+                                            activeKey={tabKey}
+                                            style={{ backgroundColor: 'rgb(45, 45, 45)', ...codeBorderRadius }}
+                                            className={'tabStyle'}
+                                            type="card"
+                                            tabBarGutter={0}
+                                            onChange={(key) => setTabKey(key)}
+                                            tabBarStyle={{ backgroundColor: 'rgb(80, 80, 80)', margin: 0, ...codeBorderRadius }}
+                                        >
+                                            {
+                                                tabList.map((tab, i) => (
+                                                    <TabPane
+                                                        key={i}
+                                                        tab={<span style={{
+                                                            ...codeFontSize,
+                                                            ...codeFontWeight,
+                                                            color: tabKey === i.toString() ? config.antdProps.themeColor : config.antdProps.inactiveTabFontColor,
+                                                        }}
+                                                        >
+                                                            {tab.children[1]}
+                                                        </span>}
+                                                    >
+                                                        <SyntaxHighlighter
+                                                            children={tab.children[0]}
+                                                            style={tomorrow ? tomorrow : undefined}
+                                                            customStyle={{ ...codeBorderRadius, height: (1.6 * maxTabLine) + 'em', ...codeFontSize, ...codeFontWeight }}
+                                                            language={tab.language}
+                                                            PreTag="div"
+                                                        />
+                                                    </TabPane>
+                                                ))}
+                                        </Tabs>
+                                        :
+                                        <SyntaxHighlighter
+                                            children={String(children).replace(/\n$/, '')}
+                                            style={tomorrow ? tomorrow : undefined}
+                                            customStyle={{ ...codeBorderRadius, ...codeFontWeight, }}
+                                            language={match[1]}
+                                            PreTag="div"
+                                        />
+                                )
                         ) : (
                             children.toString().trim().length > 0 ?
                                 <code
@@ -119,7 +182,7 @@ const Markdown = (props: MarkdownProps) => {
                                         padding: '.2em .4em',
                                         margin: 0,
                                         backgroundColor: 'rgba(175,184,193,0.2)',
-                                        borderRadius: '6px',
+                                        ...codeBorderRadius,
                                     }}
                                     className={className}
                                     {...props}>

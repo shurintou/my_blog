@@ -1,0 +1,17 @@
+.tabStyle .ant-tabs-nav .ant-tabs-nav-wrap .ant-tabs-nav-list .ant-tabs-tab {
+    background-color: rgb(80, 80, 80) !important;
+}
+
+.tabStyle .ant-tabs-nav .ant-tabs-nav-wrap .ant-tabs-nav-list .ant-tabs-tab-active {
+    background-color: #e6fffb !important;
+    border-bottom-color: #1DA57A !important;
+}
+
+.tabStyle .ant-tabs-nav .ant-tabs-nav-wrap .ant-tabs-nav-list .ant-tabs-tab:hover {
+    background-color: #e6fffb !important;
+    border-bottom-color: #1DA57A !important;
+}
+
+.tabStyle .ant-tabs-nav .ant-tabs-nav-wrap .ant-tabs-nav-list :first-child {
+    border-top-left-radius: 6px !important;
+}
