@@ -243,4 +243,4 @@ const Markdown = (props: MarkdownProps) => {
 
 const MarkdownModule = (props: MarkdownProps) => <Markdown {...props}></Markdown>
 
-export default MarkdownModule
+export default React.memo(MarkdownModule)

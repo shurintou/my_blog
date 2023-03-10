@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { Divider, Typography, Layout, Space } from 'antd'
 import { HeartOutlined, CommentOutlined } from '@ant-design/icons'
 import { I18NObjectKey, PostListItem } from '../../../../types/index'
@@ -47,7 +47,7 @@ const PostListItemComp = (props: PostListItem) => {
     const [likeText, setLikeText] = useState(getLikeCommentText(selectedLanguage)[0])
     const [commentText, setCommentText] = useState(getLikeCommentText(selectedLanguage)[1])
 
-    const listItemBackgroundCssObj = { backgroundColor: config.antdProps.listItemBackgroundColor }
+    const listItemBackgroundCssObj = useMemo(() => { return { backgroundColor: config.antdProps.listItemBackgroundColor } }, [])
     return (
         <li lang={postLang} style={{ ...listItemBackgroundCssObj, ...props.layoutStyle }}>
             <Title level={3} onClick={navigateToPost} style={{ padding: '16px 24px 0px 24px' }}><Text style={{ ...mouseBlurStyle, color: config.antdProps.themeColor }} >{props.title}</Text></Title>
