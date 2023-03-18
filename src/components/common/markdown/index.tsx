@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import ReactMarkdown from 'react-markdown'
-import { Typography, Image, Layout, Space, Tabs } from 'antd'
+import { Typography, Image, Layout, Space, Tabs, Row, Col } from 'antd'
 import remarkGfm from 'remark-gfm'
 import remarkBreaks from 'remark-breaks'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
@@ -229,7 +229,11 @@ const Markdown = (props: MarkdownProps) => {
                         if (isAtListPage()) {
                             return <span></span> //not render img when at the list page.
                         }
-                        return <Image alt={alt} src={src} style={{ maxWidth: '100%', marginBottom: '1em' }} />
+                        return <Row justify='center' style={{ marginBottom: '1em', marginTop: '1em' }}>
+                            <Col >
+                                <Image alt={alt} src={src} />
+                            </Col>
+                        </Row>
                     },
                     p: replacePTag,
                     li({ children }) {
