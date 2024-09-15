@@ -48,6 +48,32 @@ export function debounce(fn: Function, delay?: number) {
     }
 }
 
+type ThrottledFunction<T extends (...args: any[]) => void> = (...args: Parameters<T>) => void
+
+export function throttle<T extends (...args: any[]) => void>(
+    func: T,
+    limit: number = 1000
+): ThrottledFunction<T> {
+    let lastFunc: ReturnType<typeof setTimeout> | undefined
+    let lastRun: number = Date.now()
+
+    return function (this: any, ...args: Parameters<T>) {
+        const now = Date.now()
+        if (now - lastRun >= limit) {
+            func.apply(this, args)
+            lastRun = now
+        } else {
+            if (lastFunc) {
+                clearTimeout(lastFunc)
+            }
+            lastFunc = setTimeout(() => {
+                func.apply(this, args)
+                lastRun = now
+            }, limit - (now - lastRun))
+        }
+    }
+}
+
 /* From: https://jsfiddle.net/s61x7c4e/ */
 export function doScrolling(element: Element, duration: number) {
 
